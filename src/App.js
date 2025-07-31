@@ -1,14 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./components/landingPage/LandingPage";
+import LoginPage from "./components/Login/LoginPage";
+import Dashboard from "./components/Dashboard/Dashboard"; // (Create this as a placeholder or full UI later)
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-       Hi this is CashPilot
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+    </Routes>
   );
 }
-
-export default App;

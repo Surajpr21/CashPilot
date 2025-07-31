@@ -1,0 +1,25 @@
+/* src/pages/Dashboard/Dashboard.css */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar.expanded {
+  width: 220px;
+  transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  transition: width 0.3s;
+}
+
+.dashboard-content {
+  flex: 1;
+  transition: margin-left 0.3s, width 0.3s;
+  padding: 32px;
+}
+/* 
+.dashboard-content.sidebar-expanded {
+  margin-left: 50px;
+} */

@@ -1,0 +1,131 @@
+:root {
+  --primary: #6750a4;
+  --on-primary: #ffffff;
+  --surface: #fef7ff;
+  --on-surface: #1d1b20;
+  --surface-container: #e6e0e9;
+  --outline: #938f99;
+  --radius: 1rem;
+  --font: "Roboto", sans-serif;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: var(--surface);
+  font-family: var(--font);
+  color: var(--on-surface);
+}
+/* 
+.landing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+} */
+
+
+.cta-button {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.3s;
+  display: inline-block;
+}
+
+.cta-button:hover {
+  background-color: #5b429e;
+}
+
+/* Features */
+.features {
+  background-color: var(--surface-container);
+  width: 100%;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--outline);
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  transition: transform 0.2s;
+}
+
+.feature-card:hover {
+  transform: scale(1.02);
+}
+
+.feature-card h3 {
+  color: var(--primary);
+  margin-top: 0;
+}
+
+.feature-card p {
+  color: var(--on-surface);
+}
+
+/* How It Works */
+.how-it-works {
+  padding: 4rem 2rem;
+  background: var(--surface);
+  text-align: center;
+  width: 100%;
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.step {
+  max-width: 260px;
+  text-align: left;
+}
+
+.step-number {
+  font-size: 2rem;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.step-content h4 {
+  margin: 0.5rem 0;
+  color: var(--on-surface);
+}
+
+.step-content p {
+  color: var(--outline);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--surface-container);
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+}

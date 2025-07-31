@@ -1,0 +1,173 @@
+/* src/components/Sidebar/Sidebar.css */
+:root {
+  --bg-dark: #12121a;
+  --bg-panel: #1e1e2b;
+  --bg-hover: #29293f;
+  --accent: #6c5ce7;
+  --text-muted: #bbb;
+  --transition: all 0.3s ease;
+  --font-ui: 'Raleway', sans-serif;
+}
+
+.sidebar {
+  background-color: var(--bg-panel);
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition);
+  overflow: hidden;
+  border-right: 1px solid #2e2e3e;
+  font-family: var(--font-ui);
+}
+
+.sidebar.expanded {
+  width: 260px;
+}
+
+.sidebar.collapsed {
+  width: 64px;
+  align-items: center;
+}
+
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.sidebar-logo {
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.sidebar-toggle {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.sidebar-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: var(--transition);
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sidebar-item:hover {
+  background-color: var(--bg-hover);
+  color: white;
+}
+
+.sidebar-item.active {
+  background-color: #2f2f50;
+  color: white;
+  font-weight: 500;
+}
+
+.sidebar-icon {
+  font-size: 1.2rem;
+  text-align: center;
+  min-width: 24px;
+}
+
+.sidebar-label {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.sidebar-bottom {
+  padding: 1rem;
+  border-top: 1px solid #333;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.profile-email {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.badge {
+  background-color: #2ecc71;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  color: white;
+}
+
+.upgrade-btn {
+  margin-top: 0.75rem;
+  width: 100%;
+  background: #444;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.theme-toggle {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.sidebar-toggle .h-5 {
+  transition: transform 0.2s;
+}
+
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.sidebar-toggle svg {
+  width: 24px;
+  height: 24px;
+}
