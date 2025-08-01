@@ -26,7 +26,7 @@ const DashboardHeader = () => {
       <div className={styles.left}>
         <div>
           <h2 className={styles.title}>
-            Hi, Ananya <span className={styles.wave}>👋</span>
+            Hi, Subu <span className={styles.wave}>👋</span>
           </h2>
           <p className={styles.subtitle}>
             Track your all expense and transactions
