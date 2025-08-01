@@ -6,7 +6,6 @@
   --accent: #6c5ce7;
   --text-muted: #bbb;
   --transition: all 0.3s ease;
-  --font-ui: 'Raleway', sans-serif;
 }
 
 .sidebar {
@@ -19,7 +18,6 @@
   transition: var(--transition);
   overflow: hidden;
   border-right: 1px solid #2e2e3e;
-  font-family: var(--font-ui);
 }
 
 .sidebar.expanded {
