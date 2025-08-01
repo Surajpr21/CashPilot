@@ -1,0 +1,92 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Raleway", sans-serif;
+  background: #f9f9fb;
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.left .title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.wave {
+  font-size: 1.5rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.center {
+  color: #4b5563;
+  font-size: 0.9rem;
+    display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  background: #fff;
+}
+
+.searchBox input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: "Raleway", sans-serif;
+}
+
+.searchIcon {
+  height: 20px;
+  width: 20px;
+  color: #6b7280;
+  margin-left: 0.5rem;
+}
+
+.bellWrapper {
+  position: relative;
+}
+
+.bellIcon {
+  height: 22px;
+  width: 22px;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.notification {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.avatar {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
