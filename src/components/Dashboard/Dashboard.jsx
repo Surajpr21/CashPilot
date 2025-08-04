@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "./Dashboard.css";
 import Sidebar from "../Dashboard/Sidebar/Sidebar";
 import DashboardHeader from "../Dashboard/DashboardHeader/DashboardHeader";
+import StatsCards from "../Dashboard/StatsCard/StatsCards";
 
 const Dashboard = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -20,6 +21,9 @@ const Dashboard = () => {
         }`}
       >
          <DashboardHeader />
+        <div className="dashboard-stats">
+          <StatsCards />
+          </div>
       </div>
     </div>
   );
