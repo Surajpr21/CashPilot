@@ -1,4 +1,3 @@
-// src/pages/Dashboard/Dashboard.jsx
 import React, { useState } from "react";
 import "./Dashboard.css";
 import Sidebar from "../Dashboard/Sidebar/Sidebar";
