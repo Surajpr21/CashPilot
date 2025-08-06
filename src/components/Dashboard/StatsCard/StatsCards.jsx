@@ -58,19 +58,49 @@ const StatsCards = () => {
             style={{ backgroundColor: item.color }}
           ></div>
 
-          <div className="stats-card-dashboard-header">
-            <span className="stats-card-dashboard-title">{item.title}</span>
-            <button className="stats-card-dashboard-menu">⋮</button>
+          {/* Top content */}
+          <div className="stats-card-dashboard-content">
+            <div className="stats-card-dashboard-header">
+              <span className="stats-card-dashboard-title">{item.title}</span>
+              <button className="stats-card-dashboard-menu">⋮</button>
+            </div>
+
+            <div className="stats-card-dashboard-value">{item.value}</div>
+
+            <div
+              className={`stats-card-dashboard-change ${
+                item.positive ? "positive" : "negative"
+              }`}
+            >
+              <span>{item.positive ? "▲" : "▼"} {item.change}</span>
+            </div>
           </div>
 
-          <div className="stats-card-dashboard-value">{item.value}</div>
-
-          <div
-            className={`stats-card-dashboard-change ${
-              item.positive ? "positive" : "negative"
-            }`}
-          >
-            <span>{item.change}</span>
+          {/* Wave area */}
+          <div className="stats-card-dashboard-wave">
+            <svg
+              width="100%"
+              height="40"
+              viewBox="0 0 100 40"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id={`gradient-${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={item.color} stopOpacity="0.4" />
+                  <stop offset="100%" stopColor={item.color} stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M0,30 C20,35 40,25 60,30 C80,35 100,25 120,30"
+                fill="none"
+                stroke={item.color}
+                strokeWidth="2"
+              />
+              <path
+                d="M0,30 C20,35 40,25 60,30 C80,35 100,25 120,30 L120,40 L0,40 Z"
+                fill={`url(#gradient-${index})`}
+              />
+            </svg>
           </div>
         </div>
       ))}
