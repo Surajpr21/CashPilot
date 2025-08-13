@@ -40,67 +40,65 @@ const statsData = [
   {
     title: "Goal",
     value: "iPhone 17 Pro",
-    label: "₹75,000 of ₹1,45,000",
-    change: "51.70%",
-    positive: true,
+    required: "₹1,45,000",
+    collected: "₹75,000",
+    progress: 51.7, // percentage of progress
     color: "#14b8a6",
   },
 ];
 
 const StatsCards = () => {
+  const renderCardContent = (item) => {
+    if (item.title === "Goal") {
+      return (
+        <>
+          <div className="stats-card-dashboard-value">{item.value}</div>
+          <div className="stats-card-dashboard-amounts">
+            <span>Required: {item.required}</span>
+            <span>Collected: {item.collected}</span>
+          </div>
+          <div className="stats-card-dashboard-progress">
+            <div
+              className="stats-card-dashboard-progress-bar"
+              style={{
+                width: `${item.progress}%`,
+                backgroundColor: item.color,
+              }}
+            />
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div className="stats-card-dashboard-value">{item.value}</div>
+        <div
+          className={`stats-card-dashboard-change ${
+            item.positive ? "positive" : "negative"
+          }`}
+        >
+          <span>{item.positive ? "▲" : "▼"} {item.change}</span>
+        </div>
+        hi
+      </>
+    );
+  };
+
   return (
     <div className="stats-card-dashboard-container">
       {statsData.map((item, index) => (
         <div key={index} className="stats-card-dashboard-card">
-          {/* Left strip */}
           <div
             className="stats-card-dashboard-strip"
             style={{ backgroundColor: item.color }}
-          ></div>
-
-          {/* Top content */}
+          />
           <div className="stats-card-dashboard-content">
             <div className="stats-card-dashboard-header">
               <span className="stats-card-dashboard-title">{item.title}</span>
               <button className="stats-card-dashboard-menu">⋮</button>
             </div>
-
-            <div className="stats-card-dashboard-value">{item.value}</div>
-
-            <div
-              className={`stats-card-dashboard-change ${
-                item.positive ? "positive" : "negative"
-              }`}
-            >
-              <span>{item.positive ? "▲" : "▼"} {item.change}</span>
-            </div>
-          </div>
-
-          {/* Wave area */}
-          <div className="stats-card-dashboard-wave">
-            <svg
-              width="100%"
-              height="40"
-              viewBox="0 0 100 40"
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient id={`gradient-${index}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={item.color} stopOpacity="0.4" />
-                  <stop offset="100%" stopColor={item.color} stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M0,30 C20,35 40,25 60,30 C80,35 100,25 120,30"
-                fill="none"
-                stroke={item.color}
-                strokeWidth="2"
-              />
-              <path
-                d="M0,30 C20,35 40,25 60,30 C80,35 100,25 120,30 L120,40 L0,40 Z"
-                fill={`url(#gradient-${index})`}
-              />
-            </svg>
+            {renderCardContent(item)}
           </div>
         </div>
       ))}
