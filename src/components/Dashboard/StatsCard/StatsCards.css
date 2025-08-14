@@ -15,7 +15,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 24px;
   flex: 1 1 220px;
-  max-width: 260px;
+  max-width: 100%;
   min-width: 220px;
   display: flex;
   flex-direction: column;
@@ -97,7 +97,7 @@
 /* Large desktop screens: shrink cards to fit row between 1201px and 1760px */
 @media (min-width: 1201px) and (max-width: 1759px) {
   .stats-card-dashboard-card {
-    max-width: 225px;
+    max-width: 100%;
     min-width: 120px;
     padding: 12px;
   }
@@ -117,7 +117,7 @@
 /* When sidebar is collapsed, shrink cards to fit row between 1201px and 1920px */
 @media (min-width: 1201px) and (max-width: 1920px) {
   .dashboard-content.sidebar-collapsed .stats-card-dashboard-card {
-    max-width: 315px;
+    max-width: 410px;
     min-width: 100px;
     padding: 12px;
   }
@@ -153,7 +153,7 @@
 }
 
 .stats-card-dashboard-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #111827;
 }
@@ -196,7 +196,7 @@
   padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 12px;
   z-index: 2;
   position: relative;
 }
