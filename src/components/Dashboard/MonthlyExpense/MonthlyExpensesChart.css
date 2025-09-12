@@ -1,0 +1,39 @@
+.monthly-expenses-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.monthly-expenses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.monthly-expenses-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.monthly-expenses-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.monthly-expenses-growth {
+  font-size: 0.85rem;
+  color: #16a34a; /* green */
+  font-weight: 500;
+}
+
+.monthly-expenses-dropdown {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  cursor: pointer;
+}

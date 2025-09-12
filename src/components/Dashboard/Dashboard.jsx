@@ -3,6 +3,8 @@ import "./Dashboard.css";
 import Sidebar from "../Dashboard/Sidebar/Sidebar";
 import DashboardHeader from "../Dashboard/DashboardHeader/DashboardHeader";
 import StatsCards from "../Dashboard/StatsCard/StatsCards";
+import MonthlyExpensesChart from "../Dashboard/MonthlyExpense/MonthlyExpensesChart";
+import TopCategoryDonut from "../Dashboard/TopCategoryDonut/TopCategoryDonut";
 
 const Dashboard = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -23,6 +25,11 @@ const Dashboard = () => {
         <div className="dashboard-stats">
           <StatsCards />
           </div>
+      
+      <div className="dashboard-charts-row">
+        <MonthlyExpensesChart />
+        <TopCategoryDonut />
+      </div>
       </div>
     </div>
   );

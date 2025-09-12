@@ -1,0 +1,85 @@
+.top-category-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.top-category-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.top-category-dropdown {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.top-category-body {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.top-category-chart {
+  flex-shrink: 0;
+}
+
+.top-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.top-category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.top-category-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.top-category-name {
+  flex: 1;
+  color: #444;
+}
+
+.top-category-value {
+  font-weight: 500;
+}
+
+.top-category-details {
+  margin-top: 1rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  cursor: pointer;
+  font-size: 0.85rem;
+  align-self: flex-start;
+  transition: background 0.2s ease;
+}
+
+.top-category-details:hover {
+  background: #eee;
+}

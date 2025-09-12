@@ -37,3 +37,15 @@
   min-width: 0;
   min-height: 1201px; /* Ensures content area fits desktop screens */
 }
+
+.dashboard-charts-row {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.dashboard-charts-row > * {
+  flex: 1;           
+  min-width: 0; 
+}
