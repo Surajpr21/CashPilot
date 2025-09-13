@@ -7,6 +7,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .top-category-header {
@@ -29,22 +31,6 @@
   cursor: pointer;
 }
 
-.top-category-body {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.top-category-chart {
-  flex-shrink: 0;
-}
-
-.top-category-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  font-size: 0.9rem;
-}
 
 .top-category-item {
   display: flex;
@@ -82,4 +68,94 @@
 
 .top-category-details:hover {
   background: #eee;
+}
+.top-category-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: nowrap; /* prevent wrapping unless forced */
+}
+
+.top-category-chart {
+  flex: 1 1 40%;
+  min-width: 240px;
+  max-width: 380px;
+  height: 220px;
+  margin-top: -20px;
+}
+
+.top-category-list {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+/* ✅ Medium screens (≤1200px) → stack vertically */
+@media (max-width: 1200px) {
+  .top-category-body {
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .top-category-chart {
+    width: 100%;
+    max-width: 350px;
+    height: 200px;
+  }
+
+  .top-category-list {
+    width: 100%;
+    align-items: center;
+  }
+}
+
+/* ✅ Large screens (≥1920px) → bigger scaling */
+@media (min-width: 1920px) {
+
+  .top-category-chart {
+    max-width: 500px;
+    height: 215px;
+  }
+
+  .top-category-list {
+    font-size: 1rem;
+  }
+}
+
+/* ✅ Handle side-by-side squeeze between 1300px → 1201px */
+@media (max-width: 1300px) and (min-width: 1201px) {
+  .top-category-chart {
+    max-width: 260px;   /* smaller donut */
+    height: 180px;      /* reduce height */
+    flex-shrink: 0;
+  }
+
+  .top-category-list {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .top-category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .top-category-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.8rem;   /* slightly smaller text */
+  }
+
+  .top-category-value {
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
 }

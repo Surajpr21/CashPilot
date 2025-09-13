@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import "./TopCategoryDonut.css";
 
 const data = [
@@ -17,7 +11,14 @@ const data = [
   { name: "Bill & Subscription", value: 2162 },
 ];
 
-const COLORS = ["#4C6EF5", "#FACC15", "#22C55E", "#A855F7", "#F97316", "#06B6D4"];
+const COLORS = [
+  "#4C6EF5",
+  "#FACC15",
+  "#22C55E",
+  "#A855F7",
+  "#F97316",
+  "#06B6D4",
+];
 
 export default function TopCategoryDonut() {
   return (
@@ -33,17 +34,20 @@ export default function TopCategoryDonut() {
 
       <div className="top-category-body">
         <div className="top-category-chart">
-          <ResponsiveContainer width={450} height={200}>
+          <ResponsiveContainer width="100%" height={220}>
             <PieChart>
               <Pie
                 data={data}
                 dataKey="value"
-                 innerRadius="70%"
-        outerRadius="90%"
+                innerRadius="55%"
+                outerRadius="75%"
                 paddingAngle={4}
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -59,7 +63,9 @@ export default function TopCategoryDonut() {
                 style={{ backgroundColor: COLORS[index] }}
               ></span>
               <span className="top-category-name">{item.name}</span>
-              <span className="top-category-value">₹{item.value.toLocaleString()}</span>
+              <span className="top-category-value">
+                ₹{item.value.toLocaleString()}
+              </span>
             </div>
           ))}
         </div>
