@@ -1,6 +1,5 @@
-
 .monthly-expenses-card {
-  background: #fff;
+  background: #F2F4F2;
   border-radius: 16px;
   padding: 1.25rem;
   box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
@@ -16,9 +15,10 @@
 }
 
 .monthly-expenses-header h3 {
-  font-size: 1.05rem;
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
+  color: #0F2E2B;
 }
 
 .monthly-expenses-info {
@@ -70,13 +70,13 @@
 }
 
 .tick-label {
-  fill: #9ca3af;
+  fill: #6F8F89;
   font-size: 12px;
   font-family: inherit;
 }
 
 .x-label {
-  fill: #6b7280;
+  fill: #6F8F89;
   font-size: 12px;
   font-family: inherit;
 }
@@ -117,7 +117,105 @@
   .monthly-expenses-card {
     padding: 0.9rem;
   }
+
   .monthly-expenses-header h3 {
     font-size: 1rem;
   }
+}
+
+/* line draw animation */
+.line-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-line 900ms cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.line-point {
+  opacity: 0;
+  transition: opacity 150ms ease, transform 150ms ease;
+  cursor: pointer;
+}
+
+.expenses-svg:hover .line-point {
+  opacity: 1;
+}
+
+.line-point:hover {
+  transform: scale(1.25);
+}
+
+.expenses-svg {
+  overflow: visible;
+}
+
+.line-path {
+  filter: drop-shadow(0 2px 6px rgba(76, 110, 245, 0.18));
+}
+
+.line-point {
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  pointer-events: auto;
+}
+
+.expenses-svg:hover .line-point {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.progress-row {
+  margin-top: 0.75rem;
+}
+
+.progress-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F2E2B;
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 18px;
+  border-radius: 999px;
+  background: #E6EDF0;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  width: var(--progress, 72%);
+  background: linear-gradient(90deg,
+    #B8E6C3 0%,
+    #9FDDB4 35%,
+    #86D3A5 65%,
+    #6FC9A0 100%);
+  box-shadow:
+    inset 0 -1px rgba(0, 0, 0, 0.06),
+    0 2px 8px rgba(20, 96, 78, 0.12);
+  transition: width 500ms cubic-bezier(.4,0,.2,1);
+}
+
+.progress-value {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #4C96A8;
 }

@@ -15,7 +15,7 @@ export default function HeroSection() {
           <a href="#" className="hero-section-link">Features</a>
           <a href="#" className="hero-section-link">About</a>
           <a href="#" className="hero-section-link">Contact</a>
-          <button className="hero-section-nav-btn" onClick={() => navigate("/dashboard")}>
+          <button className="hero-section-nav-btn" onClick={() => navigate("/login")}>
             Dashboard
           </button>
         </nav>

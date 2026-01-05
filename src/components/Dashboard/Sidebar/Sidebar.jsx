@@ -1,81 +1,79 @@
-// src/components/Sidebar/Sidebar.jsx
-import React, { useState } from "react";
+import React from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  PieChart,
+  List,
+  CreditCard,
+  Wallet,
+  BarChart2,
+  Settings,
+  Bell,
+  User,
+  LogOut,
+} from "lucide-react";
 import "./Sidebar.css";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
-import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
-
-const menuItems = [
-  { label: "Dashboard", icon: "📊", key: "dashboard" },
-  { label: "Add Expense", icon: "➕", key: "add-expense" },
-  { label: "All Expenses", icon: "📋", key: "all-expenses" },
-  { label: "Subscriptions", icon: "🔁", key: "subscriptions" },
-  { label: "Categories", icon: "🏷️", key: "categories" },
-  { label: "Budgets", icon: "💰", key: "budgets" },
-  { label: "Reports", icon: "📈", key: "reports" },
-  { label: "Settings", icon: "⚙️", key: "settings" },
-  { label: "Profile", icon: "👤", key: "profile" },
-  { label: "Logout", icon: "🚪", key: "logout" },
+const NAV_TABS = [
+  { key: "dashboard", label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
+  { key: "expenses", label: "Expenses", path: "/expenses", icon: <List size={18} /> },
+  { key: "subscriptions", label: "Subscriptions", path: "/subscriptions", icon: <CreditCard size={18} /> },
+  { key: "budgets", label: "Budgets", path: "/budgets", icon: <Wallet size={18} /> },
+  // { key: "insights", label: "Insights", path: "/insights", icon: <PieChart size={18} /> },
+  // { key: "reports", label: "Reports", path: "/reports", icon: <BarChart2 size={18} /> },
+  { key: "goals", label: "Goals", path: "/goals", icon: <BarChart2 size={18} /> },
 ];
 
-const Sidebar = ({ activeTab, isExpanded, setIsExpanded }) => {
+const Sidebar = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  // derive active tab from URL (works for nested routes too)
+  const activeKey =
+    NAV_TABS.find(tab => pathname.startsWith(tab.path))?.key ?? "";
+
   return (
-    <div className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}>
-      <div className="sidebar-top">
-        <div className="sidebar-logo">{isExpanded ? "CashPilot" : ""}</div>
-
-        <button
-          className="sidebar-toggle"
-          onClick={() => setIsExpanded((prev) => !prev)}
-          title={isExpanded ? "Collapse" : "Expand"}
-        >
-          {isExpanded ? (
-            <ArrowLeftStartOnRectangleIcon className="h-6 w-6 text-white" />
-          ) : (
-            <ArrowRightStartOnRectangleIcon className="h-6 w-6 text-white" />
-          )}
-        </button>
+    <div className="topbar">
+      <div className="logo" onClick={() => navigate("/dashboard")}>
+        CashPilot
       </div>
 
-      <div className="sidebar-menu">
-        {menuItems.map((item) => (
-          <div
-            key={item.key}
-            className={`sidebar-item ${activeTab === item.key ? "active" : ""}`}
-            title={!isExpanded ? item.label : ""}
-          >
-            <span className="sidebar-icon">{item.icon}</span>
-            {isExpanded && <span className="sidebar-label">{item.label}</span>}
+      <div className="controls">
+        <nav className="nav">
+          {NAV_TABS.map(tab => (
+            <NavLink
+              key={tab.key}
+              to={tab.path}
+              className={`nav-item ${activeKey === tab.key ? "active" : ""}`}
+            >
+              {/* {tab.icon}  — enable icons later if needed */}
+              <span>{tab.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="right-actions">
+          <div className="icons">
+            <button className="icon-btn">
+              <Bell size={18} />
+            </button>
+            <button className="icon-btn">
+              <User size={18} />
+            </button>
           </div>
-        ))}
-      </div>
 
-      <div className="sidebar-bottom">
-        <div className="sidebar-profile">
-          <img
-            src="https://i.pravatar.cc/36?img=3"
-            alt="avatar"
-            className="avatar"
-          />
-          {isExpanded && (
-            <>
-              <div className="profile-info">
-                <div className="profile-name">Tran Mau Tri Tam</div>
-                <div className="profile-email">tam@ui8.net</div>
-              </div>
-              <div className="badge">Free</div>
-            </>
-          )}
+          <div className="settings-group">
+            <div className="divider-left" />
+
+            <button className="nav-item">
+              <Settings size={18} />
+            </button>
+
+            <button className="nav-item">
+              <LogOut size={18} />
+            </button>
+          </div>
         </div>
-        {isExpanded && (
-          <>
-            <button className="upgrade-btn">Upgrade to Pro</button>
-            <div className="theme-toggle">
-              <span>🌙</span>
-              <span>Light</span>
-            </div>
-          </>
-        )}
       </div>
     </div>
   );

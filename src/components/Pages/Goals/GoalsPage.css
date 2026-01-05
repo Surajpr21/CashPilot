@@ -1,0 +1,149 @@
+.goals-page-wrapper {
+  padding: 28px;
+}
+
+/* HEADER */
+.goals-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.goals-page-title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.goals-page-subtitle {
+  margin-top: 4px;
+  color: #6b7280;
+}
+
+.goals-page-create-btn {
+  background: linear-gradient(135deg, #6fb1c6, #4f9cf9);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+/* SECTION */
+.goals-page-section {
+  background: #f7f8fe;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+/* CARD */
+.goals-page-goal-card {
+  background: #f9fbff;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+/* TOP */
+.goals-page-goal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goals-page-goal-title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.goals-page-goal-sub {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+/* STATUS */
+.goals-page-status {
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.goals-behind {
+  background: #fde7d9;
+  color: #b45309;
+}
+
+.goals-ontrack {
+  background: #e7f6ee;
+  color: #166534;
+}
+
+.goals-completed {
+  background: #e5edff;
+  color: #1d4ed8;
+}
+
+/* PROGRESS */
+.goals-page-progress-block {
+  margin-top: 14px;
+}
+
+.goals-page-progress-track {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.goals-page-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.goals-behind.goals-page-progress-fill {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+.goals-ontrack.goals-page-progress-fill {
+  background: linear-gradient(90deg, #6ee7b7, #34d399);
+}
+
+.goals-completed.goals-page-progress-fill {
+  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+}
+
+.goals-page-progress-meta {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+/* ACTIONS */
+.goals-page-actions {
+  display: flex;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.goals-page-actions button {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.goals-page-actions .danger {
+  color: #dc2626;
+}
+
+/* INSIGHTS */
+.goals-page-insights {
+  margin-top: 18px;
+  background: #eef2ff;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 14px;
+}

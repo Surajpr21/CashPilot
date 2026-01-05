@@ -1,284 +1,259 @@
-/* Default: Desktop (1201px - 1920px) */
-.stats-card-dashboard-container {
+.stats-section-container {
   display: flex;
-  flex-direction: row;
-  gap: 24px;
-  flex-wrap: nowrap; /* Prevent wrapping */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
   width: 100%;
-  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
-.stats-card-dashboard-card {
+/* LEFT SIDE — cards */
+.stats-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  flex: 2;
+  /* allow the left section to shrink on narrower viewports so layout stays horizontal
+     until 1200px */
+  min-width: 360px;
+}
+
+.stats-card {
   position: relative;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  flex: 1 1 220px;
-  max-width: 100%;
-  min-width: 220px;
+  /* allow cards to shrink gradually as width decreases */
+  flex: 1 1 0;
+  min-width: 140px;
+  border-radius: 18px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: flex-basis 0.3s, max-width 0.3s;
-  margin-top: 15px;
-  overflow: hidden;
+  /* transition: transform 0.25s ease, box-shadow 0.25s ease; */
+  /* box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px; */
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
 }
 
-/* Tablet (768px - 1200px) */
-@media (max-width: 1200px) and (min-width: 768px) {
-  .stats-card-dashboard-container {
-    gap: 16px;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap; /* Allow wrapping */
-  }
-  .stats-card-dashboard-card {
-    flex: 1 1 45%;
-    max-width: 48%;
-    min-width: 180px;
-    padding: 18px;
-  }
-}
-
-/* Mobile (320px - 767px) */
-@media (max-width: 767px) {
-  .stats-card-dashboard-container {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-    flex-wrap: nowrap;
-  }
-  .stats-card-dashboard-card {
-    flex: 1 1 100%;
-    max-width: 100%;
-    min-width: 0;
-    padding: 14px;
-  }
-}
-
-/* Desktop: 1201px and up (single row, no wrap) */
-@media (min-width: 1201px) {
-  .stats-card-dashboard-container {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-    flex-wrap: nowrap;
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .stats-card-dashboard-card {
-    flex: 1;  /* Changed to just flex: 1 to allow equal growth */
-    min-width: 0;  /* Remove min-width constraint */
-    padding: 20px;
-    transition: all 0.3s ease;
-  }
-}
-
-/* Mid-size desktop specific adjustments */
-@media (min-width: 1350px) and (max-width: 1758px) {
-  .stats-card-dashboard-card {
-    padding: 16px;
-  }
-  .stats-card-dashboard-title {
-    font-size: 12px;
-  }
-  .stats-card-dashboard-value {
-    font-size: 18px;
-    margin: 8px 0 4px;
-  }
-  .stats-card-dashboard-change {
-    font-size: 11px;
-    padding: 3px 8px;
-  }
-}
-
-/* Large desktop screens: shrink cards to fit row between 1201px and 1760px */
-@media (min-width: 1201px) and (max-width: 1759px) {
-  .stats-card-dashboard-card {
-    max-width: 100%;
-    min-width: 120px;
-    padding: 12px;
-  }
-  .stats-card-dashboard-title {
-    font-size: 12px;
-  }
-  .stats-card-dashboard-value {
-    font-size: 18px;
-    /* margin: 12px 0 6px; */
-  }
-  .stats-card-dashboard-change {
-    font-size: 11px;
-    padding: 3px 8px;
-  }
-}
-
-/* When sidebar is collapsed, shrink cards to fit row between 1201px and 1920px */
-@media (min-width: 1201px) and (max-width: 1920px) {
-  .dashboard-content.sidebar-collapsed .stats-card-dashboard-card {
-    max-width: 410px;
-    min-width: 100px;
-    padding: 12px;
-  }
-  .dashboard-content.sidebar-collapsed .stats-card-dashboard-title {
-    font-size: 12px;
-  }
-  .dashboard-content.sidebar-collapsed .stats-card-dashboard-value {
-    font-size: 18px;
-  margin: 12px 0 6px;
-  }
-  .dashboard-content.sidebar-collapsed .stats-card-dashboard-change {
-    font-size: 11px;
-  padding: 3px 8px;
-  }
-}
-
-/* Left color strip */
-.stats-card-dashboard-strip {
+/* .stats-card::after {
+  content: "";
   position: absolute;
-  top: 22;
-  left: 0;
-  width: 4px;
-  height: 35%;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
-}
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
 
-/* Header with title and menu */
-.stats-card-dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+  background:
+    radial-gradient(
+      120px 90px at 75% 75%,
+      rgba(255,255,255,0.55),
+      rgba(255,255,255,0.0) 70%
+    ),
+    radial-gradient(
+      140px 100px at 40% 85%,
+      rgba(255,255,255,0.35),
+      rgba(255,255,255,0.0) 75%
+    );
+} */
 
-.stats-card-dashboard-title {
+
+/* .stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+} */
+
+.stats-card-title {
   font-size: 16px;
   font-weight: 500;
+  color: #4E6C68;
+  margin: 0;
+}
+
+.stats-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.card-icon {
+  /* width: 28px; */
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #111827;
 }
 
-.stats-card-dashboard-menu {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #9ca3af;
-  cursor: pointer;
+.hero-icon {
+  width: 26px;
+  height: 26px;
 }
 
-/* Main value */
-.stats-card-dashboard-value {
-  /* font-size: 24px; */
-  font-weight: 700;
-  /* margin: 16px 0 8px; */
-  color: #1f2937;
-}
-
-/* Change percentage */
-.stats-card-dashboard-change {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  width: fit-content;
+.stats-card-value {
+  font-size: 26px;
   font-weight: 600;
+  color: #0F2E2B;
+  margin: 0;
+  margin-top: 10px;
 }
 
-.stats-card-dashboard-change.positive {
-  background-color: #ecfdf5;
-  color: #047857;
+.stats-card-icon {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 6px;
+  border-radius: 50%;
 }
 
-.stats-card-dashboard-change.negative {
-  background-color: #fef2f2;
+/* RIGHT SIDE — numbers */
+.stats-right {
+  display: flex;
+  /* gap: 52px; */
+  justify-content: space-around;
+  align-items: center;
+  flex: 1 1;
+  /* background: linear-gradient(135deg, #fffbe6, #fff0c2); */
+  border-radius: 20px;
+  /* padding: 24px 16px; */
+  min-width: 220px;
+}
+
+.stats-number-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stats-number-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.stats-number-label {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.stats-number-icon svg {
+  margin-top: -2px;
+}
+
+/* RESPONSIVE */
+/* Keep left and right side-by-side (horizontal) until viewport is 1200px wide.
+   Below 1200px we stack vertically. */
+@media (max-width: 1200px) {
+  .stats-section-container {
+    flex-direction: column;
+  }
+
+  .stats-left,
+  .stats-right {
+    width: 100%;
+  }
+
+  .stats-right {
+    justify-content: space-evenly;
+    margin-top: 16px;
+  }
+}
+
+/* Intermediate adjustments so the layout degrades smoothly between wide and
+   stacked breakpoints. These reduce gaps, padding and font-sizes gradually. */
+@media (max-width: 1400px) {
+  .stats-left {
+    gap: 16px;
+  }
+
+  .stats-card {
+    padding: 18px;
+  }
+
+  .stats-number-value {
+    font-size: 30px;
+  }
+}
+
+/* Prevent wrapping and distribute space proportionally on wide viewports so cards
+   do not drop to the next line. This keeps left and right horizontal until
+   the 1200px breakpoint above. */
+@media (min-width: 1201px) {
+  .stats-section-container {
+    flex-wrap: nowrap;
+    /* keep children on one line */
+    align-items: stretch;
+  }
+
+  .stats-left {
+    /* take ~70% of the available width and allow internal cards to flex */
+    /* flex: 0 0 66.5%; */
+    min-width: 0;
+    /* allow shrinking below previous min */
+    display: flex;
+    gap: 16px;
+  }
+
+  .stats-right {
+    /* flex: 0 0 33%; */
+    min-width: 0;
+  }
+
+  .stats-left .stats-card {
+    /* share available space evenly and be allowed to shrink */
+    flex: 1 1 0;
+    min-width: 120px;
+  }
+}
+
+/* --- Comparison badge styling --- */
+.stats-card-change-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-top: 6px;
+  width: fit-content;
+}
+
+.stats-card-change-badge.positive {
+  background-color: #E6F6F1;
+  /* soft green */
+  color: #1F6B5D;
+}
+
+.stats-card-change-badge.negative {
+  background-color: #fee2e2;
+  /* soft red */
   color: #b91c1c;
 }
-.stats-card-dashboard-content {
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 2;
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.stats-card {
   position: relative;
-}
-
-.stats-card-dashboard-wave {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  z-index: 1;
-}
-
-
-.stats-card-dashboard-wave svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.stats-card-dashboard-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-}
-
-.stats-card-dashboard-amounts {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 8px 0;
-  font-size: 14px;
-  color: #64748b;
-}
-
-.stats-card-dashboard-progress {
-  width: 100%;
-  height: 6px;
-  background-color: #e2e8f0;
-  border-radius: 3px;
   overflow: hidden;
-  margin-top: 8px;
 }
 
-.stats-card-dashboard-progress-bar {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.3s ease;
+/* Background Layer */
+.stats-card-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: .95;
 }
 
-/* Responsive styles */
-@media (min-width: 1350px) and (max-width: 1759px) {
-  .stats-card-dashboard-amounts {
-    font-size: 12px;
-    margin: 6px 0;
-  }
-  .stats-card-dashboard-progress {
-    height: 4px;
-    margin-top: 6px;
-  }
-}
-
-@media (min-width: 1201px) and (max-width: 1349px) {
-  .stats-card-dashboard-amounts {
-    font-size: 11px;
-    margin: 4px 0;
-  }
-  .stats-card-dashboard-progress {
-    height: 4px;
-    margin-top: 4px;
-  }
-}
-
-@media (max-width: 1200px) and (min-width: 768px) {
-  .stats-card-dashboard-amounts {
-    font-size: 11px;
-    margin: 4px 0;
-  }
-  .stats-card-dashboard-progress {
-    height: 3px;
-    margin-top: 4px;
-  }
+/* Force SVG to behave like a COVER background */
+.stats-card-bg svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
 }

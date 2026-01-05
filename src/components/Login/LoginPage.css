@@ -1,0 +1,137 @@
+.login-page-root {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: linear-gradient(135deg, #eef3fb, #efe7ff);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.login-page-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+
+.login-page-svg {
+  width: 100%;
+  height: auto;
+}
+
+.login-page-form-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+
+.login-page-card {
+  width: 420px;
+  padding: 36px 32px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(90, 80, 140, 0.18);
+}
+
+.login-page-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.login-page-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #7a7a7a;
+  margin-bottom: 28px;
+}
+
+.login-page-field {
+  margin-bottom: 18px;
+}
+
+.login-page-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.login-page-input {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.login-page-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.login-page-icon {
+  font-size: 16px;
+}
+
+.login-page-eye {
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.login-page-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 14px 0 22px;
+}
+
+.login-page-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-page-forgot {
+  cursor: pointer;
+}
+
+.login-page-button {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #4db6c6, #5f9cf3);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.login-page-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.login-page-footer span {
+  color: #4db6c6;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .login-page-root {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page-illustration {
+    display: none;
+  }
+}

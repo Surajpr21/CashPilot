@@ -1,0 +1,169 @@
+/* .expenses-page-container {
+
+  font-family: Inter, sans-serif;
+}
+
+.expenses-page-header {
+  margin-bottom: 20px;
+}
+
+.expenses-page-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.expenses-page-subtitle {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.expenses-page-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.expenses-page-filter,
+.expenses-page-clear-filters {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #f1f3f8;
+  font-size: 14px;
+}
+
+.expenses-page-add-expense {
+  margin-left: auto;
+  background: #1fb6aa;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.expenses-page-summary {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 14px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.expense-page-left {
+display: flex;
+}
+
+.expenses-page-summary-item {
+  display: flex;
+  gap: 6px;
+}
+
+.expenses-page-summary-value {
+  font-weight: 700;
+}
+
+.expenses-page-import {
+  margin-left: auto;
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.expenses-page-table-wrapper {
+  margin-top: 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.expenses-page-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expenses-page-th {
+  text-align: left;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 14px;
+}
+
+.expenses-page-td {
+  padding: 14px;
+  border-top: 1px solid #eef0f4;
+}
+
+.expenses-page-amount {
+  font-weight: 600;
+}
+
+.expenses-page-actions {
+  text-align: center;
+  cursor: pointer;
+}
+
+.expenses-page-footer {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.expenses-page-pagination {
+  display: flex;
+  gap: 6px;
+}
+
+.expenses-page-page-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f1f3f8;
+}
+
+.expenses-page-page-active {
+  background: #1fb6aa;
+  color: white;
+}
+
+ */
+.expenses-page-container {
+  font-family: Inter, sans-serif;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* SVG Background */
+.expenses-page-svg-background {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  width: 100%;
+  height: 200px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.expenses-page-svg-background svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+    -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,1) 88%,
+    rgba(0,0,0,0) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,1) 88%,
+    rgba(0,0,0,0) 100%
+  );
+}

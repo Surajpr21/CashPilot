@@ -1,0 +1,300 @@
+/* .subs-list-card {
+    background: #F6F5F1;
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    font-family: "Segoe UI", sans-serif;
+}
+
+
+.subs-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.subs-list-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.subs-list-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #fff7ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.subs-list-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.subs-list-kebab {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #777;
+}
+
+
+
+.subs-list-items {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.subs-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+
+
+.subs-list-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+
+.subs-list-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.subs-list-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #111;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subs-list-date {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+
+
+.subs-list-amount {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+
+@media (max-width: 1200px) {
+    .subs-list-card {
+        padding: 1rem;
+    }
+
+    .subs-list-item {
+        gap: 0.6rem;
+    }
+
+    .subs-list-name {
+        font-size: 0.85rem;
+    }
+
+    .subs-list-amount {
+        font-size: 0.85rem;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .subs-list-item {
+        align-items: flex-start;
+    }
+
+    .subs-list-info {
+        flex: 1;
+    }
+
+    .subs-list-amount {
+        margin-left: auto;
+        font-size: 0.85rem;
+    }
+}
+
+
+@media (min-width: 1920px) {
+    .subs-list-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .subs-list-name {
+        font-size: 1rem;
+    }
+
+    .subs-list-amount {
+        font-size: 1rem;
+    }
+} */
+
+/* CARD */
+.bills-card {
+    background: #F2F4F2;
+    border-radius: 32px;
+    overflow: hidden;
+    padding: 20px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
+
+
+.bills-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.bills-icon {
+    font-size: 26px;
+}
+
+.bills-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F2E2B;
+}
+
+/* TOTAL */
+.bills-total {
+    border-bottom: 1px solid #ececec;
+}
+
+.bills-total-label {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.bills-total-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #4E6C68;
+}
+
+.bills-total-amount span {
+    font-size: 18px;
+    font-weight: 400;
+    color: #6b7280;
+}
+
+/* LIST */
+.bills-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.bills-row {
+    padding: 7px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #efefef;
+}
+
+.bills-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bills-app-icon {
+    font-size: 22px;
+}
+
+.bills-name {
+    font-size: 16px;
+    color: #0F2E2B;
+}
+
+/* RIGHT */
+.bills-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.bills-date {
+    font-size: 15px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bills-amount {
+    font-size: 16px;
+    color: #0F2E2B;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* STATUS PILLS */
+.bills-status {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.bills-status.due {
+    background: #FFF2DD;
+    color: #8A6A24;
+}
+
+.bills-status.paid {
+    background: #E6F6EE;
+    color: #1F6B5D;
+}
+
+.bills-status.overdue {
+    background: #FBEAEB;
+    color: #B43F46;
+}
+
+/* FOOTER */
+.bills-footer {
+    padding: 6px 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.bills-manage {
+    background: #ecece8;
+    border: none;
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #111;
+}
+
+.bills-manage:hover {
+    background: #e0e0dc;
+}
