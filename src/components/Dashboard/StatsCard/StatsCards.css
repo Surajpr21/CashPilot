@@ -1,89 +1,259 @@
-/* src/components/StatsCards/StatsCards.css */
-
-.stats-card-dashboard-container {
+.stats-section-container {
   display: flex;
-  gap: 16px;
-  padding: 20px;
-  overflow-x: auto;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-.stats-card-dashboard-card {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 16px 20px;
-  min-width: 240px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  border: 1.5px solid #e4e4e7;
+/* LEFT SIDE — cards */
+.stats-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  flex: 2;
+  /* allow the left section to shrink on narrower viewports so layout stays horizontal
+     until 1200px */
+  min-width: 360px;
+}
+
+.stats-card {
+  position: relative;
+  /* allow cards to shrink gradually as width decreases */
+  flex: 1 1 0;
+  min-width: 140px;
+  border-radius: 18px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: box-shadow 0.2s ease;
+  /* transition: transform 0.25s ease, box-shadow 0.25s ease; */
+  /* box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px; */
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
 }
 
-.stats-card-dashboard-card:hover {
+/* .stats-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      120px 90px at 75% 75%,
+      rgba(255,255,255,0.55),
+      rgba(255,255,255,0.0) 70%
+    ),
+    radial-gradient(
+      140px 100px at 40% 85%,
+      rgba(255,255,255,0.35),
+      rgba(255,255,255,0.0) 75%
+    );
+} */
+
+
+/* .stats-card:hover {
+  transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+} */
+
+.stats-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #4E6C68;
+  margin: 0;
 }
 
-.stats-card-dashboard-header {
+.stats-card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
-.stats-card-dashboard-title {
-  display: flex;
+.card-icon {
+  /* width: 28px; */
+  height: 28px;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  color: #111827;
+}
+
+.hero-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.stats-card-value {
+  font-size: 26px;
   font-weight: 600;
-  font-size: 14px;
-  color: #27272a;
+  color: #0F2E2B;
+  margin: 0;
+  margin-top: 10px;
 }
 
-.stats-card-dashboard-icon {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
+.stats-card-icon {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 6px;
+  border-radius: 50%;
 }
 
-.stats-card-dashboard-menu {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #a1a1aa;
-  cursor: pointer;
+/* RIGHT SIDE — numbers */
+.stats-right {
+  display: flex;
+  /* gap: 52px; */
+  justify-content: space-around;
+  align-items: center;
+  flex: 1 1;
+  /* background: linear-gradient(135deg, #fffbe6, #fff0c2); */
+  border-radius: 20px;
+  /* padding: 24px 16px; */
+  min-width: 220px;
 }
 
-.stats-card-dashboard-value {
-  font-size: 24px;
+.stats-number-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stats-number-value {
+  font-size: 36px;
   font-weight: 700;
-  margin-top: 12px;
-  color: #18181b;
+  color: #111827;
 }
 
-.stats-card-dashboard-label {
-  font-size: 12px;
-  color: #71717a;
-  margin-top: 2px;
+.stats-number-label {
+  font-size: 13px;
+  color: #4b5563;
 }
 
-.stats-card-dashboard-change {
-  margin-top: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
-  width: fit-content;
-  display: flex;
+.stats-number-icon svg {
+  margin-top: -2px;
+}
+
+/* RESPONSIVE */
+/* Keep left and right side-by-side (horizontal) until viewport is 1200px wide.
+   Below 1200px we stack vertically. */
+@media (max-width: 1200px) {
+  .stats-section-container {
+    flex-direction: column;
+  }
+
+  .stats-left,
+  .stats-right {
+    width: 100%;
+  }
+
+  .stats-right {
+    justify-content: space-evenly;
+    margin-top: 16px;
+  }
+}
+
+/* Intermediate adjustments so the layout degrades smoothly between wide and
+   stacked breakpoints. These reduce gaps, padding and font-sizes gradually. */
+@media (max-width: 1400px) {
+  .stats-left {
+    gap: 16px;
+  }
+
+  .stats-card {
+    padding: 18px;
+  }
+
+  .stats-number-value {
+    font-size: 30px;
+  }
+}
+
+/* Prevent wrapping and distribute space proportionally on wide viewports so cards
+   do not drop to the next line. This keeps left and right horizontal until
+   the 1200px breakpoint above. */
+@media (min-width: 1201px) {
+  .stats-section-container {
+    flex-wrap: nowrap;
+    /* keep children on one line */
+    align-items: stretch;
+  }
+
+  .stats-left {
+    /* take ~70% of the available width and allow internal cards to flex */
+    /* flex: 0 0 66.5%; */
+    min-width: 0;
+    /* allow shrinking below previous min */
+    display: flex;
+    gap: 16px;
+  }
+
+  .stats-right {
+    /* flex: 0 0 33%; */
+    min-width: 0;
+  }
+
+  .stats-left .stats-card {
+    /* share available space evenly and be allowed to shrink */
+    flex: 1 1 0;
+    min-width: 120px;
+  }
+}
+
+/* --- Comparison badge styling --- */
+.stats-card-change-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-top: 6px;
+  width: fit-content;
 }
 
-.stats-card-dashboard-change.positive {
-  background-color: #dcfce7;
-  color: #15803d;
+.stats-card-change-badge.positive {
+  background-color: #E6F6F1;
+  /* soft green */
+  color: #1F6B5D;
 }
 
-.stats-card-dashboard-change.negative {
+.stats-card-change-badge.negative {
   background-color: #fee2e2;
+  /* soft red */
   color: #b91c1c;
+}
+
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.stats-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Layer */
+.stats-card-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: .95;
+}
+
+/* Force SVG to behave like a COVER background */
+.stats-card-bg svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
 }

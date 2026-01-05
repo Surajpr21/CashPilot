@@ -1,0 +1,239 @@
+
+/* Content wrapper */
+.expenses-page-content {
+  position: relative;
+  z-index: 1;
+}
+
+.expenses-page-header {
+  margin-bottom: 20px;
+}
+
+.expenses-page-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.expenses-page-subtitle {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.expenses-page-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.expenses-page-filter,
+.expenses-page-clear-filters {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #f1f3f8;
+  font-size: 14px;
+}
+
+.expenses-page-add-expense {
+  margin-left: auto;
+  background: #1fb6aa;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.expenses-page-summary {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 14px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.expense-page-left {
+  display: flex;
+}
+
+.expenses-page-summary-item {
+  display: flex;
+  gap: 6px;
+}
+
+.expenses-page-summary-value {
+  font-weight: 700;
+}
+
+.expenses-page-import {
+  margin-left: auto;
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.expenses-page-table-wrapper {
+  margin-top: 20px;
+  background: #F2F4F2;
+  border-radius: 14px;
+  overflow: hidden;
+   box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.expenses-page-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expenses-page-th {
+  text-align: left;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 14px;
+}
+
+.expenses-page-td {
+  padding: 14px;
+  border-top: 1px solid #eef0f4;
+}
+
+.expenses-page-amount {
+  font-weight: 600;
+}
+
+.expenses-page-actions {
+  text-align: center;
+  cursor: pointer;
+}
+
+.expenses-page-footer {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.expenses-page-pagination {
+  display: flex;
+  gap: 6px;
+}
+
+.expenses-page-page-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f1f3f8;
+}
+
+.expenses-page-page-active {
+  background: #1fb6aa;
+  color: white;
+}
+
+.expenses-page-content {
+  position: relative;
+  z-index: 1;
+}
+
+.expenses-page-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px;
+  border-radius: 18px;
+  background: #F2F4F2;
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.expenses-page-filter,
+.expenses-page-clear-filters {
+  padding: 9px 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ecf4f1 0%, #e4efe9 100%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 6px 18px rgba(77, 122, 108, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #2f3f3a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.expenses-page-add-expense {
+  margin-left: auto;
+  padding: 10px 18px;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    180deg,
+    #39d2c9 0%,
+    #2ac4ba 35%,
+    #1fb6aa 100%
+  );
+
+  border: 1px solid rgba(255, 255, 255, 0.65);
+
+  box-shadow:
+    0 12px 22px rgba(23, 120, 110, 0.32),
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+  color: #ffffff;
+  font-weight: 700;
+}
+
+
+.expenses-page-summary {
+  margin-top: 18px;
+  padding: 16px;
+  width: 100%;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expense-page-left {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.expenses-page-summary-item {
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.expenses-page-summary-value {
+  font-weight: 700;
+}
+
+.expense-page-left > .expenses-page-summary-item + .expenses-page-summary-item {
+  position: relative;
+  padding-left: 18px;
+}
+
+.expense-page-left > .expenses-page-summary-item + .expenses-page-summary-item::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.expense-page-right {
+  color: #6c87c8;
+  font-weight: 500;
+  cursor: pointer;
+}

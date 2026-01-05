@@ -1,0 +1,110 @@
+.recent-trans-card {
+    background: #F2F4F2;
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
+
+.recent-trans-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.recent-trans-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F2E2B;
+    margin: 0;
+}
+
+.recent-trans-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.recent-trans-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.recent-trans-select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 13px;
+    background: #fff;
+}
+
+.recent-trans-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.recent-trans-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.recent-trans-table thead th {
+    text-align: left;
+    padding: 10px 8px;
+    font-weight: 500;
+    color: #4E6C68;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.recent-trans-table tbody td {
+    padding: 10px 8px;
+    color: #0F2E2B;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 400;
+}
+
+.recent-trans-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.recent-trans-table .amount {
+    font-weight: 600;
+}
+
+/* RESPONSIVE HELPERS */
+.hide-sm {
+    display: table-cell;
+}
+
+.hide-md {
+    display: table-cell;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .hide-md {
+        display: none;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .hide-sm {
+        display: none;
+    }
+
+    .recent-trans-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .recent-trans-table {
+        font-size: 13px;
+    }
+}

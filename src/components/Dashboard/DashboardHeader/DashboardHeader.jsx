@@ -26,7 +26,7 @@ const DashboardHeader = () => {
       <div className={styles.left}>
         <div>
           <h2 className={styles.title}>
-            Hi, Subu <span className={styles.wave}>👋</span>
+            Hi, Subu
           </h2>
           <p className={styles.subtitle}>
             Track your all expense and transactions
@@ -34,7 +34,7 @@ const DashboardHeader = () => {
         </div>
       </div>
 
-      <div className={styles.right}>
+      {/* <div className={styles.right}>
         <div className={styles.center}>
                <AnalogClock />
           <span className={styles.time}>
@@ -59,7 +59,7 @@ const DashboardHeader = () => {
           alt="Avatar"
           className={styles.avatar}
         />
-      </div>
+      </div> */}
     </header>
   );
 };

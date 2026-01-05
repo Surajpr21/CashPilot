@@ -1,0 +1,214 @@
+/* .goals-wrapper {
+    display: grid;
+    grid-template-rows: repeat(auto-fit, minmax(1fr, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+
+.goals-card {
+    background: #f6f5f1;
+    border-radius: 20px;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+
+    border-radius: 28px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.2s ease;
+}
+
+.goals-card:hover {
+    transform: translateY(-2px);
+}
+
+
+.goals-card.dark {
+    color: #ffffff;
+}
+
+.goals-card.dark .goals-progress {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.goals-card.dark .goals-progress-fill {
+    background: #e7ff6a;
+}
+
+
+.goals-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.goals-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.goals-percent {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.goals-amount {
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.goals-amount span {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.7;
+    margin-left: 4px;
+}
+
+
+.goals-progress {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.goals-progress-fill {
+    height: 100%;
+    background: #111827;
+    border-radius: 999px;
+}
+
+
+.goals-cta {
+    margin-top: auto;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.goals-cta:hover {
+    opacity: 1;
+}
+
+
+@media (max-width: 600px) {
+    .goals-amount {
+        font-size: 22px;
+    }
+} */
+
+.goals-card {
+    background: #F2F4F2;
+    border-radius: 28px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
+
+/* Header */
+.goals-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.goals-icon {
+    width: 42px;
+    height: 42px;
+    background: #f2f2ef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.goals-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F2E2B;
+}
+
+/* Body */
+.goals-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.goals-label {
+    font-size: 14px;
+    color: #8CA5A0;
+}
+
+.goals-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0F2E2B;
+    margin: 0;
+}
+
+/* Progress bar */
+.goals-progress {
+    position: relative;
+    height: 45px;
+    background: #E3EFEA;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.goals-progress-fill {
+    height: 100%;
+    background: rgb(159, 210, 168);
+    border-radius: 999px;
+}
+
+.goals-progress-percent {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #0F2E2B;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+/* Meta */
+.goals-meta {
+    font-size: 18px;
+    font-weight: 600;
+    color: #4E6C68;
+}
+
+.goals-meta span {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6b7280;
+    margin-left: 4px;
+}
+
+/* CTA */
+.goals-cta {
+    align-self: flex-start;
+    margin-top: 8px;
+    background: #efefec;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #4A7FD6;
+}
+
+.goals-cta:hover {
+    background: #e6e6e3;
+}

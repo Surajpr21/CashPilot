@@ -1,0 +1,220 @@
+/* ================================
+   ROOT CONTAINER
+================================ */
+.subscriptions-page-container {
+  padding: 32px;
+}
+
+/* ================================
+   HEADER
+================================ */
+.subscriptions-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.subscriptions-page-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.subscriptions-page-subtitle {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #7b7b7b;
+}
+
+.subscriptions-page-add-btn {
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: none;
+  background: #4f9a94;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ================================
+   FILTERS CONTAINER
+================================ */
+.subscriptions-page-filters-wrapper {
+  margin-top: 26px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+}
+
+.subscriptions-page-filters-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* dropdowns + inputs */
+.subscriptions-page-filter,
+.subscriptions-page-search input {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #dedede;
+  background: #ffffff;
+  font-size: 14px;
+  color: #333;
+}
+
+/* clear filters */
+.subscriptions-page-clear-btn {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #dedede;
+  background: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* push right actions */
+.subscriptions-page-import-btn {
+  margin-left: auto;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #dedede;
+  background: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* monthly spend text */
+.subscriptions-page-total-spend {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #5f5f5f;
+}
+
+/* ================================
+   MAIN CONTENT GRID
+================================ */
+.subscriptions-page-content {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 22px;
+}
+
+/* ================================
+   SUBSCRIPTION LIST (LEFT)
+================================ */
+.subscriptions-page-table {
+  display: flex;
+  flex-direction: column;
+}
+
+/* card */
+.subscriptions-page-card {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+/* left content */
+.subscriptions-page-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subscriptions-page-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.subscriptions-page-card-meta {
+  font-size: 14px;
+  color: #6f6f6f;
+}
+
+.subscriptions-page-card-category {
+  font-size: 14px;
+  color: #4f4f4f;
+}
+
+/* ================================
+   CARD RIGHT ACTIONS
+================================ */
+.subscriptions-page-card-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* status pill */
+.subscriptions-page-status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  text-transform: lowercase;
+}
+
+.subscriptions-page-status-active {
+  background: #e2f4f0;
+  color: #1f7f73;
+}
+
+.subscriptions-page-status-paused {
+  background: #fff0d6;
+  color: #9a6b00;
+}
+
+/* actions */
+.subscriptions-page-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.subscriptions-page-actions button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+}
+
+.subscriptions-page-actions .danger {
+  color: #d64545;
+}
+
+/* ================================
+   UPCOMING PAYMENTS (RIGHT)
+================================ */
+.subscriptions-page-upcoming {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 18px;
+  padding: 18px;
+  height: fit-content;
+}
+
+.subscriptions-page-upcoming-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.subscriptions-page-upcoming-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #2b2b2b;
+}

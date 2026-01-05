@@ -3,14 +3,15 @@
   align-items: center;
   justify-content: space-between;
   font-family: "Raleway", sans-serif;
-  background: #f9f9fb;
-  border-bottom: 1px solid #e4e4e7;
+  /* background: #f9f9fb; */
+  /* border-bottom: 1px solid #e4e4e7; */
 }
 
 .left .title {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
+  color: #0F2E2B;
 }
 
 .wave {
@@ -19,7 +20,7 @@
 
 .subtitle {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: #8CA5A0;
   margin: 0;
   margin-top: 5px;
   margin-bottom: 20px;

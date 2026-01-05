@@ -6,7 +6,7 @@
   --surface-container: #e6e0e9;
   --outline: #938f99;
   --radius: 1rem;
-  --font: "Roboto", sans-serif;
+  --font: 'Poppins', sans-serif;
 }
 
 body, html {
