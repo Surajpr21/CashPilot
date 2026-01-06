@@ -51,6 +51,7 @@ const BudgetsPage = lazy(() => import("./components/Pages/Budgets/BudgetsPage"))
 const ReportsPage = lazy(() => import("./components/Pages/Reports/ReportsPage"));
 const GoalsPage = lazy(() => import("./components/Pages/Goals/GoalsPage"));
 const Login = lazy(() => import("./components/Login/LoginPage"));
+const Signup = lazy(() => import("./components/Login/SignupPage"));
 
 export default function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -62,6 +63,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         {/* Dashboard Shell — Sidebar visible on all below */}
         <Route
           element={

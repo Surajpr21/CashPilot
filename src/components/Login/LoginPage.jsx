@@ -1,11 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
+import { signIn, getSession } from "../../services/auth.service";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      const session = await getSession();
+      if (session) navigate("/dashboard");
+    })();
+  }, [navigate]);
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const { data, error: loginError } = await signIn(email, password);
+
+    setLoading(false);
+
+    if (loginError) {
+      setError(loginError.message || "Login failed");
+      return;
+    }
+
+    // Redirect to dashboard
+    navigate("/dashboard");
+  }
+
   return (
     <div className="login-page-root">
 
@@ -17,11 +48,20 @@ export default function LoginPage() {
             Welcome back! Please enter your login details
           </p>
 
+          {error && (
+            <div style={{ color: "#d85c5c", marginBottom: 12, fontSize: 13 }}>{error}</div>
+          )}
+
           <div className="login-page-field">
             <label className="login-page-label">Email</label>
             <div className="login-page-input">
               <span className="login-page-icon">✉</span>
-              <input type="email" placeholder="Enter your email..." />
+              <input
+                type="email"
+                placeholder="Enter your email..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
           </div>
 
@@ -32,6 +72,8 @@ export default function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <span
                 className="login-page-eye"
@@ -50,12 +92,12 @@ export default function LoginPage() {
             <span className="login-page-forgot">Forgot password?</span>
           </div>
 
-       <button className="login-page-button" onClick={() => navigate("/dashboard")}>
-            Login
+       <button className="login-page-button" onClick={handleLogin} disabled={loading}>
+            {loading ? "Signing in..." : "Login"}
           </button>
 
           <div className="login-page-footer">
-            Don’t have an account? <span>Sign up</span>
+            Don’t have an account? <span onClick={() => navigate("/signup")}>Sign up</span>
           </div>
         </div>
       </div>

@@ -34,26 +34,55 @@
 //     </div>
 //   );
 // }
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ExpensesFilters from "./ExpensesFilters/ExpensesFilters";
 import ExpensesSummary from "./ExpensesFilters/ExpensesSummary";
 import ExpensesTable from "./ExpensesFilters/ExpensesTable";
 import ExpensesPagination from "./ExpensesFilters/ExpensesPagination";
 import "./ExpensesPage.css";
+import { getExpensesForMonth } from "../../../services/expenses.service";
 
 export default function ExpensesPage() {
-  const expenses = [
-    { date: "31 May 2025", title: "Amazon", category: "Shopping", sub: "Amazon", amount: "₹318", mode: "UPI" },
-    { date: "30 May 2025", title: "PVR", category: "Movie", sub: "PVR", amount: "₹4,200", mode: "Card" },
-    { date: "30 May 2025", title: "Medplus", category: "Health", sub: "Medplus", amount: "₹540", mode: "Bank" },
-    { date: "26 May 2025", title: "Swiggy", category: "Food", sub: "Swiggy", amount: "₹160", mode: "UPI" },
-    { date: "24 May 2025", title: "Flipkart", category: "Shopping", sub: "Flipkart", amount: "₹1,600", mode: "Bank" },
-    { date: "20 May 2025", title: "Uber", category: "Travel", sub: "Uber", amount: "₹2,000", mode: "UPI" },
-    { date: "19 May 2025", title: "Petrol", category: "Auto", sub: "Petrol", amount: "₹1,400", mode: "Bank" },
-    { date: "18 May 2025", title: "Dropbox", category: "Software", sub: "Dropbox", amount: "₹450", mode: "UPI" },
-    { date: "16 May 2025", title: "Myntra", category: "Shopping", sub: "Myntra", amount: "₹1,200", mode: "Card" },
-    { date: "14 May 2025", title: "Concert tickets", category: "Entertainment", sub: "Concert tickets", amount: "₹2,700", mode: "UPI" }
-  ];
+  const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      console.log("FETCHING EXPENSES WITH RANGE => year:", year, "month:", month);
+      const { data, error } = await getExpensesForMonth(year, month);
+
+      if (error) {
+        setError(error.message);
+      } else {
+        setExpenses(data || []);
+        setError("");
+      }
+
+      setLoading(false);
+    }
+
+    load();
+  }, [year, month]);
+
+  const refetchExpenses = async () => {
+    setLoading(true);
+    const { data, error } = await getExpensesForMonth(year, month);
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setExpenses(data || []);
+      setError("");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className="expenses-page-container">
@@ -117,9 +146,19 @@ export default function ExpensesPage() {
           <p className="expenses-page-subtitle">Track and manage all your spending.</p>
         </div>
 
-        <ExpensesFilters />
+        <ExpensesFilters onExpenseAdded={refetchExpenses} />
         {/* <ExpensesSummary /> */}
-        <ExpensesTable expenses={expenses} />
+
+        {loading && <div className="expenses-page-loading">Loading expenses…</div>}
+        {error && <div className="expenses-page-error" style={{ color: "red" }}>{error}</div>}
+
+        {!loading && !error && (
+          <>
+            {console.log("RAW EXPENSES FROM API =>", expenses)}
+            {console.log("PASSED TO TABLE =>", expenses)}
+            <ExpensesTable expenses={expenses} />
+          </>
+        )}
         <ExpensesPagination />
       </div>
     </div>
