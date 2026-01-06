@@ -189,10 +189,31 @@
   font-size: 14px;
   color: #444;
   cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subscriptions-page-actions button:disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .subscriptions-page-actions .danger {
   color: #d64545;
+}
+
+.subscriptions-page-actions .cancelled {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.subscriptions-page-actions .reactivate-btn {
+  color: #1fb6aa;
+  font-weight: 600;
+}
+
+.subscriptions-page-actions .reactivate-btn:hover {
+  color: #17a89c;
 }
 
 /* ================================

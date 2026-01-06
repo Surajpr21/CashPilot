@@ -237,3 +237,9 @@
   font-weight: 500;
   cursor: pointer;
 }
+
+.expenses-page-stats-error {
+  margin-top: 10px;
+  color: #b91c1c;
+  font-size: 13px;
+}

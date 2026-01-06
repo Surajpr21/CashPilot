@@ -13,6 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import "./Sidebar.css";
+import { signOut } from "../../../services/auth.service";
 
 const NAV_TABS = [
   { key: "dashboard", label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
@@ -27,6 +28,11 @@ const NAV_TABS = [
 const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  async function handleLogout() {
+    await signOut();
+    navigate("/login");
+  }
 
   // derive active tab from URL (works for nested routes too)
   const activeKey =
@@ -69,7 +75,7 @@ const Sidebar = () => {
               <Settings size={18} />
             </button>
 
-            <button className="nav-item">
+            <button className="nav-item" onClick={handleLogout} title="Logout">
               <LogOut size={18} />
             </button>
           </div>
