@@ -1,13 +1,14 @@
 .login-page-root {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #eef3fb, #efe7ff);
   font-family: Inter, system-ui, sans-serif;
 }
 
 .login-page-illustration {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 48px;

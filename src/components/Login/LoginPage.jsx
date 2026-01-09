@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
 import { signIn, getSession } from "../../services/auth.service";
+import { EnvelopeIcon, LockClosedIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +56,7 @@ export default function LoginPage() {
           <div className="login-page-field">
             <label className="login-page-label">Email</label>
             <div className="login-page-input">
-              <span className="login-page-icon">✉</span>
+              <EnvelopeIcon className="login-page-icon" style={{ width: 18, height: 18 }} />
               <input
                 type="email"
                 placeholder="Enter your email..."
@@ -68,19 +69,18 @@ export default function LoginPage() {
           <div className="login-page-field">
             <label className="login-page-label">Password</label>
             <div className="login-page-input">
-              <span className="login-page-icon">🔒</span>
+              <LockClosedIcon className="login-page-icon" style={{ width: 18, height: 18 }} />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password..."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <span
+              <EyeIcon
                 className="login-page-eye"
+                style={{ width: 18, height: 18, cursor: "pointer" }}
                 onClick={() => setShowPassword(!showPassword)}
-              >
-                👁
-              </span>
+              />
             </div>
           </div>
 
