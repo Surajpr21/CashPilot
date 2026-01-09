@@ -3,6 +3,7 @@ import "./LoginPage.css"; // reuse login styles for consistent look
 import { useNavigate } from "react-router-dom";
 // import { signUp } from "../../lib/supabaseClient";
 import { signUp, signIn, getSession } from "../../services/auth.service";
+import { EnvelopeIcon, LockClosedIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 // Signup behavior: we send { email, password, full_name } to Supabase.
 // Supabase will create the user and store full_name in user.user_metadata.full_name.
@@ -76,10 +77,10 @@ export default function SignupPage() {
           <h1 className="login-page-title">Sign up</h1>
           <p className="login-page-subtitle">Create an account to get started</p>
 
-          <div style={{ fontSize: 12, color: "#666", marginBottom: 12 }}>
+          {/* <div style={{ fontSize: 12, color: "#666", marginBottom: 12 }}>
             We will store your full name in your account profile (saved as
             <code>user_metadata.full_name</code>).
-          </div>
+          </div> */}
 
           {error && (
             <div style={{ color: "#d85c5c", marginBottom: 12, fontSize: 13 }}>{error}</div>
@@ -103,7 +104,7 @@ export default function SignupPage() {
           <div className="login-page-field">
             <label className="login-page-label">Email</label>
             <div className="login-page-input">
-              <span className="login-page-icon">✉</span>
+              <EnvelopeIcon className="login-page-icon" style={{ width: 18, height: 18 }} />
               <input
                 name="email"
                 type="email"
@@ -117,7 +118,7 @@ export default function SignupPage() {
           <div className="login-page-field">
             <label className="login-page-label">Password</label>
             <div className="login-page-input">
-              <span className="login-page-icon">🔒</span>
+              <LockClosedIcon className="login-page-icon" style={{ width: 18, height: 18 }} />
               <input
                 name="password"
                 type={showPassword ? "text" : "password"}
@@ -125,12 +126,11 @@ export default function SignupPage() {
                 onChange={handleChange}
                 placeholder="Create a password..."
               />
-              <span
+              <EyeIcon
                 className="login-page-eye"
+                style={{ width: 18, height: 18, cursor: "pointer" }}
                 onClick={() => setShowPassword(!showPassword)}
-              >
-                👁
-              </span>
+              />
             </div>
           </div>
 

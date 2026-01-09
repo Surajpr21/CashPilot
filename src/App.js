@@ -61,7 +61,7 @@ export default function App() {
     <Suspense fallback={<div>Loading…</div>}>
 
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {/* Dashboard Shell — Sidebar visible on all below */}
