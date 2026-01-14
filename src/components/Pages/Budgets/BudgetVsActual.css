@@ -55,6 +55,22 @@
   padding: 8px 14px;
   border-radius: 10px;
   font-size: 14px;
+
+.bVa-page-filter select {
+  background: #eef1f8;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #111827;
+  font-family: inherit;
+}
+
+.bVa-page-filter select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 156, 249, 0.1);
+}
 }
 
 .bVa-page-filter-actions {
@@ -197,5 +213,122 @@
   border: 1px solid #d1d5db;
   border-radius: 10px;
   padding: 6px 14px;
+
+  .bVa-page-edit-btn:hover {
+    background: #f3f4f6;
+    cursor: pointer;
+  }
+
+  /* EDIT MODE */
+  .bVa-page-edit-input-group {
+    margin-top: 10px;
+    margin-bottom: 6px;
+  }
+
+  .bVa-page-edit-input-group label {
+    font-size: 12px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+    color: #6b7280;
+  }
+
+  .bVa-page-edit-input-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .bVa-page-edit-input-group input:focus {
+    outline: none;
+    border-color: #4f9cf9;
+    box-shadow: 0 0 0 3px rgba(79, 156, 249, 0.1);
+  }
+
+  /* EDIT BUTTONS */
+  .bVa-page-edit-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .bVa-page-save-btn,
+  .bVa-page-cancel-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .bVa-page-save-btn {
+    background: #4f9cf9;
+    color: white;
+  }
+
+  .bVa-page-save-btn:hover:not(:disabled) {
+    background: #3b8ee6;
+  }
+
+  .bVa-page-save-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .bVa-page-cancel-btn {
+    background: #e9ecf5;
+    color: #374151;
+  }
+
+  .bVa-page-cancel-btn:hover:not(:disabled) {
+    background: #d9e0ed;
+  }
+
+  .bVa-page-cancel-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  /* UNDER BUDGET */
+  .bVa-page-under {
+    color: #4caf82;
+  }
+
+  /* SMART INSIGHTS */
+  .bVa-page-insights {
+    background: #f0fdf4;
+    border-left: 4px solid #4caf82;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 24px;
+  }
+
+  .bVa-page-insights h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #166534;
+  }
+
+  .bVa-page-insights ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bVa-page-insights li {
+    font-size: 13px;
+    color: #166534;
+    margin: 6px 0;
+    padding-left: 0;
+  }
+
+  .bVa-page-insights li:before {
+    content: '';
+  }
   font-size: 13px;
 }

@@ -87,7 +87,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
       </div>
 
       <div className="subs-form-grid">
-        {/* 1) Subscription Name */}
         <label className="subs-form-field">
           <span>Subscription Name</span>
           <input
@@ -100,7 +99,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
           />
         </label>
 
-        {/* 2) Amount */}
         <label className="subs-form-field">
           <span>Amount</span>
           <div className="subs-amount-input">
@@ -118,7 +116,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
           </div>
         </label>
 
-        {/* 3) Billing Cycle */}
         <label className="subs-form-field">
           <span>Billing Cycle</span>
           <select
@@ -133,7 +130,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
           </select>
         </label>
 
-        {/* 4) Next Billing Date */}
         <label className="subs-form-field">
           <span>Next Billing Date</span>
           <input
@@ -145,7 +141,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
           />
         </label>
 
-        {/* 5) Category */}
         <label className="subs-form-field">
           <span>Category</span>
           <select
@@ -162,7 +157,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
           </select>
         </label>
 
-        {/* 6) Payment Method (not shown in table, but saved) */}
         <label className="subs-form-field">
           <span>Payment Method</span>
           <select

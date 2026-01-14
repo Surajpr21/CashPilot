@@ -4,7 +4,7 @@ import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
 import ConfirmDialog from "./ConfirmDialog/ConfirmDialog";
 import ReactivateDialog from "./ReactivateDialog/ReactivateDialog";
 
-export default function SubscriptionsTable({ subs = [], onPause, onResume, onCancel, onEdit, onReactivate }) {
+export default function SubscriptionsTable({ subs = [], onPause, onResume, onCancel, onEdit, onReactivate, onMarkAsPaid }) {
   const [editingSub, setEditingSub] = useState(null);
   const [cancellingId, setCancellingId] = useState(null);
   const [reactivatingId, setReactivatingId] = useState(null);
@@ -57,10 +57,11 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
       {subs.map((sub) => {
         const dLeft = daysLeft(sub.next_due);
         const dueText = `in ${dLeft} days on ${dateLabel(sub.next_due)}`;
-        const status = getStatus(sub);
-        const canPause = status === "active";
-        const canResume = status === "paused";
-        const isCancelled = status === "inactive";
+        const uiStatus = getStatus(sub);
+        const canPause = sub.status === "active";
+        const canResume = sub.status === "paused";
+        const isCancelled = sub.status === "inactive";
+        const showMarkAsPaid = sub.status === "active";
 
         return (
           <div key={sub.id} className="subscriptions-page-card">
@@ -77,11 +78,16 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
             </div>
 
             <div className="subscriptions-page-card-right">
-              <span className={`subscriptions-page-status subscriptions-page-status-${status}`}>
-                {status}
+              <span className={`subscriptions-page-status subscriptions-page-status-${uiStatus}`}>
+                {uiStatus}
               </span>
 
               <div className="subscriptions-page-actions">
+                {showMarkAsPaid && (
+                  <button className="mark-paid-btn" onClick={() => onMarkAsPaid && onMarkAsPaid(sub)}>
+                    Mark as Paid
+                  </button>
+                )}
                 {!isCancelled && canPause && (
                   <button onClick={() => onPause && onPause(sub.id)}>
                     Pause
