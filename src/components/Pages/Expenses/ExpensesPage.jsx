@@ -40,49 +40,92 @@ import ExpensesSummary from "./ExpensesFilters/ExpensesSummary";
 import ExpensesTable from "./ExpensesFilters/ExpensesTable";
 import ExpensesPagination from "./ExpensesFilters/ExpensesPagination";
 import "./ExpensesPage.css";
-import { getExpensesForMonth } from "../../../services/expenses.service";
+import { getExpensesPaginated } from "../../../services/expenses.service";
+
+const PAGE_SIZE = 10;
+
+// Helper to get date range presets
+function getDatePreset(preset) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  
+  if (preset === "thisMonth") {
+    const from = new Date(year, month, 1).toISOString().split("T")[0];
+    const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
+    return { from, to };
+  }
+  
+  if (preset === "lastMonth") {
+    const from = new Date(year, month - 1, 1).toISOString().split("T")[0];
+    const to = new Date(year, month, 0).toISOString().split("T")[0];
+    return { from, to };
+  }
+  
+  return { from: null, to: null };
+}
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
+  // Filter state
+  const [filters, setFilters] = useState(() => {
+    const { from, to } = getDatePreset("thisMonth");
+    return {
+      fromDate: from,
+      toDate: to,
+      category: "",
+      minAmount: "",
+      maxAmount: "",
+      paymentMode: "",
+      source: "",
+      search: "",
+    };
+  });
 
   useEffect(() => {
-    async function load() {
+    async function loadExpenses() {
       setLoading(true);
-      console.log("FETCHING EXPENSES WITH RANGE => year:", year, "month:", month);
-      const { data, error } = await getExpensesForMonth(year, month);
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setExpenses(data || []);
+      try {
+        const res = await getExpensesPaginated(page, filters);
+        setExpenses(res.expenses || []);
+        setTotalCount(res.total || 0);
         setError("");
+      } catch (err) {
+        setError(err.message || "Failed to load expenses");
+        setExpenses([]);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     }
 
-    load();
-  }, [year, month]);
+    loadExpenses();
+  }, [page, filters]);
 
   const refetchExpenses = async () => {
     setLoading(true);
-    const { data, error } = await getExpensesForMonth(year, month);
-
-    if (error) {
-      setError(error.message);
-    } else {
-      setExpenses(data || []);
+    try {
+      const res = await getExpensesPaginated(page, filters);
+      setExpenses(res.expenses || []);
+      setTotalCount(res.total || 0);
       setError("");
+    } catch (err) {
+      setError(err.message || "Failed to load expenses");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setPage(1);
+  };
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
     <div className="expenses-page-container">
@@ -146,7 +189,11 @@ export default function ExpensesPage() {
           <p className="expenses-page-subtitle">Track and manage all your spending.</p>
         </div>
 
-        <ExpensesFilters onExpenseAdded={refetchExpenses} />
+        <ExpensesFilters 
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onExpenseAdded={refetchExpenses} 
+        />
         {/* <ExpensesSummary /> */}
 
         {loading && <div className="expenses-page-loading">Loading expenses…</div>}
@@ -154,12 +201,31 @@ export default function ExpensesPage() {
 
         {!loading && !error && (
           <>
-            {console.log("RAW EXPENSES FROM API =>", expenses)}
-            {console.log("PASSED TO TABLE =>", expenses)}
             <ExpensesTable expenses={expenses} />
+            
+            {/* STEP 6: Pagination UI */}
+            <div className="pagination">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+              >
+                Prev
+              </button>
+
+              <span>
+                Page {page} of {totalPages || 1}
+              </span>
+
+              <button
+                disabled={page === totalPages || totalPages === 0}
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+              </button>
+            </div>
           </>
         )}
-        <ExpensesPagination />
+        {/* Old pagination component removed */}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { addExpense } from "../../../../../services/expenses.service";
 import { supabase } from "../../../../../lib/supabaseClient";
+import { CATEGORIES } from "../../../../../constants/categories";
 import "./ExpenseForm.css";
 
 const initialState = {
@@ -109,14 +110,19 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
 
         <label className="expense-form-field">
           <span>Category</span>
-          <input
-            type="text"
+          <select
             name="category"
             value={formState.category}
             onChange={handleChange}
-            placeholder="Food"
             required
-          />
+          >
+            <option value="">Select category</option>
+            {CATEGORIES.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="expense-form-field">

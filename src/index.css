@@ -27,7 +27,7 @@ html, body, #root {
 }
 
 .app-content {
-  padding: 24px; /* 👈 this fixes it properly */
+  padding: 24px;
 }
 
 

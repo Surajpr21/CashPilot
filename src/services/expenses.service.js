@@ -1,5 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
 
+const PAGE_SIZE = 10;
+
 export async function addExpense(expense) {
   const {
     spent_at,
@@ -77,7 +79,58 @@ export function getMonthRange(year, month) {
 
 export async function getExpensesForMonth(year, month) {
   const { from, to } = getMonthRange(year, month);
-  // TEMP FIX: Disable date filter to confirm data exists
-  return await getExpenses(); // no date filter
-  // return await getExpenses({ fromDate: from, toDate: to });
+  return await getExpenses();
+}
+
+export async function getExpensesPaginated(page = 1, filters = {}) {
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  let query = supabase
+    .from("expenses")
+    .select("*", { count: "exact" })
+    .order("spent_at", { ascending: false });
+
+  if (filters.fromDate) {
+    query = query.gte("spent_at", filters.fromDate);
+  }
+  if (filters.toDate) {
+    query = query.lte("spent_at", filters.toDate);
+  }
+
+  if (filters.category) {
+    query = query.eq("category", filters.category);
+  }
+
+  if (filters.minAmount !== undefined && filters.minAmount !== "") {
+    query = query.gte("amount", filters.minAmount);
+  }
+  if (filters.maxAmount !== undefined && filters.maxAmount !== "") {
+    query = query.lte("amount", filters.maxAmount);
+  }
+
+  if (filters.paymentMode) {
+    query = query.eq("payment_mode", filters.paymentMode);
+  }
+
+  if (filters.source === "manual") {
+    query = query.is("subscription_id", null);
+  } else if (filters.source === "subscription") {
+    query = query.not("subscription_id", "is", null);
+  }
+
+  if (filters.search) {
+    query = query.ilike("title", `%${filters.search}%`);
+  }
+
+  query = query.range(from, to);
+
+  const { data, count, error } = await query;
+
+  if (error) throw error;
+
+  return {
+    expenses: data,
+    total: count,
+  };
 }
