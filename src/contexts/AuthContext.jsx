@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { signIn as signInService, signOut as signOutService } from "../services/auth.service";
 import { getProfile, saveProfile } from "../services/profile.service";
@@ -11,6 +11,7 @@ export function AuthProvider({ children }) {
   const [initializing, setInitializing] = useState(true);
   const [profileLoading, setProfileLoading] = useState(false);
   const [error, setError] = useState(null);
+  const lastUserIdRef = useRef(null);
 
   const fetchProfile = useCallback(async (userId) => {
     setProfileLoading(true);
@@ -50,9 +51,11 @@ export function AuthProvider({ children }) {
 
       if (!active) return;
 
+      const nextUserId = nextSession?.user?.id ?? null;
+      lastUserIdRef.current = nextUserId;
       setSession(nextSession);
-      if (nextSession?.user?.id) {
-        await fetchProfile(nextSession.user.id);
+      if (nextUserId) {
+        await fetchProfile(nextUserId);
       } else {
         setProfile(null);
       }
@@ -62,9 +65,17 @@ export function AuthProvider({ children }) {
     hydrate();
 
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      const nextUserId = newSession?.user?.id ?? null;
+      const currentUserId = lastUserIdRef.current;
+
+      if (nextUserId === currentUserId) {
+        return;
+      }
+
+      lastUserIdRef.current = nextUserId;
       setSession(newSession);
-      if (newSession?.user?.id) {
-        fetchProfile(newSession.user.id);
+      if (nextUserId) {
+        fetchProfile(nextUserId);
       } else {
         setProfile(null);
       }
@@ -83,6 +94,7 @@ export function AuthProvider({ children }) {
       if (signInError) return { error: signInError };
 
       const nextSession = data?.session ?? null;
+      lastUserIdRef.current = nextSession?.user?.id ?? null;
       setSession(nextSession);
 
       if (nextSession?.user?.id) {
@@ -99,6 +111,7 @@ export function AuthProvider({ children }) {
     await signOutService();
     setSession(null);
     setProfile(null);
+    lastUserIdRef.current = null;
   }, []);
 
   const persistProfile = useCallback(async (updates) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./GoalsPage.css";
 import GoalsSection from "./GoalsPage/GoalsSection";
 import CreateGoalModal from "./GoalsPage/CreateGoalModal";
@@ -8,9 +8,13 @@ export default function GoalsPage() {
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const hasFetchedRef = useRef(false);
 
   // Fetch goals on mount
   useEffect(() => {
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
+
     async function loadGoals() {
       try {
         setLoading(true);
