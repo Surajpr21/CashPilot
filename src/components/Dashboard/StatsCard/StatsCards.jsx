@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./StatsCards.css";
 import {
-  ChartBarIcon,
-  CreditCardIcon,
-  SparklesIcon,
-  ArrowTrendingUpIcon,
-} from "@heroicons/react/24/outline";
-import {
   ArrowTrendingUpIcon as TrendingUp,
   ArrowTrendingDownIcon as TrendingDown,
 } from "@heroicons/react/24/solid";

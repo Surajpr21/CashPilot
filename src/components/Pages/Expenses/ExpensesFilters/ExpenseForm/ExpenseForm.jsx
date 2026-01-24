@@ -55,7 +55,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
         user_id: user.id,
       };
 
-      const { data, error: submitError } = await addExpense(payload);
+      const { error: submitError } = await addExpense(payload);
       if (submitError) {
         setError(submitError.message);
       } else {

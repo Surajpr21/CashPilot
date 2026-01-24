@@ -143,6 +143,11 @@ export default function GoalsSection({ goals, loading, setGoals }) {
                   ) : (
                     <>Target: {new Date(goal.target_date).toLocaleDateString()} • Completed</>
                   )}
+                  {monthlyReq ? (
+                    <span className="goals-page-progress-hint">
+                      Need ₹{monthlyReq.toLocaleString()}/month to reach this goal
+                    </span>
+                  ) : null}
                 </div>
               </div>
 

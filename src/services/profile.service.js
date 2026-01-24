@@ -18,7 +18,7 @@ export async function getProfile(userId) {
 }
 
 export async function saveProfile(userId, updates) {
-  const { data, error, count } = await supabase
+  const { data, error } = await supabase
     .from("profiles")
     .update({ ...updates })
     .eq("id", userId)

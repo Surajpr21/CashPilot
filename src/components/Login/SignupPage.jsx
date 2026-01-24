@@ -45,7 +45,7 @@ export default function SignupPage() {
     }
 
     setLoading(true);
-    const { data, error: signupError } = await signUp(form.email, form.password, form.name);
+    const { error: signupError } = await signUp(form.email, form.password, form.name);
     setLoading(false);
 
     if (signupError) {

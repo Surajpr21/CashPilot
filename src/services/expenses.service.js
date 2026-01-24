@@ -87,7 +87,7 @@ export function getMonthRange(year, month) {
 
 export async function getExpensesForMonth(year, month) {
   const { from, to } = getMonthRange(year, month);
-  return await getExpenses();
+  return await getExpenses({ fromDate: from, toDate: to });
 }
 
 export async function getExpensesPaginated(page = 1, filters = {}) {

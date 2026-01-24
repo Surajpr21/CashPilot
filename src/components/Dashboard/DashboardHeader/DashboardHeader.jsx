@@ -1,26 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./dashboardHeader.module.css";
-import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import AnalogClock from "./AnalogClock";
 
 const DashboardHeader = () => {
-  const [now, setNow] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const time = now.toLocaleTimeString("en-IN", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  const date = now.toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
   return (
     <header className={styles.header}>
       <div className={styles.left}>

@@ -33,7 +33,9 @@ export default function GoldDetailsCard() {
       <p className="positive">Market price today: ₹6,080/g +0.8%</p>
       <p className="assets-page-muted">Market price shown for reference only</p>
 
-      <a className="assets-page-link">View price history →</a>
+        <button type="button" className="assets-page-link" onClick={() => setShowForm(true)}>
+          View price history →
+        </button>
 
       {showForm && (
         <div

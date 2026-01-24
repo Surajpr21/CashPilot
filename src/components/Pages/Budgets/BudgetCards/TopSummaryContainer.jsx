@@ -18,16 +18,6 @@ export default function TopSummaryContainer({ rows, loading, onAddBudgetClick })
     return "bVa-page-under";
   };
 
-  const filteredRows = rows.filter((row) => {
-    if (categoryFilter !== "All categories" && row.category !== categoryFilter) {
-      return false;
-    }
-    if (amountFilter === "Over budget" && row.diff <= 0) return false;
-    if (amountFilter === "Under budget" && row.diff >= 0) return false;
-    if (amountFilter === "On track" && row.status !== "on-track") return false;
-    return true;
-  });
-
   return (
     <div className="bVa-page-top-container">
       {/* Filters */}

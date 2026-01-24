@@ -271,8 +271,6 @@ export default function MonthlyExpensesChart() {
     Math.round((i * domainMax) / 6)
   );
 
-  const band = chartW / currentSeries.data.length;
-
   const getX = (i) =>
     padding.left +
     ((chartW - rightInset) / (currentSeries.data.length - 1)) * i;

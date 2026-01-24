@@ -14,7 +14,9 @@ export default function InsuranceCard() {
       <p>Premiums paid till date: ₹2,35,500</p>
       <p className="assets-page-muted">Coverage: Health, term life, vehicle</p>
 
-      <a className="assets-page-link">View premium history →</a>
+      <button type="button" className="assets-page-link">
+        View premium history 
+      </button>
     </div>
   );
 }

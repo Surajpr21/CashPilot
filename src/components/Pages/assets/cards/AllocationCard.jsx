@@ -28,11 +28,6 @@ export default function AllocationCard() {
     []
   );
 
-  const total = useMemo(
-    () => data.reduce((sum, item) => sum + item.value, 0),
-    [data]
-  );
-
   return (
     <div className="assets-page-card">
       <div className="assets-page-card-header">
