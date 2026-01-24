@@ -31,8 +31,12 @@ export async function addExpense(expense) {
 }
 
 // Aggregate expense stats between optional dates.
-export async function getExpenseStats(fromDate, toDate) {
-  let query = supabase.from("expenses").select("amount, spent_at");
+export async function getExpenseStats(fromDate, toDate, userId) {
+  let query = supabase.from("expenses").select("amount, spent_at, user_id");
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
 
   if (fromDate) query = query.gte("spent_at", fromDate);
   if (toDate) query = query.lte("spent_at", toDate);
@@ -53,13 +57,17 @@ export async function getExpenseStats(fromDate, toDate) {
   };
 }
 
-export async function getExpenses({ fromDate, toDate } = {}) {
+export async function getExpenses({ fromDate, toDate, userId } = {}) {
   console.log("SERVICE RANGE =>", fromDate, toDate);
 
   let query = supabase
     .from("expenses")
     .select("*")
     .order("spent_at", { ascending: false });
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
 
   if (fromDate) query = query.gte("spent_at", fromDate);
   if (toDate) query = query.lte("spent_at", toDate);
@@ -79,7 +87,7 @@ export function getMonthRange(year, month) {
 
 export async function getExpensesForMonth(year, month) {
   const { from, to } = getMonthRange(year, month);
-  return await getExpenses();
+  return await getExpenses({ fromDate: from, toDate: to });
 }
 
 export async function getExpensesPaginated(page = 1, filters = {}) {
@@ -90,6 +98,10 @@ export async function getExpensesPaginated(page = 1, filters = {}) {
     .from("expenses")
     .select("*", { count: "exact" })
     .order("spent_at", { ascending: false });
+
+  if (filters.userId) {
+    query = query.eq("user_id", filters.userId);
+  }
 
   if (filters.fromDate) {
     query = query.gte("spent_at", filters.fromDate);

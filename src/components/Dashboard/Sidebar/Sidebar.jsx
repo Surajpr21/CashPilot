@@ -11,15 +11,18 @@ import {
   Bell,
   User,
   LogOut,
+  PiggyBank,
 } from "lucide-react";
 import "./Sidebar.css";
-import { signOut } from "../../../services/auth.service";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const NAV_TABS = [
   { key: "dashboard", label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
-  { key: "expenses", label: "Expenses", path: "/expenses", icon: <List size={18} /> },
+  { key: "expenses", label: "Trasactions", path: "/expenses", icon: <List size={18} /> },
   { key: "subscriptions", label: "Subscriptions", path: "/subscriptions", icon: <CreditCard size={18} /> },
   { key: "budgets", label: "Budgets", path: "/budgets", icon: <Wallet size={18} /> },
+  { key: "assets", label: "Assets", path: "/assets", icon: <PieChart size={18} /> },
+  { key: "savings", label: "Savings", path: "/savings", icon: <PiggyBank size={18} /> },
   // { key: "insights", label: "Insights", path: "/insights", icon: <PieChart size={18} /> },
   // { key: "reports", label: "Reports", path: "/reports", icon: <BarChart2 size={18} /> },
   { key: "goals", label: "Goals", path: "/goals", icon: <BarChart2 size={18} /> },
@@ -28,9 +31,10 @@ const NAV_TABS = [
 const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { logout } = useAuth();
 
   async function handleLogout() {
-    await signOut();
+    await logout();
     navigate("/login");
   }
 

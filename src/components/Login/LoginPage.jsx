@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
-import { signIn, getSession } from "../../services/auth.service";
 import { EnvelopeIcon, LockClosedIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,22 +11,22 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login, session, profile, initializing, profileLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const session = await getSession();
-      if (session) navigate("/dashboard");
-    })();
-  }, [navigate]);
+    if (initializing || profileLoading) return;
+    if (session && profile) {
+      navigate(profile.onboarding_completed ? "/dashboard" : "/onboarding", { replace: true });
+    }
+  }, [initializing, profileLoading, session, profile, navigate]);
 
   async function handleLogin(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const { data, error: loginError } = await signIn(email, password);
-
+    const { error: loginError, profile: nextProfile } = await login(email, password);
     setLoading(false);
 
     if (loginError) {
@@ -34,8 +34,11 @@ export default function LoginPage() {
       return;
     }
 
-    // Redirect to dashboard
-    navigate("/dashboard");
+    if (nextProfile) {
+      navigate(nextProfile.onboarding_completed ? "/dashboard" : "/onboarding");
+    } else {
+      navigate("/dashboard");
+    }
   }
 
   return (

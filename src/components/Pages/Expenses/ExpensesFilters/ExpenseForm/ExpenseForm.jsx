@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { addExpense } from "../../../../../services/expenses.service";
 import { supabase } from "../../../../../lib/supabaseClient";
 import { CATEGORIES } from "../../../../../constants/categories";
@@ -17,6 +17,15 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const disallowed = useMemo(
+    () => ["Gold", "Investment", "Investments", "RD", "FD", "SIP", "Mutual Fund", "Stocks", "Equity", "Asset"],
+    []
+  );
+  const expenseCategories = useMemo(
+    () => CATEGORIES.filter((category) => !disallowed.includes(category)),
+    [disallowed]
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +55,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
         user_id: user.id,
       };
 
-      const { data, error: submitError } = await addExpense(payload);
+      const { error: submitError } = await addExpense(payload);
       if (submitError) {
         setError(submitError.message);
       } else {
@@ -79,7 +88,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
             aria-label="Close"
             onClick={onClose}
           >
-            ×
+            
           </button>
         )}
       </div>
@@ -117,12 +126,13 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
             required
           >
             <option value="">Select category</option>
-            {CATEGORIES.map((category) => (
+            {expenseCategories.map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>
             ))}
           </select>
+          <p className="expense-form-helper">Buying gold, RD/FD/SIP, or investing? Add it from Assets, not here.</p>
         </label>
 
         <label className="expense-form-field">

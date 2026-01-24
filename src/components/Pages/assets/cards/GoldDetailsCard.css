@@ -1,0 +1,13 @@
+.assets-page-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.assets-page-link {
+  margin-top: 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: #2563eb;
+  cursor: pointer;
+}

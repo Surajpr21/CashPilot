@@ -1,0 +1,38 @@
+.assets-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.assets-page-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.assets-page-subtitle {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.assets-page-updated {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.assets-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.assets-page-card .positive {
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.assets-page-muted {
+  color: #6b7280;
+  font-size: 12px;
+}

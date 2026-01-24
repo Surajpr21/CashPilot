@@ -49,6 +49,32 @@
   font-size: 0.9rem;
 }
 
+.toggle {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #e6edf0;
+}
+
+.toggle-pill {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #0f2e2b;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.toggle-pill.active {
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(15, 46, 43, 0.12);
+  color: #0f2e2b;
+}
+
 .kebab {
   border: none;
   background: transparent;

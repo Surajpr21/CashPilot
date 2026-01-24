@@ -34,56 +34,91 @@
 //   );
 // }
 
-import React, { useState, lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./components/landingPage/LandingPage";
+import React, { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/Login/LoginPage";
-
-// Layout shell (Snowfall + Sidebar + Outlet)
+import SignupPage from "./components/Login/SignupPage";
 import DashboardLayout from "./components/Dashboard/DashboardLayout";
+import Onboarding from "./components/Pages/Onboarding/Onboarding";
+import { useAuth } from "./contexts/AuthContext";
 
-// Lazy-loaded dashboard pages
 const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 const ExpensesPage = lazy(() => import("./components/Pages/Expenses/ExpensesPage"));
-const InsightsPage = lazy(() => import("./components/Pages/Insights/InsightsPage"));
 const SubscriptionsPage = lazy(() => import("./components/Pages/Subscriptions/SubscriptionsPage"));
 const BudgetsPage = lazy(() => import("./components/Pages/Budgets/BudgetsPage"));
-const ReportsPage = lazy(() => import("./components/Pages/Reports/ReportsPage"));
 const GoalsPage = lazy(() => import("./components/Pages/Goals/GoalsPage"));
-const Login = lazy(() => import("./components/Login/LoginPage"));
-const Signup = lazy(() => import("./components/Login/SignupPage"));
+const SavingsPage = lazy(() => import("./components/Pages/Savings/SavingsPage"));
+const AssetsPage = lazy(() => import("./components/Pages/assets/AssetsPage"));
+
+function LoadingScreen({ message = "Loading..." }) {
+  return (
+    <div style={{ display: "grid", placeItems: "center", minHeight: "60vh", fontSize: 16 }}>
+      {message}
+    </div>
+  );
+}
+
+function ProtectedRoute({ children, allowOnboarding = false }) {
+  const { session, profile, initializing, profileLoading } = useAuth();
+
+  if (initializing || profileLoading) {
+    return <LoadingScreen message="Loading your account..." />;
+  }
+
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!profile) {
+    return <LoadingScreen message="Preparing your profile..." />;
+  }
+
+  if (!profile.onboarding_completed) {
+    return allowOnboarding ? children : <Navigate to="/onboarding" replace />;
+  }
+
+  if (allowOnboarding) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+}
 
 export default function App() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
-
   return (
-
-    <Suspense fallback={<div>Loading…</div>}>
-
+    <Suspense fallback={<LoadingScreen />}> 
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        {/* Dashboard Shell — Sidebar visible on all below */}
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+
+        <Route
+          path="/onboarding"
+          element={
+            <ProtectedRoute allowOnboarding>
+              <Onboarding />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           element={
-            <DashboardLayout
-              isSidebarExpanded={isSidebarExpanded}
-              setIsSidebarExpanded={setIsSidebarExpanded}
-            />
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
           }
         >
-
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/expenses" element={<ExpensesPage />} />
           <Route path="/subscriptions" element={<SubscriptionsPage />} />
           <Route path="/budgets" element={<BudgetsPage />} />
+          <Route path="/savings" element={<SavingsPage />} />
           <Route path="/goals" element={<GoalsPage />} />
+          <Route path="/assets" element={<AssetsPage />} />
         </Route>
 
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
-
     </Suspense>
-
   );
 }

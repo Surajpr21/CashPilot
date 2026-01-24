@@ -8,10 +8,25 @@ const formatDate = (value) => {
   });
 };
 
-const formatAmount = (value) => `₹${Number(value || 0).toLocaleString("en-IN")}`;
+const formatAmount = (value, isIncome) => {
+  const amount = Number(value || 0);
+  const formatted = amount.toLocaleString("en-IN");
+  return isIncome ? `+${formatted}` : formatted;
+};
 
-export default function ExpensesTable({ expenses = [] }) {
-  console.log("RECEIVED EXPENSES IN TABLE =>", expenses);
+const resolveDateValue = (row) => row?.spent_at || row?.occurred_on || row?.date || row?.created_at || null;
+
+const resolveModeValue = (row, isIncome) => {
+  if (isIncome) {
+    return row?.payment_mode || row?.mode || row?.source || "-";
+  }
+  return row?.payment_mode || row?.mode || "-";
+};
+
+export default function ExpensesTable({ expenses = [], view = "expense", onEdit, onDelete }) {
+  const isIncome = view === "income";
+  const emptyLabel = isIncome ? "No income found." : "No expenses found.";
+
   return (
     <div className="expenses-page-table-wrapper">
       <table className="expenses-page-table">
@@ -30,22 +45,41 @@ export default function ExpensesTable({ expenses = [] }) {
           {expenses.length === 0 && (
             <tr className="expenses-page-tr">
               <td className="expenses-page-td" colSpan={7}>
-                No expenses found.
+                {emptyLabel}
               </td>
             </tr>
           )}
 
-          {expenses.map((e, i) => (
-            <tr key={e.id || i} className="expenses-page-tr">
-              <td className="expenses-page-td">{formatDate(e.spent_at)}</td>
-              <td className="expenses-page-td">{e.title || "-"}</td>
-              <td className="expenses-page-td">{e.category || "-"}</td>
-              {/* <td className="expenses-page-td">{e.sub_category || "-"}</td> */}
-              <td className="expenses-page-td expenses-page-amount">{formatAmount(e.amount)}</td>
-              <td className="expenses-page-td">{e.payment_mode || "-"}</td>
-              <td className="expenses-page-td expenses-page-actions">•••</td>
-            </tr>
-          ))}
+          {expenses.map((row, index) => {
+            const dateValue = resolveDateValue(row);
+            const titleValue = isIncome ? row?.note || row?.title || "-" : row?.title || row?.note || "-";
+            const categoryValue = row?.category || "-";
+            const modeValue = resolveModeValue(row, isIncome);
+            const amountValue = formatAmount(row?.amount, isIncome);
+
+            return (
+              <tr key={row?.id || index} className="expenses-page-tr">
+                <td className="expenses-page-td">{formatDate(dateValue)}</td>
+                <td className="expenses-page-td">{titleValue}</td>
+                <td className="expenses-page-td">{categoryValue}</td>
+                {/* <td className="expenses-page-td">{row?.sub_category || "-"}</td> */}
+                <td className="expenses-page-td expenses-page-amount">{amountValue}</td>
+                <td className="expenses-page-td">{modeValue}</td>
+                <td className="expenses-page-td expenses-page-actions">
+                  {onEdit && (
+                    <button type="button" onClick={() => onEdit(row)}>
+                      Edit
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button type="button" onClick={() => onDelete(row)}>
+                      Delete
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

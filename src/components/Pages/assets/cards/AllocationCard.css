@@ -1,0 +1,91 @@
+.assets-page-card {
+  background: #f2f4f2;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.assets-page-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.assets-page-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f2e2b;
+}
+
+.assets-page-dots {
+  color: #9ca3af;
+}
+
+.assets-page-donut-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto 6px;
+  width: 260px;
+  height: 260px;
+}
+
+.assets-page-donut-center {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #f6f4f4;
+  border-radius: 50%;
+  box-shadow: rgba(17, 17, 26, 0.1) 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.assets-page-center-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f2e2b;
+}
+
+.assets-page-center-label {
+  font-size: 11px;
+  color: #4e6c68;
+  margin-top: 3px;
+}
+
+.assets-page-legend {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.assets-page-legend span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.assets-page-legend .investments {
+  color: #4c6ef5;
+}
+
+.assets-page-legend .gold {
+  color: #facc15;
+}
+
+.assets-page-legend .insurance {
+  color: #06b6d4;
+}
+
+.assets-page-footnote {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
+}

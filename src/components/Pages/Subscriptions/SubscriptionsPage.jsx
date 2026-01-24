@@ -2,7 +2,7 @@ import "./SubscriptionsPage.css";
 import SubscriptionsFilters from "./SubsCards/SubscriptionsFilters";
 import SubscriptionsTable from "./SubsCards/SubscriptionsTable";
 import UpcomingSubscriptions from "./SubsCards/UpcomingSubscriptions";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getSubscriptionsPaginated, updateSubscription, cancelSubscription, markSubscriptionAsPaid } from "../../../services/subscriptions";
 
 const PAGE_SIZE = 5;
@@ -20,7 +20,7 @@ export default function SubscriptionsPage() {
     search: "",
   });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       setLoading(true);
       const res = await getSubscriptionsPaginated({
@@ -35,11 +35,11 @@ export default function SubscriptionsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, filters]);
 
   useEffect(() => {
     load();
-  }, [page, filters]);
+  }, [load]);
 
   const handlePause = async (id) => {
     await updateSubscription(id, { status: "paused" });
