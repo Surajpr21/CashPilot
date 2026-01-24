@@ -66,7 +66,7 @@ function getDatePreset(preset) {
   return { from: null, to: null };
 }
 
-export default function TransactionsPage() {
+export default function ExpensesPage() {
   const [activeTab, setActiveTab] = useState("expenses");
 
   const [expenses, setExpenses] = useState([]);
@@ -172,12 +172,7 @@ export default function TransactionsPage() {
   };
 
   const handleFilterChange = (newFilters) => {
-    // Guardrail: block asset-like categories from expenses. Expenses should not log gold/RD/FD/SIP/investments.
-    const disallowed = ["Gold", "Investment", "Investments", "RD", "FD", "SIP", "Mutual Fund", "Stocks", "Equity"];
-    const nextCategory = disallowed.includes(newFilters.category) ? "" : newFilters.category;
-
-    const sanitizedFilters = { ...newFilters, category: nextCategory };
-    setFilters(sanitizedFilters);
+    setFilters(newFilters);
     setPage(1);
     setIncomePage(1);
   };
@@ -286,9 +281,6 @@ export default function TransactionsPage() {
           </div>
           <h1 className="expenses-page-title">Transactions</h1>
           <p className="expenses-page-subtitle">Track expenses and income in one view. Expenses stay the default.</p>
-          <div className="expenses-page-guardrail">
-            <strong>Reminder:</strong> Bought gold or invested? Add it from the Assets page instead.
-          </div>
         </div>
 
         {activeTab === "expenses" && (
@@ -305,10 +297,6 @@ export default function TransactionsPage() {
             {!loading && !error && (
               <>
                 <ExpensesTable expenses={expenses} view="expense" />
-
-                <div className="expenses-page-guardrail-inline">
-                  Investments, gold, RD/FD/SIP must be added via Assets. Expense categories exclude asset-like items to keep data clean.
-                </div>
                 
                 <div className="pagination">
                   <button

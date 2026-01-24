@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./LoginPage.css"; // reuse login styles for consistent look
 import { useNavigate } from "react-router-dom";
-// import { signUp } from "../../lib/supabaseClient";
-import { signUp, signIn, getSession } from "../../services/auth.service";
+import { signUp } from "../../services/auth.service";
 import { EnvelopeIcon, LockClosedIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Signup behavior: we send { email, password, full_name } to Supabase.
 // Supabase will create the user and store full_name in user.user_metadata.full_name.
@@ -17,14 +17,15 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login, session, profile, initializing, profileLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const session = await getSession();
-      if (session) navigate("/dashboard");
-    })();
-  }, [navigate]);
+    if (initializing || profileLoading) return;
+    if (session && profile) {
+      navigate(profile.onboarding_completed ? "/dashboard" : "/onboarding", { replace: true });
+    }
+  }, [initializing, profileLoading, session, profile, navigate]);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -52,21 +53,21 @@ export default function SignupPage() {
       return;
     }
 
-    // Try auto-login — if the project requires email confirmation this will likely fail.
     setLoading(true);
-    const { data: loginData, error: loginError } = await signIn(form.email, form.password);
+    const { error: loginError, profile: nextProfile } = await login(form.email, form.password);
     setLoading(false);
 
-    if (!loginError && loginData?.session) {
-      // Auto-login successful, redirect to dashboard
+    if (!loginError && nextProfile) {
+      navigate(nextProfile.onboarding_completed ? "/dashboard" : "/onboarding");
+      return;
+    }
+
+    if (!loginError) {
       navigate("/dashboard");
       return;
     }
 
-    // On success but no auto-login, prompt user to check their email for confirmation
-    setSuccess(
-      "Account created. Check your email to confirm your account. Your full name is saved to your profile."
-    );
+    setSuccess("Account created. Check your email to confirm your account. Your full name is saved to your profile.");
     setForm({ name: "", email: "", password: "", confirm: "" });
   }
 

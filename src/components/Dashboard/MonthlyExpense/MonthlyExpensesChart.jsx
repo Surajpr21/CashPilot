@@ -180,20 +180,62 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./MonthlyExpensesChart.css";
 
-const data = [
-  { name: "Jan", expense: 15000 },
-  { name: "Feb", expense: 27000 },
-  { name: "Mar", expense: 8000 },
-  { name: "Apr", expense: 20000 },
-  { name: "May", expense: 26000 },
-  { name: "Jun", expense: 18000 },
-];
+const SERIES = {
+  expenses: {
+    label: "Monthly Expenses",
+    chip: "▲ 6% more than last month",
+    color: {
+      line: "#99C0F6",
+      point: "#4C6EF5",
+      areaTop: "#3CA8D6",
+      areaBottom: "#D3F2BD",
+    },
+    data: [
+      { name: "Jan", value: 15000 },
+      { name: "Feb", value: 27000 },
+      { name: "Mar", value: 8000 },
+      { name: "Apr", value: 20000 },
+      { name: "May", value: 26000 },
+      { name: "Jun", value: 18000 },
+      { name: "Jul", value: 22000 },
+      { name: "Aug", value: 24000 },
+      { name: "Sep", value: 21000 },
+      { name: "Oct", value: 23000 },
+      { name: "Nov", value: 25000 },
+      { name: "Dec", value: 19000 },
+    ],
+  },
+  savings: {
+    label: "Monthly Savings",
+    chip: "▲ 12% higher than average",
+    color: {
+      line: "#99C0F6",
+      point: "#4C6EF5",
+      areaTop: "#3CA8D6",
+      areaBottom: "#D3F2BD",
+    },
+    data: [
+      { name: "Jan", value: 7000 },
+      { name: "Feb", value: 11000 },
+      { name: "Mar", value: 9500 },
+      { name: "Apr", value: 14000 },
+      { name: "May", value: 16000 },
+      { name: "Jun", value: 17500 },
+      { name: "Jul", value: 18000 },
+      { name: "Aug", value: 20000 },
+      { name: "Sep", value: 22000 },
+      { name: "Oct", value: 24000 },
+      { name: "Nov", value: 26000 },
+      { name: "Dec", value: 28000 },
+    ],
+  },
+};
 
 export default function MonthlyExpensesChart() {
   const containerRef = useRef(null);
   const [width, setWidth] = useState(900);
   const height = 320;
-
+  const [mode, setMode] = useState("expenses");
   const [tooltip, setTooltip] = useState(null);
 
   useEffect(() => {
@@ -218,10 +260,10 @@ export default function MonthlyExpensesChart() {
   const chartW = Math.max(0, width - padding.left - padding.right);
   const chartH = Math.max(0, height - padding.top - padding.bottom);
 
-  const values = data.map((d) => d.expense);
-  const maxVal = Math.max(...values, 30000);
-  const domainMax =
-    Math.ceil(maxVal / 5000) * 5000 * 1.08; // +8% headroom
+  const currentSeries = SERIES[mode];
+  const values = currentSeries.data.map((d) => d.value);
+  const maxVal = Math.max(...values, 1);
+  const domainMax = Math.ceil(maxVal / 5000) * 5000 * 1.08;
   const rightInset = 32; // subtle, not visible as padding
 
 
@@ -229,22 +271,22 @@ export default function MonthlyExpensesChart() {
     Math.round((i * domainMax) / 6)
   );
 
-  const band = chartW / data.length;
+  const band = chartW / currentSeries.data.length;
 
   const getX = (i) =>
     padding.left +
-    ((chartW - rightInset) / (data.length - 1)) * i;
+    ((chartW - rightInset) / (currentSeries.data.length - 1)) * i;
 
 
   // --- Line points ---
-  const points = data.map((d, i) => {
+  const points = currentSeries.data.map((d, i) => {
     const x = getX(i);
     const y =
       padding.top +
       chartH -
-      (d.expense / domainMax) * chartH;
+      (d.value / domainMax) * chartH;
 
-    return { x, y, value: d.expense, label: d.name };
+    return { x, y, value: d.value, label: d.name };
   });
 
 
@@ -266,10 +308,26 @@ export default function MonthlyExpensesChart() {
   return (
     <div className="monthly-expenses-card" ref={containerRef}>
       <div className="monthly-expenses-header">
-        <h3>Monthly Expenses</h3>
+        <h3>{currentSeries.label}</h3>
         <div className="monthly-expenses-info">
-          <span className="chip growth">▲ 6% more than last month</span>
-          <select className="monthly-expenses-dropdown">
+          <span className="chip growth">{currentSeries.chip}</span>
+          <div className="toggle">
+            {[
+              { id: "expenses", label: "Expenses" },
+              { id: "savings", label: "Savings" },
+            ].map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`toggle-pill ${mode === option.id ? "active" : ""}`}
+                onClick={() => setMode(option.id)}
+                aria-pressed={mode === option.id}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <select className="monthly-expenses-dropdown" aria-label="range">
             <option>Recent</option>
             <option>Last 6 months</option>
             <option>Last year</option>
@@ -281,15 +339,15 @@ export default function MonthlyExpensesChart() {
         <svg width={width} height={height} className="expenses-svg">
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#3CA8D6" stop-opacity="0.35" />
-              <stop offset="100%" stop-color="#D3F2BD" stop-opacity="0" />
+              <stop offset="0%" stopColor="#3CA8D6" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#D3F2BD" stopOpacity="0" />
             </linearGradient>
 
             <linearGradient id="fadeGradient" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="white" stop-opacity="0" />
-              <stop offset="10%" stop-color="white" stop-opacity="1" />
-              <stop offset="100%" stop-color="white" stop-opacity="1" />
-              <stop offset="100%" stop-color="white" stop-opacity="0" />
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="10%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
             </linearGradient>
 
 
@@ -387,7 +445,7 @@ export default function MonthlyExpensesChart() {
 
 
           {/* X labels */}
-          {data.map((d, i) => (
+          {currentSeries.data.map((d, i) => (
             <text
               key={d.name}
               x={getX(i)}

@@ -114,7 +114,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
 
   return (
     <div className="expenses-page-filters">
-      {/* 1️⃣ Date Filter (PRIMARY) - Dropdown with presets */}
+      {/* 1∩╕ÅΓâú Date Filter (PRIMARY) - Dropdown with presets */}
       <select
         className="expenses-page-filter"
         value={getDatePresetLabel()}
@@ -149,7 +149,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         </>
       )}
 
-      {/* 2️⃣ Category Filter */}
+      {/* 2∩╕ÅΓâú Category Filter */}
       <select
         className="expenses-page-filter"
         value={localFilters.category}
@@ -161,13 +161,13 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         ))}
       </select>
 
-      {/* 3️⃣ Amount Range Filter */}
+      {/* 3∩╕ÅΓâú Amount Range Filter */}
       <input
         type="number"
         className="expenses-page-filter expenses-amount-input"
         value={localFilters.minAmount}
         onChange={(e) => handleLocalChange("minAmount", e.target.value)}
-        placeholder="Min ₹"
+        placeholder="Min "
         min="0"
       />
       <input
@@ -175,11 +175,11 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         className="expenses-page-filter expenses-amount-input"
         value={localFilters.maxAmount}
         onChange={(e) => handleLocalChange("maxAmount", e.target.value)}
-        placeholder="Max ₹"
+        placeholder="Max "
         min="0"
       />
 
-      {/* 4️⃣ Payment Mode Filter */}
+      {/* 4∩╕ÅΓâú Payment Mode Filter */}
       <select
         className="expenses-page-filter"
         value={localFilters.paymentMode}
@@ -193,7 +193,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         <option value="other">Other</option>
       </select>
 
-      {/* 5️⃣ Source Filter */}
+      {/* 5∩╕ÅΓâú Source Filter */}
       <select
         className="expenses-page-filter"
         value={localFilters.source}
@@ -204,7 +204,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         <option value="subscription">Subscription</option>
       </select>
 
-      {/* 6️⃣ Search (Title) */}
+      {/* 6∩╕ÅΓâú Search (Title) */}
       <input
         type="text"
         className="expenses-page-filter"
@@ -229,19 +229,19 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
           <div className="expenses-page-summary-item">
             <span className="expenses-page-summary-label">Total spent:</span>
             <span className="expenses-page-summary-value">
-              {loadingStats ? "…" : `₹${formatNumber(stats.total_spent)}`}
+              {loadingStats ? "ΓÇª" : `${formatNumber(stats.total_spent)}`}
             </span>
           </div>
           <div className="expenses-page-summary-item">
             <span className="expenses-page-summary-label">Average per day:</span>
             <span className="expenses-page-summary-value">
-              {loadingStats ? "…" : `₹${formatNumber(stats.avg_per_day)}`}
+              {loadingStats ? "ΓÇª" : `${formatNumber(stats.avg_per_day)}`}
             </span>
           </div>
           <div className="expenses-page-summary-item">
             <span className="expenses-page-summary-label">Transactions:</span>
             <span className="expenses-page-summary-value">
-              {loadingStats ? "…" : formatNumber(stats.transactions)}
+              {loadingStats ? "ΓÇª" : formatNumber(stats.transactions)}
             </span>
           </div>
         </div>
@@ -268,7 +268,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
               aria-label="Close"
               onClick={() => setShowForm(false)}
             >
-              ×
+              
             </button>
             <ExpenseForm 
               onClose={() => setShowForm(false)} 

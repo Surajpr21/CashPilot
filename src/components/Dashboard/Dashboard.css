@@ -70,7 +70,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   transition: padding 0.3s;
   padding: 16px;
   min-width: 0;
-  min-height: 1201px;
+  /* min-height: 1201px; */
   z-index: 2;
   /* Ensures content area fits desktop screens */
 }
