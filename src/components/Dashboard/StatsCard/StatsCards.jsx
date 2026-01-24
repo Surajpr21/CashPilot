@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./StatsCards.css";
 import {
   ArrowTrendingUpIcon as TrendingUp,
@@ -87,6 +87,7 @@ const StatsCards = () => {
     expenseCount: 0,
     avgExpensePerDay: 0,
   });
+  const lastLoadKeyRef = useRef(null);
 
   const monthRange = useMemo(() => {
     const now = new Date();
@@ -97,37 +98,47 @@ const StatsCards = () => {
     return { from, to };
   }, []);
 
-  const loadTransactions = useCallback(async () => {
-    try {
-      const userId = session?.user?.id;
+  const loadTransactions = useCallback(
+    async ({ force = false } = {}) => {
+      const key = JSON.stringify({ from: monthRange.from, to: monthRange.to, userId: session?.user?.id });
+      if (!force && lastLoadKeyRef.current === key) {
+        return;
+      }
 
-      const [expenseRes, incomeRes] = await Promise.all([
-        getExpenseStats(monthRange.from, monthRange.to, userId),
-        getIncomeSummary({ fromDate: monthRange.from, toDate: monthRange.to, userId }),
-      ]);
+      lastLoadKeyRef.current = key;
 
-      const expenseTotal = expenseRes?.data ? Number(expenseRes.data.total_spent || 0) : 0;
-      const expenseCount = expenseRes?.data ? Number(expenseRes.data.transactions || 0) : 0;
-      const avgPerDay = expenseRes?.data ? Number(expenseRes.data.avg_per_day || 0) : 0;
+      try {
+        const userId = session?.user?.id;
 
-      const incomeTotal = incomeRes?.total ? Number(incomeRes.total || 0) : 0;
-      const incomeCount = incomeRes?.count ? Number(incomeRes.count || 0) : 0;
+        const [expenseRes, incomeRes] = await Promise.all([
+          getExpenseStats(monthRange.from, monthRange.to, userId),
+          getIncomeSummary({ fromDate: monthRange.from, toDate: monthRange.to, userId }),
+        ]);
 
-      setTotals({
-        income: incomeTotal,
-        expense: expenseTotal,
-        incomeCount,
-        expenseCount,
-        avgExpensePerDay: avgPerDay,
-      });
-    } catch (err) {
-      setTotals({ income: 0, expense: 0, incomeCount: 0, expenseCount: 0, avgExpensePerDay: 0 });
-    }
-  }, [monthRange, session]);
+        const expenseTotal = expenseRes?.data ? Number(expenseRes.data.total_spent || 0) : 0;
+        const expenseCount = expenseRes?.data ? Number(expenseRes.data.transactions || 0) : 0;
+        const avgPerDay = expenseRes?.data ? Number(expenseRes.data.avg_per_day || 0) : 0;
+
+        const incomeTotal = incomeRes?.total ? Number(incomeRes.total || 0) : 0;
+        const incomeCount = incomeRes?.count ? Number(incomeRes.count || 0) : 0;
+
+        setTotals({
+          income: incomeTotal,
+          expense: expenseTotal,
+          incomeCount,
+          expenseCount,
+          avgExpensePerDay: avgPerDay,
+        });
+      } catch (err) {
+        setTotals({ income: 0, expense: 0, incomeCount: 0, expenseCount: 0, avgExpensePerDay: 0 });
+      }
+    },
+    [monthRange, session]
+  );
 
   useEffect(() => {
     loadTransactions();
-    const handler = () => loadTransactions();
+    const handler = () => loadTransactions({ force: true });
     window.addEventListener("transactions:updated", handler);
     return () => window.removeEventListener("transactions:updated", handler);
   }, [loadTransactions]);

@@ -34,7 +34,7 @@
 //     </div>
 //   );
 // }
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ExpensesFilters from "./ExpensesFilters/ExpensesFilters";
 import ExpensesTable from "./ExpensesFilters/ExpensesTable";
 import "./ExpensesPage.css";
@@ -84,6 +84,8 @@ export default function TransactionsPage() {
   const [editingIncome, setEditingIncome] = useState(null);
 
   const { session } = useAuth();
+  const lastExpensesKeyRef = useRef(null);
+  const lastIncomeKeyRef = useRef(null);
 
   // Filter state
   const [filters, setFilters] = useState(() => {
@@ -100,41 +102,60 @@ export default function TransactionsPage() {
     };
   });
 
-  const loadExpenses = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await getExpensesPaginated(page, { ...filters, userId: session?.user?.id });
-      setExpenses(res.expenses || []);
-      setTotalCount(res.total || 0);
-      setError("");
-    } catch (err) {
-      setError(err.message || "Failed to load expenses");
-      setExpenses([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, filters, session?.user?.id]);
+  const loadExpenses = useCallback(
+    async ({ force = false } = {}) => {
+      const key = JSON.stringify({ page, filters, userId: session?.user?.id });
+      if (!force && lastExpensesKeyRef.current === key) {
+        return;
+      }
+
+      lastExpensesKeyRef.current = key;
+      setLoading(true);
+      try {
+        const res = await getExpensesPaginated(page, { ...filters, userId: session?.user?.id });
+        setExpenses(res.expenses || []);
+        setTotalCount(res.total || 0);
+        setError("");
+      } catch (err) {
+        setError(err.message || "Failed to load expenses");
+        setExpenses([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [page, filters, session?.user?.id]
+  );
 
   useEffect(() => {
     loadExpenses();
   }, [loadExpenses]);
 
-  const loadIncome = useCallback(async () => {
-    if (!session?.user?.id) return;
-    setIncomeLoading(true);
-    try {
-      const res = await getIncomePaginated(incomePage, { ...filters, userId: session?.user?.id });
-      setIncomeRows(res.incomes || []);
-      setIncomeTotalCount(res.total || 0);
+  const loadIncome = useCallback(
+    async ({ force = false } = {}) => {
+      if (!session?.user?.id) return;
 
-      setIncomeError("");
-    } catch (err) {
-      setIncomeError(err.message || "Failed to load income");
-      setIncomeRows([]);
-    } finally {
-      setIncomeLoading(false);
-    }
-  }, [incomePage, filters, session?.user?.id]);
+      const key = JSON.stringify({ page: incomePage, filters, userId: session.user.id });
+      if (!force && lastIncomeKeyRef.current === key) {
+        return;
+      }
+
+      lastIncomeKeyRef.current = key;
+      setIncomeLoading(true);
+      try {
+        const res = await getIncomePaginated(incomePage, { ...filters, userId: session?.user?.id });
+        setIncomeRows(res.incomes || []);
+        setIncomeTotalCount(res.total || 0);
+
+        setIncomeError("");
+      } catch (err) {
+        setIncomeError(err.message || "Failed to load income");
+        setIncomeRows([]);
+      } finally {
+        setIncomeLoading(false);
+      }
+    },
+    [incomePage, filters, session?.user?.id]
+  );
 
   useEffect(() => {
     if (activeTab === "income") {
@@ -143,13 +164,13 @@ export default function TransactionsPage() {
   }, [activeTab, loadIncome, filters]);
 
   const refetchExpenses = async () => {
-    await loadExpenses();
+    await loadExpenses({ force: true });
   };
 
   const handleIncomeSaved = async () => {
     setShowIncomeForm(false);
     setEditingIncome(null);
-    await loadIncome();
+    await loadIncome({ force: true });
   };
 
   const handleIncomeDelete = async (row) => {
@@ -163,7 +184,7 @@ export default function TransactionsPage() {
         throw new Error("You must be logged in to delete income");
       }
       await deleteIncomeTransaction(row.id, session.user.id);
-      await loadIncome();
+      await loadIncome({ force: true });
     } catch (err) {
       setIncomeError(err.message || "Failed to delete income");
     } finally {

@@ -2,7 +2,7 @@ import "./SubscriptionsPage.css";
 import SubscriptionsFilters from "./SubsCards/SubscriptionsFilters";
 import SubscriptionsTable from "./SubsCards/SubscriptionsTable";
 import UpcomingSubscriptions from "./SubsCards/UpcomingSubscriptions";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getSubscriptionsPaginated, updateSubscription, cancelSubscription, markSubscriptionAsPaid } from "../../../services/subscriptions";
 
 const PAGE_SIZE = 5;
@@ -13,6 +13,7 @@ export default function SubscriptionsPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const lastLoadKeyRef = useRef(null);
   const [filters, setFilters] = useState({
     status: "",
     billing_cycle: "",
@@ -20,22 +21,32 @@ export default function SubscriptionsPage() {
     search: "",
   });
 
-  const load = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await getSubscriptionsPaginated({
-        page,
-        filters,
-      });
-      setSubs(res.subscriptions || []);
-      setTotalCount(res.total || 0);
-      setError("");
-    } catch (e) {
-      setError(e.message || "Failed to load subscriptions");
-    } finally {
-      setLoading(false);
-    }
-  }, [page, filters]);
+  const load = useCallback(
+    async ({ force = false } = {}) => {
+      const key = JSON.stringify({ page, filters });
+      if (!force && lastLoadKeyRef.current === key) {
+        return;
+      }
+
+      lastLoadKeyRef.current = key;
+
+      try {
+        setLoading(true);
+        const res = await getSubscriptionsPaginated({
+          page,
+          filters,
+        });
+        setSubs(res.subscriptions || []);
+        setTotalCount(res.total || 0);
+        setError("");
+      } catch (e) {
+        setError(e.message || "Failed to load subscriptions");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [page, filters]
+  );
 
   useEffect(() => {
     load();
@@ -43,17 +54,17 @@ export default function SubscriptionsPage() {
 
   const handlePause = async (id) => {
     await updateSubscription(id, { status: "paused" });
-    load();
+    load({ force: true });
   };
 
   const handleResume = async (id) => {
     await updateSubscription(id, { status: "active" });
-    load();
+    load({ force: true });
   };
 
   const handleCancel = async (id) => {
     await cancelSubscription(id);
-    load();
+    load({ force: true });
   };
 
   const handleReactivate = async (id, nextDue) => {
@@ -62,13 +73,13 @@ export default function SubscriptionsPage() {
       cancelled_at: null,
       next_due: nextDue,
     });
-    load();
+    load({ force: true });
   };
 
   const handleMarkAsPaid = async (subscription) => {
     try {
       await markSubscriptionAsPaid(subscription);
-      load();
+      load({ force: true });
     } catch (error) {
       console.error("Error marking subscription as paid:", error);
       alert(error.message || "Failed to mark subscription as paid");
@@ -94,7 +105,7 @@ export default function SubscriptionsPage() {
       </div>
 
       <SubscriptionsFilters 
-        onSubscriptionAdded={load} 
+        onSubscriptionAdded={() => load({ force: true })} 
         subs={subs}
         filters={filters}
         onFilterChange={handleFilterChange}
@@ -111,7 +122,7 @@ export default function SubscriptionsPage() {
                 onPause={handlePause}
                 onResume={handleResume}
                 onCancel={handleCancel}
-                onEdit={load}
+                onEdit={() => load({ force: true })}
                 onReactivate={handleReactivate}
                 onMarkAsPaid={handleMarkAsPaid}
               />
