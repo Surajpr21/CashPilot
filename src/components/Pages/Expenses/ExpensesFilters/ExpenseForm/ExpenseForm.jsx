@@ -1,7 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { addExpense } from "../../../../../services/expenses.service";
 import { supabase } from "../../../../../lib/supabaseClient";
 import { CATEGORIES } from "../../../../../constants/categories";
+import {
+  addInsurancePremium,
+  createInsurancePolicy,
+  getInsurancePolicies,
+} from "../../../../../lib/api/assets.api";
+import { INSURANCE_TYPES } from "../../../../../constants/insuranceTypes";
 import "./ExpenseForm.css";
 
 const initialState = {
@@ -10,6 +16,12 @@ const initialState = {
   category: "",
   amount: "",
   payment_mode: "",
+  currency: "INR",
+  // Insurance-only fields
+  insuranceProvider: "",
+  policyName: "",
+  insuranceType: "",
+  policyId: "",
 };
 
 export default function ExpenseForm({ onClose, onExpenseAdded }) {
@@ -17,6 +29,9 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [policies, setPolicies] = useState([]);
+  const [policiesLoading, setPoliciesLoading] = useState(false);
+  const [policyMode, setPolicyMode] = useState("existing");
 
   const disallowed = useMemo(
     () => ["Gold", "Investment", "Investments", "RD", "FD", "SIP", "Mutual Fund", "Stocks", "Equity", "Asset"],
@@ -27,10 +42,52 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
     [disallowed]
   );
 
+  const isInsuranceCategory = useMemo(
+    () => (formState.category || "").toLowerCase() === "insurance",
+    [formState.category]
+  );
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    if (!isInsuranceCategory) {
+      setPolicyMode("existing");
+      setFormState((prev) => ({
+        ...prev,
+        policyId: "",
+        insuranceProvider: "",
+        policyName: "",
+        insuranceType: "",
+        currency: prev.currency || "INR",
+      }));
+      return;
+    }
+
+    let active = true;
+    setPoliciesLoading(true);
+
+    (async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) return;
+        const list = await getInsurancePolicies();
+        if (active) setPolicies(list);
+      } catch (err) {
+        if (active) setError(err.message || "Failed to load policies");
+      } finally {
+        if (active) setPoliciesLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [isInsuranceCategory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,28 +105,57 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
         return;
       }
 
-      const payload = {
-        ...formState,
+      const isInsurance = isInsuranceCategory;
+
+      const expensePayload = {
+        spent_at: formState.spent_at,
+        title: formState.title,
+        category: formState.category,
         amount: formState.amount ? Number(formState.amount) : "",
         sub_category: null,
-        user_id: user.id,
+        payment_mode: formState.payment_mode,
       };
 
-      const { error: submitError } = await addExpense(payload);
-      if (submitError) {
-        setError(submitError.message);
-      } else {
-        setSuccess("Expense added successfully");
-        setFormState(initialState);
-        // Trigger refetch in parent
-        if (onExpenseAdded) {
-          onExpenseAdded();
+      const { error: submitError } = await addExpense(expensePayload);
+      if (submitError) throw submitError;
+
+      if (isInsurance) {
+        let policyId = formState.policyId;
+
+        if (policyMode === "new") {
+          if (!formState.insuranceProvider || !formState.policyName || !formState.insuranceType) {
+            throw new Error("Insurance provider, policy name, and type are required");
+          }
+
+          const createdPolicy = await createInsurancePolicy({
+            provider: formState.insuranceProvider,
+            policy_name: formState.policyName,
+            insurance_type: formState.insuranceType,
+          });
+
+          policyId = createdPolicy?.id;
+        } else if (!policyId) {
+          throw new Error("Select an existing policy or add a new one");
         }
-        // Optionally close the form after success
-        setTimeout(() => {
-          if (onClose) onClose();
-        }, 1500);
+
+        const insurancePayload = {
+          policy_id: policyId,
+          amount: Number(formState.amount) || 0,
+          paid_on: formState.spent_at,
+          currency: formState.currency || "INR",
+        };
+
+        await addInsurancePremium(insurancePayload);
       }
+
+      setSuccess("Expense added successfully");
+      setFormState(initialState);
+      if (onExpenseAdded) {
+        onExpenseAdded();
+      }
+      setTimeout(() => {
+        if (onClose) onClose();
+      }, 1500);
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -92,6 +178,107 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
           </button>
         )}
       </div>
+
+      {isInsuranceCategory && (
+        <div className="expense-form-insurance">
+          <h4>Insurance details</h4>
+
+          <div className="expense-form-grid">
+            <label className="expense-form-field">
+              <span>Existing policy</span>
+              <select
+                name="policyId"
+                value={formState.policyId}
+                onChange={(e) => {
+                  setPolicyMode("existing");
+                  setFormState((prev) => ({ ...prev, policyId: e.target.value }));
+                }}
+                disabled={policyMode === "new"}
+              >
+                <option value="">Select policy</option>
+                {policies.map((policy) => (
+                  <option key={policy.id} value={policy.id}>
+                    {policy.provider || "Unknown provider"} — {policy.policy_name || "Untitled policy"}
+                  </option>
+                ))}
+              </select>
+              {policiesLoading && <p className="expense-form-helper">Loading your policies...</p>}
+            </label>
+
+            <div className="expense-form-field">
+              <span>Need a new policy?</span>
+              {policyMode === "new" ? (
+                <button
+                  type="button"
+                  className="expense-form-toggle"
+                  onClick={() => {
+                    setPolicyMode("existing");
+                    setFormState((prev) => ({ ...prev, insuranceProvider: "", policyName: "", insuranceType: "" }));
+                  }}
+                >
+                  Use existing policy
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="expense-form-toggle"
+                  onClick={() => {
+                    setPolicyMode("new");
+                    setFormState((prev) => ({ ...prev, policyId: "" }));
+                  }}
+                >
+                  Add new policy
+                </button>
+              )}
+            </div>
+          </div>
+
+          {policyMode === "new" && (
+            <div className="expense-form-grid">
+              <label className="expense-form-field">
+                <span>Insurance Provider</span>
+                <input
+                  type="text"
+                  name="insuranceProvider"
+                  value={formState.insuranceProvider}
+                  onChange={handleChange}
+                  placeholder="e.g. HDFC Ergo"
+                  required
+                />
+              </label>
+
+              <label className="expense-form-field">
+                <span>Policy Name</span>
+                <input
+                  type="text"
+                  name="policyName"
+                  value={formState.policyName}
+                  onChange={handleChange}
+                  placeholder="e.g. Family Floater 2025"
+                  required
+                />
+              </label>
+
+              <label className="expense-form-field">
+                <span>Insurance Type</span>
+                <select
+                  name="insuranceType"
+                  value={formState.insuranceType}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select type</option>
+                  {INSURANCE_TYPES.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="expense-form-grid">
         <label className="expense-form-field">
@@ -148,6 +335,19 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
             required
           />
         </label>
+
+        {isInsuranceCategory && (
+          <label className="expense-form-field">
+            <span>Currency</span>
+            <input
+              type="text"
+              name="currency"
+              value={formState.currency}
+              onChange={handleChange}
+              placeholder="INR"
+            />
+          </label>
+        )}
 
         <label className="expense-form-field">
           <span>Mode of Payment</span>

@@ -86,6 +86,9 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
     } else if (preset === "lastMonth") {
       from = new Date(year, month - 1, 1).toISOString().split("T")[0];
       to = new Date(year, month, 0).toISOString().split("T")[0];
+    } else if (preset === "lastYear") {
+      from = new Date(year - 1, 0, 1).toISOString().split("T")[0];
+      to = new Date(year - 1, 11, 31).toISOString().split("T")[0];
     }
     
     const newFilters = { ...localFilters, fromDate: from, toDate: to };
@@ -103,11 +106,15 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
     const thisMonthTo = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
     const lastMonthFrom = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().split("T")[0];
     const lastMonthTo = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split("T")[0];
+    const lastYearFrom = new Date(now.getFullYear() - 1, 0, 1).toISOString().split("T")[0];
+    const lastYearTo = new Date(now.getFullYear() - 1, 11, 31).toISOString().split("T")[0];
 
     if (localFilters.fromDate === thisMonthFrom && localFilters.toDate === thisMonthTo) {
       return "This month";
     } else if (localFilters.fromDate === lastMonthFrom && localFilters.toDate === lastMonthTo) {
       return "Last month";
+    } else if (localFilters.fromDate === lastYearFrom && localFilters.toDate === lastYearTo) {
+      return "Last year";
     }
     return "Custom range";
   };
@@ -123,11 +130,14 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
             setDatePreset("thisMonth");
           } else if (e.target.value === "Last month") {
             setDatePreset("lastMonth");
+          } else if (e.target.value === "Last year") {
+            setDatePreset("lastYear");
           }
         }}
       >
         <option>This month</option>
         <option>Last month</option>
+        <option>Last year</option>
         <option>Custom range</option>
       </select>
 

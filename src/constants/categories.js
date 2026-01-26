@@ -9,6 +9,7 @@ export const CATEGORIES = [
   "Subscriptions",
 
   "Health",
+  "Insurance",
   "Education",
   "Travel",
   "Personal Care",

@@ -38,7 +38,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import ExpensesFilters from "./ExpensesFilters/ExpensesFilters";
 import ExpensesTable from "./ExpensesFilters/ExpensesTable";
 import "./ExpensesPage.css";
-import { getExpensesPaginated } from "../../../services/expenses.service";
+import { getExpensesPaginated, deleteExpense } from "../../../services/expenses.service";
 import { getIncomePaginated, deleteIncomeTransaction } from "../../../services/transactions.service";
 import { useAuth } from "../../../contexts/AuthContext";
 import ExpenseForm from "./ExpensesFilters/ExpenseForm/ExpenseForm";
@@ -165,6 +165,25 @@ export default function ExpensesPage() {
 
   const refetchExpenses = async () => {
     await loadExpenses({ force: true });
+  };
+
+  const handleExpenseDelete = async (row) => {
+    if (!row?.id) return;
+    const confirmed = window.confirm("Delete this expense?");
+    if (!confirmed) return;
+
+    setLoading(true);
+    try {
+      if (!session?.user?.id) {
+        throw new Error("You must be logged in to delete expenses");
+      }
+      await deleteExpense(row.id, session.user.id);
+      await loadExpenses({ force: true });
+    } catch (err) {
+      setError(err.message || "Failed to delete expense");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleIncomeSaved = async () => {
@@ -317,7 +336,11 @@ export default function ExpensesPage() {
 
             {!loading && !error && (
               <>
-                <ExpensesTable expenses={expenses} view="expense" />
+                <ExpensesTable
+                  expenses={expenses}
+                  view="expense"
+                  onDelete={handleExpenseDelete}
+                />
                 
                 <div className="pagination">
                   <button
