@@ -10,22 +10,18 @@ export async function addExpense(expense) {
     sub_category,
     amount,
     payment_mode,
-    user_id,
   } = expense;
 
   const { data, error } = await supabase
     .from("expenses")
-    .insert([
-      {
-        user_id,
-        spent_at,
-        title,
-        category,
-        sub_category,
-        amount,
-        payment_mode,
-      }
-    ]);
+    .insert({
+      spent_at,
+      title,
+      category,
+      sub_category,
+      amount,
+      payment_mode,
+    });
 
   return { data, error };
 }
@@ -145,4 +141,17 @@ export async function getExpensesPaginated(page = 1, filters = {}) {
     expenses: data,
     total: count,
   };
+}
+
+// Delete a single expense by id (optionally scoped to a user).
+export async function deleteExpense(expenseId, userId) {
+  if (!expenseId) throw new Error("expenseId is required to delete an expense");
+
+  let query = supabase.from("expenses").delete().eq("id", expenseId);
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { error } = await query;
+  return { error };
 }

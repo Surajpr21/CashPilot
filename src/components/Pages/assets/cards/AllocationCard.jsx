@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { formatCurrency } from "../../../../lib/formatters";
 import "./AllocationCard.css";
 
 const GRADIENTS = [
-  { from: "#CDE7A2", to: "#90D087" }, // lime-mint (investments)
-  { from: "#FFE6A8", to: "#F4C86A" }, // apricot-yellow (gold)
-  { from: "#B7EFE5", to: "#6ECFBC" }, // aqua-teal (insurance)
+  { from: "#CDE7A2", to: "#90D087" },
+  { from: "#FFE6A8", to: "#F4C86A" },
+  { from: "#B7EFE5", to: "#6ECFBC" },
 ];
 
 const lighten = (hex, amount = 0.18) => {
@@ -16,17 +17,9 @@ const lighten = (hex, amount = 0.18) => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
-export default function AllocationCard() {
+export default function AllocationCard({ allocation, totalAssets, currency }) {
   const [activeIndex, setActiveIndex] = useState(null);
-
-  const data = useMemo(
-    () => [
-      { name: "Investments", value: 55 },
-      { name: "Gold", value: 25 },
-      { name: "Insurance", value: 20 },
-    ],
-    []
-  );
+  const chartData = allocation?.map((item) => ({ ...item })) ?? [];
 
   return (
     <div className="assets-page-card">
@@ -54,7 +47,7 @@ export default function AllocationCard() {
             </defs>
 
             <Pie
-              data={data}
+              data={chartData}
               dataKey="value"
               cx="50%"
               cy="50%"
@@ -66,7 +59,7 @@ export default function AllocationCard() {
               onMouseEnter={(_, i) => setActiveIndex(i)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {data.map((_, i) => {
+              {chartData.map((_, i) => {
                 const isActive = i === activeIndex;
                 return (
                   <Cell
@@ -96,15 +89,17 @@ export default function AllocationCard() {
         </ResponsiveContainer>
 
         <div className="assets-page-donut-center">
-          <div className="assets-page-center-value">₹8,75,500</div>
+          <div className="assets-page-center-value">{formatCurrency(totalAssets, currency)}</div>
           <div className="assets-page-center-label">Total assets</div>
         </div>
       </div>
 
       <div className="assets-page-legend">
-        <span className="investments">Investments</span>
-        <span className="gold">Gold</span>
-        <span className="insurance">Insurance</span>
+        {chartData.map((item) => (
+          <span key={item.name.toLowerCase()} className={item.name.toLowerCase()}>
+            {item.name}: {formatCurrency(item.value, currency)}
+          </span>
+        ))}
       </div>
 
       <p className="assets-page-footnote">Based on invested amount and total premiums paid</p>
