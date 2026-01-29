@@ -10,18 +10,22 @@ export async function addExpense(expense) {
     sub_category,
     amount,
     payment_mode,
+    user_id,
   } = expense;
 
-  const { data, error } = await supabase
-    .from("expenses")
-    .insert({
-      spent_at,
-      title,
-      category,
-      sub_category,
-      amount,
-      payment_mode,
-    });
+  if (!user_id) {
+    throw new Error("Missing user id for expense");
+  }
+
+  const { data, error } = await supabase.from("expenses").insert({
+    spent_at,
+    title,
+    category,
+    sub_category,
+    amount,
+    payment_mode,
+    user_id,
+  });
 
   return { data, error };
 }
@@ -84,6 +88,110 @@ export function getMonthRange(year, month) {
 export async function getExpensesForMonth(year, month) {
   const { from, to } = getMonthRange(year, month);
   return await getExpenses({ fromDate: from, toDate: to });
+}
+
+export async function getRecentExpenses({ userId, limit = 5 } = {}) {
+  let query = supabase
+    .from("expenses")
+    .select("id, title, category, sub_category, amount, spent_at, payment_mode, user_id")
+    .order("spent_at", { ascending: false })
+    .limit(limit);
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const rows = data || [];
+  return rows.map((row) => ({
+    ...row,
+    note: row.sub_category || row.title || "",
+  }));
+}
+
+export async function getExpensesByMonth({ userId, months = 12 } = {}) {
+  const today = new Date();
+  const from = new Date(today.getFullYear(), today.getMonth() - (months - 1), 1)
+    .toISOString()
+    .split("T")[0];
+
+  let query = supabase
+    .from("expenses")
+    .select("amount, spent_at")
+    .gte("spent_at", from)
+    .order("spent_at", { ascending: true });
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const monthsArr = Array.from({ length: months }, (_, i) => {
+    const date = new Date(today.getFullYear(), today.getMonth() - (months - 1 - i), 1);
+    return {
+      key: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`,
+      label: date.toLocaleString("en-US", { month: "short" }),
+      value: 0,
+    };
+  });
+
+  const map = monthsArr.reduce((acc, item) => {
+    acc[item.key] = item;
+    return acc;
+  }, {});
+
+  (data || []).forEach((row) => {
+    const key = row.spent_at.slice(0, 7);
+    if (map[key]) {
+      map[key].value += Number(row.amount || 0);
+    }
+  });
+
+  return monthsArr;
+}
+
+export async function getTopCategories({ userId, days = 30 } = {}) {
+  const today = new Date();
+  const from = new Date(today);
+  from.setDate(from.getDate() - (days - 1));
+  const fromStr = from.toISOString().split("T")[0];
+
+  let query = supabase
+    .from("expenses")
+    // Pull full rows so we can filter out any non-expense entries if they slip into the view
+    .select("*")
+    .gte("spent_at", fromStr);
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const expenseRows = (data || []).filter((row) => {
+    const type = (row.type || row.flow || row.transaction_type || "").toLowerCase();
+    if (type && type !== "expense") return false;
+
+    const category = (row.category || "").toLowerCase();
+    if (category === "income" || category === "salary") return false;
+
+    return true;
+  });
+
+  const byCat = expenseRows.reduce((acc, row) => {
+    const key = row.category || "Uncategorized";
+    acc[key] = (acc[key] || 0) + Number(row.amount || 0);
+    return acc;
+  }, {});
+
+  return Object.entries(byCat)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value);
 }
 
 export async function getExpensesPaginated(page = 1, filters = {}) {

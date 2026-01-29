@@ -101,6 +101,21 @@
   background: #fff;
 }
 
+.assets-page-hint {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.assets-page-form-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
 .assets-page-form-section {
   margin-top: 12px;
   padding-top: 12px;
@@ -130,6 +145,7 @@
 
 .assets-page-form-note {
   margin-top: 12px;
+  color: #475569;
 }
 
 .assets-page-modal-actions {

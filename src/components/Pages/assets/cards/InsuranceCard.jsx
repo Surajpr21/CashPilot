@@ -9,15 +9,15 @@ export default function InsuranceCard({ totalPremiums, currency, policiesCount, 
 
       <div className="assets-page-row">
         <span>Policies covered</span>
-        <strong>{policiesCount ? `${formatNumber(policiesCount)} active` : "—"}</strong>
+        <strong>{policiesCount ? formatNumber(policiesCount) : "—"}</strong>
       </div>
 
-      <p>Premiums paid till date: {formatCurrency(totalPremiums, currency)}</p>
+      <p>Premiums paid till date: ₹ {formatCurrency(totalPremiums)}</p>
       <p className="assets-page-muted">Read-only values from insurance view</p>
 
       {onViewHistory ? (
         <button type="button" className="assets-page-link" onClick={onViewHistory}>
-          View premium history →
+          Know more →
         </button>
       ) : null}
     </div>

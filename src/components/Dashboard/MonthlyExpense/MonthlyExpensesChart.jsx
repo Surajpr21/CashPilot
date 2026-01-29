@@ -1,184 +1,8 @@
-// // MonthlyExpensesChart.jsx
-// import React, { useRef, useEffect, useState } from "react";
-// import "./MonthlyExpensesChart.css";
-
-// const data = [
-//   { name: "Dec", expense: 18000 },
-//   { name: "Feb", expense: 27000 },
-//   { name: "Mar", expense: 8000 },
-//   { name: "Apr", expense: 20000 },
-//   { name: "May", expense: 26000 },
-//   { name: "Jan", expense: 15000 },
-// ];
-
-// export default function MonthlyExpensesChart() {
-//   const containerRef = useRef(null);
-//   const [width, setWidth] = useState(900);
-//   const height = 320;
-
-//   useEffect(() => {
-//     const el = containerRef.current;
-//     if (!el) return;
-//     const resize = () => setWidth(el.clientWidth || 600);
-
-//     if (typeof ResizeObserver !== "undefined") {
-//       const ro = new ResizeObserver(() => resize());
-//       ro.observe(el);
-//       resize();
-//       return () => ro.disconnect();
-//     } else {
-//       window.addEventListener("resize", resize);
-//       resize();
-//       return () => window.removeEventListener("resize", resize);
-//     }
-//   }, []);
-
-//   const padding = { top: 18, right: 18, bottom: 46, left: 50 };
-//   const chartW = Math.max(0, width - padding.left - padding.right);
-//   const chartH = Math.max(0, height - padding.top - padding.bottom);
-//   const values = data.map((d) => d.expense);
-//   const maxVal = Math.max(...values, 30000);
-//   const domainMax = Math.ceil(maxVal / 5000) * 5000;
-
-//   // y ticks (0 .. domainMax) - we render 7 ticks (including 0)
-//   const ticks = Array.from({ length: 7 }, (_, i) => Math.round((i * domainMax) / 6));
-
-//   const band = chartW / data.length;
-//   const barWidth = Math.min(72, Math.max(28, band * 0.5));
-//   const bgPaddingVert = 8; // visual padding inside the background pill
-//   const innerHorizPadding = 10;
-
-//   const [tooltip, setTooltip] = useState(null);
-
-//   return (
-//     <div className="monthly-expenses-card" ref={containerRef}>
-//       <div className="monthly-expenses-header">
-//         <h3>Monthly Expenses</h3>
-//         <div className="monthly-expenses-info">
-//           <span className="chip growth">▲ 6% more than last month</span>
-//           <select className="monthly-expenses-dropdown" aria-label="range">
-//             <option>Recent</option>
-//             <option>Last 6 months</option>
-//             <option>Last year</option>
-//           </select>
-//           <button className="kebab" aria-label="more">
-//             ⋯
-//           </button>
-//         </div>
-//       </div>
-
-//       <div className="chart-wrap" style={{ height }}>
-//         <svg
-//           width={width}
-//           height={height}
-//           className="expenses-svg"
-//           role="img"
-//           aria-label="Monthly expenses chart"
-//         >
-//           <defs>
-//             <linearGradient id="barGradient" x1="0" x2="0" y1="0" y2="1">
-//               <stop offset="0%" stopColor="#4C6EF5" stopOpacity="1" />
-//               <stop offset="100%" stopColor="#7C3AED" stopOpacity="1" />
-//             </linearGradient>
-
-//             <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
-//               <feDropShadow
-//                 dx="0"
-//                 dy="2"
-//                 stdDeviation="6"
-//                 floodColor="#6b5cff"
-//                 floodOpacity="0.12"
-//               />
-//             </filter>
-//           </defs>
-
-//           {/* Y axis labels + subtle horizontal grid */}
-//           {ticks.map((t, idx) => {
-//             const y = padding.top + chartH - (t / domainMax) * chartH;
-//             return (
-//               <g key={idx}>
-//                 <line
-//                   x1={padding.left - 6}
-//                   x2={width - padding.right}
-//                   y1={y}
-//                   y2={y}
-//                   stroke="#f3f4f6"
-//                   strokeWidth={1}
-//                 />
-//                 <text x={padding.left - 12} y={y + 4} textAnchor="end" className="tick-label">
-//                   {Number(t).toLocaleString()}
-//                 </text>
-//               </g>
-//             );
-//           })}
-
-//           {/* Bars (background pill + inner value bar) */}
-//           {data.map((d, i) => {
-//             const cx = padding.left + band * i + band / 2;
-//             const bgX = cx - barWidth / 2;
-//             const bgY = padding.top + bgPaddingVert;
-//             const bgHeight = chartH - bgPaddingVert * 2;
-//             const innerWidth = Math.max(8, barWidth - innerHorizPadding * 2);
-//             const innerHeight = Math.max(6, Math.round((d.expense / domainMax) * bgHeight));
-//             const innerX = cx - innerWidth / 2;
-//             const innerY = bgY + (bgHeight - innerHeight);
-
-//             return (
-
-//               <g
-//                 key={d.name}
-//                 className="bar-group"
-//                 onMouseEnter={(e) => {
-//                   const rect = containerRef.current.getBoundingClientRect();
-//                   setTooltip({ x: e.clientX - rect.left, y: e.clientY - rect.top, value: d.expense, label: d.name });
-//                 }}
-//                 onMouseLeave={() => setTooltip(null)}
-//               >
-//                 {/* background pill */}
-//                 <rect x={bgX} y={bgY} width={barWidth} height={bgHeight} rx={barWidth / 2} ry={barWidth / 2} fill="#f3efff" />
-
-//                 {/* inner value bar */}
-//                 <rect
-//                   x={innerX}
-//                   y={innerY}
-//                   width={innerWidth}
-//                   height={innerHeight}
-//                   rx={innerWidth / 2}
-//                   ry={innerWidth / 2}
-//                   fill="url(#barGradient)"
-//                   filter="url(#softShadow)"
-//                   style={{ transition: "all 450ms cubic-bezier(.2,.8,.2,1)" }}
-//                 />
-
-//                 {/* x label */}
-//                 <text x={cx} y={padding.top + chartH + 20} textAnchor="middle" className="x-label">
-//                   {d.name}
-//                 </text>
-//               </g>
-//             );
-//           })}
-
-//           {/* bottom-left small label */}
-//           <text x={padding.left - 6} y={padding.top + chartH + 20} textAnchor="end" className="x-label small">
-//             E/M
-//           </text>
-//         </svg>
-
-//         {/* tooltip */}
-//         {tooltip && (
-//           <div className="chart-tooltip" style={{ left: tooltip.x + 12, top: tooltip.y - 12 }}>
-//             <div className="tt-label">{tooltip.label}</div>
-//             <div className="tt-value">₹{tooltip.value.toLocaleString()}</div>
-
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-import React, { useRef, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./MonthlyExpensesChart.css";
+import { useAuth } from "../../../contexts/AuthContext";
+import { supabase } from "../../../lib/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 const SERIES = {
   expenses: {
@@ -231,12 +55,71 @@ const SERIES = {
   },
 };
 
+const RANGE_CONFIG = {
+  "7d": { type: "daily", days: 7 },
+  "30d": { type: "weekly", days: 30 },
+  "6m": { type: "monthly", months: 6 },
+  "1y": { type: "monthly", months: 12 },
+};
+
+const startOfMonthKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+
+const buildBaseBuckets = (rangeKey) => {
+  const config = RANGE_CONFIG[rangeKey] || RANGE_CONFIG["6m"];
+  const today = new Date();
+
+  if (config.type === "daily") {
+    const days = config.days || 7;
+    const buckets = Array.from({ length: days }, (_, i) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() - (days - 1 - i));
+      const key = d.toISOString().slice(0, 10);
+      const name = d.toLocaleDateString("en-US", { weekday: "short" });
+      return { key, name, tooltip: name };
+    });
+    return buckets;
+  }
+
+  if (config.type === "weekly") {
+    // 4 rolling buckets, 0-6, 7-13, 14-20, 21-29 days ago
+    const labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+    const tooltips = ["Days 21-29 ago", "Days 14-20 ago", "Days 7-13 ago", "Last 7 days"];
+    return labels.map((name, idx) => ({ key: `w${idx + 1}`, name, tooltip: tooltips[idx] }));
+  }
+
+  // monthly buckets (default)
+  const months = config.months || 6;
+  return Array.from({ length: months }, (_, i) => {
+    const date = new Date(today.getFullYear(), today.getMonth() - (months - 1 - i), 1);
+    return {
+      key: startOfMonthKey(date),
+      name: date.toLocaleString("en-US", { month: "short" }),
+      tooltip: date.toLocaleString("en-US", { month: "short", year: "numeric" }),
+    };
+  });
+};
+
 export default function MonthlyExpensesChart() {
   const containerRef = useRef(null);
   const [width, setWidth] = useState(900);
   const height = 320;
   const [mode, setMode] = useState("expenses");
+  const [range, setRange] = useState("6m");
   const [tooltip, setTooltip] = useState(null);
+  const { session } = useAuth();
+  const userId = session?.user?.id || null;
+  const navigate = useNavigate();
+  const baseBuckets = useMemo(() => buildBaseBuckets(range), [range]);
+  const [series, setSeries] = useState(() => {
+    const zeroes = baseBuckets.map((b) => ({ ...b, value: 0 }));
+    return { expenses: zeroes, savings: zeroes };
+  });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const zeroes = baseBuckets.map((b) => ({ ...b, value: 0 }));
+    setSeries({ expenses: zeroes, savings: zeroes });
+  }, [baseBuckets]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -256,14 +139,182 @@ export default function MonthlyExpensesChart() {
     }
   }, []);
 
+  const load = useCallback(async () => {
+    const zeroes = baseBuckets.map((b) => ({ ...b, value: 0 }));
+
+    if (!userId) {
+      setSeries({ expenses: zeroes, savings: zeroes });
+      return;
+    }
+
+    const config = RANGE_CONFIG[range] || RANGE_CONFIG["6m"];
+
+    // compute fromDate based on range type using Date math (no string concatenation)
+    let fromDate;
+    const today = new Date();
+    if (config.type === "daily") {
+      const start = new Date(today);
+      start.setDate(start.getDate() - 6);
+      fromDate = start.toISOString().slice(0, 10);
+    } else if (config.type === "weekly") {
+      const start = new Date(today);
+      start.setDate(start.getDate() - 29);
+      fromDate = start.toISOString().slice(0, 10);
+    } else {
+      const months = config.months || 6;
+      const start = new Date(today.getFullYear(), today.getMonth() - (months - 1), 1);
+      fromDate = start.toISOString().slice(0, 10);
+    }
+
+    if (!fromDate) {
+      setSeries({ expenses: zeroes, savings: zeroes });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const [{ data: expenseRows, error: expenseError }, { data: incomeRows, error: incomeError }] = await Promise.all([
+        supabase
+          .from("expenses")
+          .select("amount, spent_at")
+          .eq("user_id", userId)
+          .gte("spent_at", fromDate),
+        supabase
+          .from("transactions")
+          .select("amount, occurred_on")
+          .eq("user_id", userId)
+          .eq("type", "income")
+          .gte("occurred_on", fromDate),
+      ]);
+
+      if (expenseError) throw expenseError;
+      if (incomeError) throw incomeError;
+
+      const expenseMap = (expenseRows || []).reduce((acc, row) => {
+        const spent = row.spent_at || "";
+        if (config.type === "daily") {
+          const key = spent.slice(0, 10);
+          if (!key) return acc;
+          acc[key] = (acc[key] || 0) + Number(row.amount || 0);
+          return acc;
+        }
+        if (config.type === "weekly") {
+          const daysAgo = Math.floor((new Date() - new Date(spent)) / 86400000);
+          if (daysAgo < 0 || daysAgo > 29) return acc;
+          const bucketKey =
+            daysAgo <= 6 ? "w4" :
+            daysAgo <= 13 ? "w3" :
+            daysAgo <= 20 ? "w2" : "w1";
+          acc[bucketKey] = (acc[bucketKey] || 0) + Number(row.amount || 0);
+          return acc;
+        }
+        const key = spent.slice(0, 7);
+        if (!key) return acc;
+        acc[key] = (acc[key] || 0) + Number(row.amount || 0);
+        return acc;
+      }, {});
+
+      const incomeMap = (incomeRows || []).reduce((acc, row) => {
+        const occurred = row.occurred_on || "";
+        if (config.type === "daily") {
+          const key = occurred.slice(0, 10);
+          if (!key) return acc;
+          acc[key] = (acc[key] || 0) + Number(row.amount || 0);
+          return acc;
+        }
+        if (config.type === "weekly") {
+          const daysAgo = Math.floor((new Date() - new Date(occurred)) / 86400000);
+          if (daysAgo < 0 || daysAgo > 29) return acc;
+          const bucketKey =
+            daysAgo <= 6 ? "w4" :
+            daysAgo <= 13 ? "w3" :
+            daysAgo <= 20 ? "w2" : "w1";
+          acc[bucketKey] = (acc[bucketKey] || 0) + Number(row.amount || 0);
+          return acc;
+        }
+        const key = occurred.slice(0, 7);
+        if (!key) return acc;
+        acc[key] = (acc[key] || 0) + Number(row.amount || 0);
+        return acc;
+      }, {});
+
+      const alignedExpenses = baseBuckets.map((bucket) => ({
+        ...bucket,
+        value: Number(expenseMap[bucket.key] || 0),
+      }));
+
+      const alignedIncome = baseBuckets.map((bucket) => ({
+        ...bucket,
+        value: Number(incomeMap[bucket.key] || 0),
+      }));
+
+      const alignedSavings = baseBuckets.map((bucket, idx) => ({
+        ...bucket,
+        value: Math.max(0, Number((alignedIncome[idx]?.value || 0) - (alignedExpenses[idx]?.value || 0))),
+      }));
+
+      setSeries({ expenses: alignedExpenses, savings: alignedSavings });
+    } catch (err) {
+      setSeries({ expenses: zeroes, savings: zeroes });
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, baseBuckets, range]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useEffect(() => {
+    if (!userId) return undefined;
+
+    const channel = supabase
+      .channel(`expenses-monthly-${userId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "expenses", filter: `user_id=eq.${userId}` },
+        () => load()
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${userId}` },
+        () => load()
+      )
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, [userId, load]);
+
   const padding = { top: 18, right: 18, bottom: 46, left: 50 };
   const chartW = Math.max(0, width - padding.left - padding.right);
   const chartH = Math.max(0, height - padding.top - padding.bottom);
 
-  const currentSeries = SERIES[mode];
-  const values = currentSeries.data.map((d) => d.value);
+  const mergedSeries = useMemo(
+    () => ({
+      expenses: { ...SERIES.expenses, data: series.expenses },
+      savings: { ...SERIES.savings, data: series.savings },
+    }),
+    [series]
+  );
+
+  const currentSeries = mergedSeries[mode];
+  const seriesData = currentSeries.data || [];
+  const values = seriesData.map((d) => d.value);
   const maxVal = Math.max(...values, 1);
-  const domainMax = Math.ceil(maxVal / 5000) * 5000 * 1.08;
+  const step = 5000;
+  let domainMax;
+
+  if (mode === "savings") {
+    domainMax = maxVal * 1.25;
+    domainMax = Math.max(domainMax, 1000);
+  } else {
+    domainMax = Math.ceil(maxVal / step) * step;
+    domainMax = Math.max(domainMax, maxVal * 1.15);
+  }
+
+  if (!Number.isFinite(domainMax) || domainMax <= 0) {
+    domainMax = step;
+  }
   const rightInset = 32; // subtle, not visible as padding
 
 
@@ -273,18 +324,18 @@ export default function MonthlyExpensesChart() {
 
   const getX = (i) =>
     padding.left +
-    ((chartW - rightInset) / (currentSeries.data.length - 1)) * i;
+    ((chartW - rightInset) / Math.max(1, seriesData.length - 1)) * i;
 
 
   // --- Line points ---
-  const points = currentSeries.data.map((d, i) => {
+  const points = seriesData.map((d, i) => {
     const x = getX(i);
     const y =
       padding.top +
       chartH -
       (d.value / domainMax) * chartH;
 
-    return { x, y, value: d.value, label: d.name };
+    return { x, y, value: d.value, label: d.name, tooltip: d.tooltip };
   });
 
 
@@ -300,14 +351,16 @@ export default function MonthlyExpensesChart() {
 
   const areaPath =
     linePath +
-    ` L ${points[points.length - 1].x} ${padding.top + chartH}` +
-    ` L ${points[0].x} ${padding.top + chartH} Z`;
+    (points.length
+      ? ` L ${points[points.length - 1].x} ${padding.top + chartH} L ${points[0].x} ${padding.top + chartH} Z`
+      : "");
 
   return (
     <div className="monthly-expenses-card" ref={containerRef}>
       <div className="monthly-expenses-header">
         <h3>{currentSeries.label}</h3>
         <div className="monthly-expenses-info">
+          <button className="bills-manage" onClick={() => navigate("/expenses")}>Manage →</button>
           <span className="chip growth">{currentSeries.chip}</span>
           <div className="toggle">
             {[
@@ -325,20 +378,27 @@ export default function MonthlyExpensesChart() {
               </button>
             ))}
           </div>
-          <select className="monthly-expenses-dropdown" aria-label="range">
-            <option>Recent</option>
-            <option>Last 6 months</option>
-            <option>Last year</option>
+          <select
+            className="monthly-expenses-dropdown"
+            aria-label="range"
+            value={range}
+            onChange={(e) => setRange(e.target.value)}
+          >
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+            <option value="6m">Last 6 months</option>
+            <option value="1y">Last year</option>
           </select>
         </div>
       </div>
 
       <div className="chart-wrap" style={{ height }}>
+        {loading && <div className="chart-loading">Refreshing…</div>}
         <svg width={width} height={height} className="expenses-svg">
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#3CA8D6" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#D3F2BD" stopOpacity="0" />
+              <stop offset="100%" stopColor="#244809" stopOpacity="0" />
             </linearGradient>
 
             <linearGradient id="fadeGradient" x1="0" y1="0" x2="1" y2="0">
@@ -434,6 +494,7 @@ export default function MonthlyExpensesChart() {
                   y: e.clientY - rect.top,
                   value: p.value,
                   label: p.label,
+                  detail: p.tooltip,
                 });
               }}
               onMouseLeave={() => setTooltip(null)}
@@ -443,7 +504,7 @@ export default function MonthlyExpensesChart() {
 
 
           {/* X labels */}
-          {currentSeries.data.map((d, i) => (
+          {seriesData.map((d, i) => (
             <text
               key={d.name}
               x={getX(i)}
@@ -463,6 +524,7 @@ export default function MonthlyExpensesChart() {
             style={{ left: tooltip.x + 12, top: tooltip.y - 12 }}
           >
             <div className="tt-label">{tooltip.label}</div>
+            {tooltip.detail && <div className="tt-sub">{tooltip.detail}</div>}
             <div className="tt-value">
               ₹{tooltip.value.toLocaleString()}
             </div>

@@ -20,20 +20,20 @@ export async function getInvestmentsTotal() {
   return data;
 }
 
-export async function getGoldSummary() {
+export async function getMetalSummary() {
   const { data, error } = await supabase
-    .from("v_gold_summary")
-    .select("*")
-    .maybeSingle();
+    .from("v_metal_summary")
+    .select("metal_type, total_grams, avg_buy_price")
+    .order("metal_type", { ascending: true });
 
   if (error) throw error;
-  return data;
+  return data || [];
 }
 
-export async function getInsuranceTotal() {
+export async function getInsuranceSummary() {
   const { data, error } = await supabase
-    .from("v_insurance_total")
-    .select("*")
+    .from("v_insurance_summary")
+    .select("policies_covered, total_premiums")
     .maybeSingle();
 
   if (error) throw error;
@@ -47,8 +47,47 @@ export async function addInvestment(payload) {
   if (error) throw error;
 }
 
-export async function addGoldHolding(payload) {
-  const { error } = await supabase.from("gold_holdings").insert(payload);
+export async function getInvestmentsDetails() {
+  const { data, error } = await supabase
+    .from("v_investments_details")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function updateInvestment(investmentId, payload) {
+  const { error } = await supabase
+    .from("investments")
+    .update(payload)
+    .eq("id", investmentId);
+
+  if (error) throw error;
+}
+
+export async function softDeleteInvestment(id) {
+  const { error } = await supabase
+    .from("investments")
+    .update({ is_deleted: true })
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function addMetalHolding(payload) {
+  // Explicitly build payload to avoid leaking optional fields (e.g., currency)
+  const insertPayload = {
+    metal_type: payload?.metal_type,
+    grams: payload?.grams,
+    buy_price_per_gram:
+      payload?.buy_price_per_gram === undefined ? null : payload?.buy_price_per_gram,
+    purchased_at: payload?.purchased_at,
+  };
+
+  console.log("METAL INSERT PAYLOAD", insertPayload);
+
+  const { error } = await supabase.from("metal_holdings").insert(insertPayload);
   if (error) throw error;
 }
 
@@ -78,23 +117,30 @@ export async function createInsurancePolicy(payload) {
   return data;
 }
 
-export async function getLatestGoldMarketPrice() {
+export async function getInsurancePoliciesSummary() {
   const { data, error } = await supabase
-    .from("gold_market_prices")
-    .select("price_per_gram, currency, price_date")
-    .order("price_date", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .from("v_insurance_policies_summary")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return data || [];
 }
 
-export async function softDeleteInvestment(id) {
+export async function updateInsurancePolicy(policyId, payload) {
   const { error } = await supabase
-    .from("investments")
+    .from("insurance_policies")
+    .update(payload)
+    .eq("id", policyId);
+
+  if (error) throw error;
+}
+
+export async function softDeleteInsurancePolicy(policyId) {
+  const { error } = await supabase
+    .from("insurance_policies")
     .update({ is_deleted: true })
-    .eq("id", id);
+    .eq("id", policyId);
 
   if (error) throw error;
 }

@@ -82,16 +82,18 @@ export async function getSubscriptionsPaginated({ page = 1, filters = {} }) {
   };
 }
 
-export async function getUpcomingSubscriptions() {
-  const today = new Date().toISOString().split("T")[0];
-
-  const { data, error } = await supabase
+export async function getUpcomingSubscriptions(userId) {
+  // Fetch active subscriptions for the user, including overdue ones.
+  let query = supabase
     .from("subscriptions")
-    .select("id, name, amount, next_due, status")
-    .eq("status", "active")
-    .gte("next_due", today)
-    .order("next_due", { ascending: true })
-    .limit(5);
+    .select("id, name, amount, next_due, status, user_id")
+    .eq("status", "active");
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query.order("next_due", { ascending: true });
 
   if (error) throw error;
   return data;

@@ -4,6 +4,13 @@
   margin: 10px 0;
 }
 
+.assets-page-row-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
 .assets-page-link {
   margin-top: 12px;
   display: inline-block;

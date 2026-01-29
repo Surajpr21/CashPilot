@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import "./AssetsPage.css";
 import SummaryCards from "./cards/SummaryCards";
 import AllocationCard from "./cards/AllocationCard";
 import InvestmentsCard from "./cards/InvestmentsCard";
 import GoldDetailsCard from "./cards/GoldDetailsCard";
 import InsuranceCard from "./cards/InsuranceCard";
+import InsurancePoliciesModal from "./cards/InsurancePoliciesModal";
+import InvestmentsDetailsModal from "./cards/InvestmentsDetailsModal";
+import AddInvestmentModal from "./cards/AddInvestmentModal";
+import AddMetalModal from "./cards/AddMetalModal";
+import { addInvestment, addMetalHolding } from "../../../lib/api/assets.api";
 import { useAssetsData } from "../../../hooks/useAssetsData";
 import { useAuthUser } from "../../../contexts/AuthContext";
 
@@ -26,9 +32,93 @@ function ErrorState() {
 
 export default function AssetsPage() {
   const user = useAuthUser();
-  const { isLoading, isError, totals, currencies, allocation, goldMarket } = useAssetsData(user?.id);
-  const handleAddGold = () => {};
-  const handleAddInvestment = () => {};
+  const queryClient = useQueryClient();
+  const [isInvestmentModalOpen, setIsInvestmentModalOpen] = useState(false);
+  const [investmentError, setInvestmentError] = useState("");
+  const [isInvestmentSubmitting, setIsInvestmentSubmitting] = useState(false);
+  const [isMetalModalOpen, setIsMetalModalOpen] = useState(false);
+  const [metalError, setMetalError] = useState("");
+  const [isMetalSubmitting, setIsMetalSubmitting] = useState(false);
+  const [isInsuranceModalOpen, setIsInsuranceModalOpen] = useState(false);
+  const [isInvestmentsModalOpen, setIsInvestmentsModalOpen] = useState(false);
+
+  const {
+    isLoading,
+    isError,
+    totals,
+    currencies,
+    allocation,
+    metalHoldings,
+    metalTypesCount,
+    insurancePoliciesCovered,
+  } = useAssetsData(user?.id);
+
+  const handleAddInvestment = () => {
+    setInvestmentError("");
+    setIsInvestmentModalOpen(true);
+  };
+
+  const handleOpenInvestmentsModal = () => {
+    setIsInvestmentsModalOpen(true);
+  };
+
+  const handleCloseInvestmentsModal = () => {
+    setIsInvestmentsModalOpen(false);
+  };
+
+  const handleAddMetal = () => {
+    setMetalError("");
+    setIsMetalModalOpen(true);
+  };
+
+  const handleOpenInsuranceModal = () => {
+    setIsInsuranceModalOpen(true);
+  };
+
+  const handleCloseInsuranceModal = () => {
+    setIsInsuranceModalOpen(false);
+  };
+
+  const handleCloseInvestmentModal = () => {
+    setInvestmentError("");
+    setIsInvestmentModalOpen(false);
+  };
+
+  const handleSubmitInvestment = async (payload) => {
+    setInvestmentError("");
+    setIsInvestmentSubmitting(true);
+    try {
+      await addInvestment(payload);
+      queryClient.invalidateQueries({ queryKey: ["investments-total"] });
+      queryClient.invalidateQueries({ queryKey: ["investments-details"] });
+      queryClient.invalidateQueries({ queryKey: ["assets-total"] });
+      setIsInvestmentModalOpen(false);
+    } catch (err) {
+      setInvestmentError(err?.message || "Unable to add investment.");
+    } finally {
+      setIsInvestmentSubmitting(false);
+    }
+  };
+
+  const handleCloseMetalModal = () => {
+    setMetalError("");
+    setIsMetalModalOpen(false);
+  };
+
+  const handleSubmitMetal = async (payload) => {
+    setMetalError("");
+    setIsMetalSubmitting(true);
+    try {
+      await addMetalHolding(payload);
+      queryClient.invalidateQueries({ queryKey: ["metals-summary"] });
+      queryClient.invalidateQueries({ queryKey: ["assets-total"] });
+      setIsMetalModalOpen(false);
+    } catch (err) {
+      setMetalError(err?.message || "Unable to add metal holding.");
+    } finally {
+      setIsMetalSubmitting(false);
+    }
+  };
 
   if (!user) {
     return <PageLoader message="Authenticating..." />;
@@ -48,7 +138,7 @@ export default function AssetsPage() {
         <div>
           <h1 className="assets-page-title">Assets</h1>
           <p className="assets-page-subtitle">
-            Track long-term allocations like investments, gold, and insurance.
+            Track long-term allocations like investments, metals, and insurance.
           </p>
         </div>
 
@@ -58,15 +148,12 @@ export default function AssetsPage() {
       <SummaryCards
         totalAssets={totals.assets}
         investmentsTotal={totals.investments}
-        goldValue={totals.gold}
-        goldGrams={totals.goldGrams}
         insuranceTotal={totals.insurance}
+        insurancePoliciesCovered={insurancePoliciesCovered}
         assetsCurrency={currencies.assets}
         investmentsCurrency={currencies.investments}
-        goldCurrency={currencies.gold}
         insuranceCurrency={currencies.insurance}
-        goldMarketPricePerGram={goldMarket.pricePerGram}
-        goldMarketCurrency={goldMarket.currency}
+        metalTypeCount={metalTypesCount}
       />
 
       <div className="assets-page-grid">
@@ -75,21 +162,44 @@ export default function AssetsPage() {
           total={totals.investments}
           currency={currencies.investments || currencies.assets}
           onAdd={handleAddInvestment}
+          onViewMore={handleOpenInvestmentsModal}
         />
-        <GoldDetailsCard
-          totalGrams={totals.goldGrams}
-          totalValue={totals.gold}
-          averageBuyPrice={totals.goldAvgBuyPrice}
-          currency={currencies.gold || currencies.assets}
-          marketPricePerGram={goldMarket.pricePerGram}
-          marketCurrency={goldMarket.currency || currencies.gold || currencies.assets}
-          onAdd={handleAddGold}
-        />
+        <GoldDetailsCard metalHoldings={metalHoldings} onAdd={handleAddMetal} />
         <InsuranceCard
           totalPremiums={totals.insurance}
           currency={currencies.insurance || currencies.assets}
+          policiesCount={insurancePoliciesCovered}
+          onViewHistory={handleOpenInsuranceModal}
         />
       </div>
+
+      <AddInvestmentModal
+        isOpen={isInvestmentModalOpen}
+        onClose={handleCloseInvestmentModal}
+        onSubmit={handleSubmitInvestment}
+        isSubmitting={isInvestmentSubmitting}
+        errorMessage={investmentError}
+      />
+
+      <AddMetalModal
+        isOpen={isMetalModalOpen}
+        onClose={handleCloseMetalModal}
+        onSubmit={handleSubmitMetal}
+        isSubmitting={isMetalSubmitting}
+        errorMessage={metalError}
+      />
+
+      <InsurancePoliciesModal
+        isOpen={isInsuranceModalOpen}
+        onClose={handleCloseInsuranceModal}
+        currency={currencies.insurance || currencies.assets}
+      />
+
+      <InvestmentsDetailsModal
+        isOpen={isInvestmentsModalOpen}
+        onClose={handleCloseInvestmentsModal}
+        currency={currencies.investments || currencies.assets}
+      />
     </div>
   );
 }

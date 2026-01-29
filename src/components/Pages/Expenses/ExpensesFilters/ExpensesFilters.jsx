@@ -239,19 +239,19 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
           <div className="expenses-page-summary-item">
             <span className="expenses-page-summary-label">Total spent:</span>
             <span className="expenses-page-summary-value">
-              {loadingStats ? "ΓÇª" : `${formatNumber(stats.total_spent)}`}
+              {loadingStats ? "...." : `${formatNumber(stats.total_spent)}`}
             </span>
           </div>
           <div className="expenses-page-summary-item">
             <span className="expenses-page-summary-label">Average per day:</span>
             <span className="expenses-page-summary-value">
-              {loadingStats ? "ΓÇª" : `${formatNumber(stats.avg_per_day)}`}
+              {loadingStats ? "...." : `${formatNumber(stats.avg_per_day)}`}
             </span>
           </div>
           <div className="expenses-page-summary-item">
             <span className="expenses-page-summary-label">Transactions:</span>
             <span className="expenses-page-summary-value">
-              {loadingStats ? "ΓÇª" : formatNumber(stats.transactions)}
+              {loadingStats ? "...." : formatNumber(stats.transactions)}
             </span>
           </div>
         </div>
