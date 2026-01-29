@@ -7,6 +7,8 @@ import {
 import { useAuth } from "../../../contexts/AuthContext";
 import { getExpenseStats } from "../../../services/expenses.service";
 import { getIncomeSummary } from "../../../services/transactions.service";
+import { supabase } from "../../../lib/supabaseClient";
+import { getInvestmentsTotal } from "../../../lib/api/assets.api";
 
 const baseCardData = [
   {
@@ -87,6 +89,7 @@ const StatsCards = () => {
     expenseCount: 0,
     avgExpensePerDay: 0,
   });
+  const [investmentsTotal, setInvestmentsTotal] = useState(0);
   const lastLoadKeyRef = useRef(null);
 
   const monthRange = useMemo(() => {
@@ -110,9 +113,10 @@ const StatsCards = () => {
       try {
         const userId = session?.user?.id;
 
-        const [expenseRes, incomeRes] = await Promise.all([
+        const [expenseRes, incomeRes, investmentsRes] = await Promise.all([
           getExpenseStats(monthRange.from, monthRange.to, userId),
           getIncomeSummary({ fromDate: monthRange.from, toDate: monthRange.to, userId }),
+          getInvestmentsTotal(),
         ]);
 
         const expenseTotal = expenseRes?.data ? Number(expenseRes.data.total_spent || 0) : 0;
@@ -121,6 +125,9 @@ const StatsCards = () => {
 
         const incomeTotal = incomeRes?.total ? Number(incomeRes.total || 0) : 0;
         const incomeCount = incomeRes?.count ? Number(incomeRes.count || 0) : 0;
+
+        const investmentTotal = investmentsRes?.total_invested ? Number(investmentsRes.total_invested || 0) : 0;
+        setInvestmentsTotal(investmentTotal);
 
         setTotals({
           income: incomeTotal,
@@ -131,6 +138,7 @@ const StatsCards = () => {
         });
       } catch (err) {
         setTotals({ income: 0, expense: 0, incomeCount: 0, expenseCount: 0, avgExpensePerDay: 0 });
+        setInvestmentsTotal(0);
       }
     },
     [monthRange, session]
@@ -142,6 +150,32 @@ const StatsCards = () => {
     window.addEventListener("transactions:updated", handler);
     return () => window.removeEventListener("transactions:updated", handler);
   }, [loadTransactions]);
+
+  useEffect(() => {
+    const userId = session?.user?.id;
+    if (!userId) return undefined;
+
+    const channel = supabase
+      .channel(`stats-${userId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "expenses", filter: `user_id=eq.${userId}` },
+        () => loadTransactions({ force: true })
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${userId}` },
+        () => loadTransactions({ force: true })
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "investments", filter: `user_id=eq.${userId}` },
+        () => loadTransactions({ force: true })
+      )
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, [session?.user?.id, loadTransactions]);
 
   const derivedCards = useMemo(() => {
     const opening = Number(profile?.opening_balance ?? 0);
@@ -163,9 +197,16 @@ const StatsCards = () => {
           change: totals.income ? Number(((monthlySavings / totals.income) * 100).toFixed(2)) : item.change,
         };
       }
+      if (item.title === "Investments") {
+        return {
+          ...item,
+          value: formatCurrency(investmentsTotal),
+          positive: investmentsTotal >= 0,
+        };
+      }
       return item;
     });
-  }, [profile, totals]);
+  }, [investmentsTotal, profile, totals]);
 
   const derivedNumbers = useMemo(() => {
     const savingsRate = totals.income ? Math.max(0, Math.round(((totals.income - totals.expense) / totals.income) * 100)) : 0;

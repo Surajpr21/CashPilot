@@ -75,93 +75,147 @@
 //     );
 // }
 
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./SubList.css";
+import { getUpcomingSubscriptions } from "../../../services/subscriptions.servies";
+import { supabase } from "../../../lib/supabaseClient";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const bills = [
-    {
-        name: "Slack",
-        icon: "🟢", // replace with svg/logo if needed
-        date: "Jun 25",
-        amount: 80,
-        status: "due",
-    },
-    {
-        name: "Adobe Creative Cloud",
-        icon: "🔴",
-        date: "Tomorrow",
-        amount: 60,
-        status: "paid",
-    },
-    {
-        name: "Dropbox",
-        icon: "🔷",
-        date: "Jun 20",
-        amount: 120,
-        status: "overdue",
-    },
-    {
-        name: "Google Workspace",
-        icon: "🟡",
-        date: "Jun 17",
-        amount: 220,
-        status: "paid",
-    },
-];
+const currencyFmt = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+});
 
 const SubList = () => {
+    const { session } = useAuth();
+    const userId = session?.user?.id || null;
+    const [subs, setSubs] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const normalizeDate = useCallback((value) => {
+        const parsed = new Date(value);
+        if (Number.isNaN(parsed.getTime())) return null;
+        parsed.setHours(0, 0, 0, 0);
+        return parsed;
+    }, []);
+
+    const today = useMemo(() => {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }, []);
+
+    const load = useCallback(async () => {
+        if (!userId) {
+            setSubs([]);
+            return;
+        }
+        setLoading(true);
+        try {
+            const data = await getUpcomingSubscriptions(userId);
+            const filtered = (data || []).filter((row) => !row.user_id || row.user_id === userId);
+            setSubs(filtered);
+        } catch (err) {
+            setSubs([]);
+        } finally {
+            setLoading(false);
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        load();
+    }, [load]);
+
+    useEffect(() => {
+        if (!userId) return undefined;
+
+        const channel = supabase
+            .channel(`subscriptions-${userId}`)
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${userId}` },
+                () => load()
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [userId, load]);
+
+    const orderedSubs = useMemo(() => {
+        if (!subs?.length) return [];
+
+        return [...subs]
+            .sort((a, b) => {
+                const aDate = normalizeDate(a.next_due);
+                const bDate = normalizeDate(b.next_due);
+
+                if (aDate && !bDate) return -1;
+                if (!aDate && bDate) return 1;
+                if (!aDate && !bDate) return 0;
+
+                const aOverdue = aDate < today;
+                const bOverdue = bDate < today;
+
+                if (aOverdue !== bOverdue) return aOverdue ? -1 : 1;
+
+                return aDate - bDate;
+            })
+            .slice(0, 5);
+    }, [normalizeDate, subs, today]);
+
+    const total = useMemo(() => orderedSubs.reduce((sum, s) => sum + Number(s.amount || 0), 0), [orderedSubs]);
+
     return (
         <div className="bills-card">
-            {/* Header */}
             <div className="bills-header">
                 <div className="bills-header-left">
                     <h3>Bills & Subscriptions</h3>
-                      <button className="bills-manage">
-                    Manage →
-                </button>
+                    <button className="bills-manage" onClick={() => navigate("/subscriptions")}>Manage →</button>
                 </div>
             </div>
 
-            {/* Total */}
             <div className="bills-total">
-                <span className="bills-total-label">Total</span>
+                <span className="bills-total-label">Upcoming</span>
                 <div className="bills-total-amount">
-                    $480 <span>/ month</span>
+                    {currencyFmt.format(total)} <span>/ next cycle</span>
                 </div>
             </div>
 
-            {/* List */}
             <div className="bills-list">
-                {bills.map((bill, index) => (
-                    <div key={index} className="bills-row">
+                {orderedSubs.length === 0 && (
+                    <div className="bills-row empty">
+                        {loading ? "Loading subscriptions..." : "No upcoming bills"}
+                    </div>
+                )}
+                {orderedSubs.map((bill, index) => {
+                    const billDate = normalizeDate(bill.next_due);
+                    const isOverdue = billDate ? billDate < today : false;
+                    const dueLabel = billDate ? bill.next_due : "—";
+
+                    return (
+                    <div key={bill.id || index} className="bills-row">
                         <div className="bills-left">
                             <span className="bills-name">{bill.name}</span>
                         </div>
 
                         <div className="bills-right">
-                            {/* <span className="bills-date">
-                                 {bill.date}
-                            </span> */}
-                            <span className="bills-amount">
-                                ${bill.amount}
-                            </span>
-
-                            {bill.status === "due" ? (
-                                <span className="bills-status due">
-                                    Due soon
-                                </span>
-                            ) : bill.status === "overdue" ? (
-                                <span className="bills-status overdue">
-                                    Overdue
-                                </span>
+                            <span className="bills-amount">{currencyFmt.format(Number(bill.amount || 0))}</span>
+                            {bill.status === "inactive" ? (
+                                <span className="bills-status paid">Inactive</span>
+                            ) : isOverdue ? (
+                                <span className="bills-status overdue">Overdue {dueLabel}</span>
                             ) : (
-                                <span className="bills-status paid">
-                                    Paid
-                                </span>
+                                <span className="bills-status due">Due {dueLabel}</span>
                             )}
                         </div>
                     </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

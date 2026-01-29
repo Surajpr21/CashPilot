@@ -51,8 +51,12 @@ export default function GoalsSection({ goals, loading, setGoals }) {
    * Frontend-only math (safe): Math.min(saved/target*100, 100)
    */
   const getProgressPercent = (goal) => {
-    if (!goal.target_amount) return 0;
-    return Math.min((goal.saved_amount / goal.target_amount) * 100, 100);
+    const targetAmount = Number(goal?.target_amount || 0);
+    const savedAmount = Number(goal?.saved_amount || 0);
+
+    if (!targetAmount) return 0;
+
+    return Math.min((savedAmount / targetAmount) * 100, 100);
   };
 
   /**
@@ -61,6 +65,9 @@ export default function GoalsSection({ goals, loading, setGoals }) {
    */
   function getMonthlyRequired(goal) {
     if (!goal.target_date) return null;
+
+    const targetAmount = Number(goal?.target_amount || 0);
+    const savedAmount = Number(goal?.saved_amount || 0);
 
     const today = new Date();
     const target = new Date(goal.target_date);
@@ -72,7 +79,7 @@ export default function GoalsSection({ goals, loading, setGoals }) {
 
     const monthsLeft = Math.max(Math.ceil(diffDays / 30), 1);
 
-    const remaining = goal.target_amount - goal.saved_amount;
+    const remaining = targetAmount - savedAmount;
     if (remaining <= 0) return null;
 
     return Math.ceil(remaining / monthsLeft);
@@ -81,10 +88,19 @@ export default function GoalsSection({ goals, loading, setGoals }) {
 
 
   const getStatusDisplay = (status) => {
-    if (status === 'completed') return 'Completed';
-    if (status === 'on_track') return 'On Track';
-    if (status === 'behind') return 'Behind';
+    const normalized = (status || '').toLowerCase();
+    if (normalized === 'completed') return 'Completed';
+    if (normalized === 'on_track' || normalized === 'ontrack') return 'On Track';
+    if (normalized === 'behind') return 'Behind';
     return status;
+  };
+
+  const getStatusClass = (status) => {
+    const normalized = (status || '').toLowerCase().replace(/[-\s]/g, '_');
+    if (normalized === 'completed') return 'goals-completed';
+    if (normalized === 'on_track' || normalized === 'ontrack') return 'goals-ontrack';
+    if (normalized === 'behind') return 'goals-behind';
+    return 'goals-ontrack';
   };
 
   if (loading) {
@@ -107,9 +123,12 @@ export default function GoalsSection({ goals, loading, setGoals }) {
     <>
       <div className="goals-page-section">
         {goals.map((goal) => {
-          const progressPercent = getProgressPercent(goal);
-          const remaining = Math.max(0, goal.target_amount - (goal.saved_amount || 0));
-          const monthlyReq = getMonthlyRequired(goal);
+          const targetAmount = Number(goal.target_amount || 0);
+          const savedAmount = Number(goal.saved_amount || 0);
+          const progressPercent = getProgressPercent({ target_amount: targetAmount, saved_amount: savedAmount });
+          const remaining = Math.max(0, targetAmount - savedAmount);
+          const monthlyReq = getMonthlyRequired({ ...goal, target_amount: targetAmount, saved_amount: savedAmount });
+          const statusClass = getStatusClass(goal.status);
 
           return (
             <div key={goal.id} className="goals-page-goal-card">
@@ -122,7 +141,7 @@ export default function GoalsSection({ goals, loading, setGoals }) {
                   </p>
                 </div>
 
-                <span className={`goals-page-status goals-${goal.status}`}>
+                <span className={`goals-page-status ${statusClass}`}>
                   {getStatusDisplay(goal.status)}
                 </span>
               </div>
@@ -131,7 +150,7 @@ export default function GoalsSection({ goals, loading, setGoals }) {
               <div className="goals-page-progress-block">
                 <div className="goals-page-progress-track">
                   <div
-                    className={`goals-page-progress-fill goals-${goal.status}`}
+                    className={`goals-page-progress-fill ${statusClass}`}
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>

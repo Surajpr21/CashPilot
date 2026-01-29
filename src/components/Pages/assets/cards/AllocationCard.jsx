@@ -89,7 +89,7 @@ export default function AllocationCard({ allocation, totalAssets, currency }) {
         </ResponsiveContainer>
 
         <div className="assets-page-donut-center">
-          <div className="assets-page-center-value">{formatCurrency(totalAssets, currency)}</div>
+          <div className="assets-page-center-value">₹ {formatCurrency(totalAssets)}</div>
           <div className="assets-page-center-label">Total assets</div>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function AllocationCard({ allocation, totalAssets, currency }) {
       <div className="assets-page-legend">
         {chartData.map((item) => (
           <span key={item.name.toLowerCase()} className={item.name.toLowerCase()}>
-            {item.name}: {formatCurrency(item.value, currency)}
+            {item.name}: ₹ {formatCurrency(item.value)}
           </span>
         ))}
       </div>

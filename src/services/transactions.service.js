@@ -188,3 +188,47 @@ export async function deleteIncomeTransaction(id, userId) {
   if (error) throw error;
   return true;
 }
+
+export async function getIncomeByMonth({ userId, months = 12 } = {}) {
+  const today = new Date();
+  const from = new Date(today.getFullYear(), today.getMonth() - (months - 1), 1)
+    .toISOString()
+    .split("T")[0];
+
+  let query = supabase
+    .from("transactions")
+    .select("amount, occurred_on, type")
+    .eq("type", "income")
+    .gte("occurred_on", from)
+    .order("occurred_on", { ascending: true });
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const monthsArr = Array.from({ length: months }, (_, i) => {
+    const date = new Date(today.getFullYear(), today.getMonth() - (months - 1 - i), 1);
+    return {
+      key: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`,
+      label: date.toLocaleString("en-US", { month: "short" }),
+      value: 0,
+    };
+  });
+
+  const map = monthsArr.reduce((acc, item) => {
+    acc[item.key] = item;
+    return acc;
+  }, {});
+
+  (data || []).forEach((row) => {
+    const key = row.occurred_on.slice(0, 7);
+    if (map[key]) {
+      map[key].value += Number(row.amount || 0);
+    }
+  });
+
+  return monthsArr;
+}

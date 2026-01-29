@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { addExpense } from "../../../../../services/expenses.service";
+import { upsertIncomeTransaction } from "../../../../../services/transactions.service";
 import { supabase } from "../../../../../lib/supabaseClient";
 import { CATEGORIES } from "../../../../../constants/categories";
 import {
@@ -24,7 +25,7 @@ const initialState = {
   policyId: "",
 };
 
-export default function ExpenseForm({ onClose, onExpenseAdded }) {
+export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" }) {
   const [formState, setFormState] = useState(initialState);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -32,6 +33,21 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
   const [policies, setPolicies] = useState([]);
   const [policiesLoading, setPoliciesLoading] = useState(false);
   const [policyMode, setPolicyMode] = useState("existing");
+  const isIncome = mode === "income";
+
+  const incomeCategories = useMemo(
+    () => [
+      "Salary",
+      "Bonus",
+      "Interest",
+      "Dividends",
+      "Rental",
+      "Gifts",
+      "Refunds",
+      "Other",
+    ],
+    []
+  );
 
   const disallowed = useMemo(
     () => ["Gold", "Investment", "Investments", "RD", "FD", "SIP", "Mutual Fund", "Stocks", "Equity", "Asset"],
@@ -43,8 +59,8 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
   );
 
   const isInsuranceCategory = useMemo(
-    () => (formState.category || "").toLowerCase() === "insurance",
-    [formState.category]
+    () => !isIncome && (formState.category || "").toLowerCase() === "insurance",
+    [formState.category, isIncome]
   );
 
   const handleChange = (e) => {
@@ -53,7 +69,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
   };
 
   useEffect(() => {
-    if (!isInsuranceCategory) {
+    if (isIncome || !isInsuranceCategory) {
       setPolicyMode("existing");
       setFormState((prev) => ({
         ...prev,
@@ -87,7 +103,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
     return () => {
       active = false;
     };
-  }, [isInsuranceCategory]);
+  }, [isInsuranceCategory, isIncome]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,59 +112,73 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
     setLoading(true);
 
     try {
-      // Get current user
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
-        setError("You must be logged in to add expenses");
+        setError("You must be logged in to add entries");
         setLoading(false);
         return;
       }
 
-      const isInsurance = isInsuranceCategory;
-
-      const expensePayload = {
-        spent_at: formState.spent_at,
-        title: formState.title,
-        category: formState.category,
-        amount: formState.amount ? Number(formState.amount) : "",
-        sub_category: null,
-        payment_mode: formState.payment_mode,
-      };
-
-      const { error: submitError } = await addExpense(expensePayload);
-      if (submitError) throw submitError;
-
-      if (isInsurance) {
-        let policyId = formState.policyId;
-
-        if (policyMode === "new") {
-          if (!formState.insuranceProvider || !formState.policyName || !formState.insuranceType) {
-            throw new Error("Insurance provider, policy name, and type are required");
-          }
-
-          const createdPolicy = await createInsurancePolicy({
-            provider: formState.insuranceProvider,
-            policy_name: formState.policyName,
-            insurance_type: formState.insuranceType,
-          });
-
-          policyId = createdPolicy?.id;
-        } else if (!policyId) {
-          throw new Error("Select an existing policy or add a new one");
-        }
-
-        const insurancePayload = {
-          policy_id: policyId,
-          amount: Number(formState.amount) || 0,
-          paid_on: formState.spent_at,
-          currency: formState.currency || "INR",
+      if (isIncome) {
+        const incomePayload = {
+          user_id: user.id,
+          occurred_on: formState.spent_at,
+          amount: formState.amount ? Number(formState.amount) : 0,
+          category: formState.category || null,
+          note: formState.title || null,
         };
 
-        await addInsurancePremium(insurancePayload);
+        await upsertIncomeTransaction(incomePayload);
+        setSuccess("Income added successfully");
+      } else {
+        const isInsurance = isInsuranceCategory;
+
+        const expensePayload = {
+          spent_at: formState.spent_at,
+          title: formState.title,
+          category: formState.category,
+          amount: formState.amount ? Number(formState.amount) : "",
+          sub_category: null,
+          payment_mode: formState.payment_mode,
+          user_id: user.id,
+        };
+
+        const { error: submitError } = await addExpense(expensePayload);
+        if (submitError) throw submitError;
+
+        if (isInsurance) {
+          let policyId = formState.policyId;
+
+          if (policyMode === "new") {
+            if (!formState.insuranceProvider || !formState.policyName || !formState.insuranceType) {
+              throw new Error("Insurance provider, policy name, and type are required");
+            }
+
+            const createdPolicy = await createInsurancePolicy({
+              provider: formState.insuranceProvider,
+              policy_name: formState.policyName,
+              insurance_type: formState.insuranceType,
+            });
+
+            policyId = createdPolicy?.id;
+          } else if (!policyId) {
+            throw new Error("Select an existing policy or add a new one");
+          }
+
+          const insurancePayload = {
+            policy_id: policyId,
+            amount: Number(formState.amount) || 0,
+            paid_on: formState.spent_at,
+            currency: formState.currency || "INR",
+          };
+
+          await addInsurancePremium(insurancePayload);
+        }
+
+        setSuccess("Expense added successfully");
       }
 
-      setSuccess("Expense added successfully");
       setFormState(initialState);
       if (onExpenseAdded) {
         onExpenseAdded();
@@ -166,7 +196,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
   return (
     <form className="expense-form" onSubmit={handleSubmit}>
       <div className="expense-form-header">
-        <h3>Add Expense</h3>
+        <h3>{isIncome ? "Add Income" : "Add Expense"}</h3>
         {onClose && (
           <button
             type="button"
@@ -179,7 +209,142 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
         )}
       </div>
 
-      {isInsuranceCategory && (
+      {!isIncome && (
+        <div className="expense-form-grid">
+          <label className="expense-form-field">
+            <span>Date</span>
+            <input
+              type="date"
+              name="spent_at"
+              value={formState.spent_at}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label className="expense-form-field">
+            <span>Title / Note</span>
+            <input
+              type="text"
+              name="title"
+              value={formState.title}
+              onChange={handleChange}
+              placeholder="Groceries at market"
+              required
+            />
+          </label>
+
+          <label className="expense-form-field">
+            <span>Category</span>
+            <select
+              name="category"
+              value={formState.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select category</option>
+              {expenseCategories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <p className="expense-form-helper">Buying gold, RD/FD/SIP, or investing? Add it from Assets, not here.</p>
+          </label>
+
+          <label className="expense-form-field">
+            <span>Amount</span>
+            <input
+              type="number"
+              name="amount"
+              value={formState.amount}
+              onChange={handleChange}
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </label>
+
+          {isInsuranceCategory && (
+            <label className="expense-form-field">
+              <span>Currency</span>
+              <input
+                type="text"
+                name="currency"
+                value={formState.currency}
+                onChange={handleChange}
+                placeholder="INR"
+              />
+            </label>
+          )}
+
+          <label className="expense-form-field">
+            <span>Mode of Payment</span>
+            <select
+              name="payment_mode"
+              value={formState.payment_mode}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select mode</option>
+              <option value="cash">Cash</option>
+              <option value="card">Card</option>
+              <option value="upi">UPI</option>
+              <option value="bank_transfer">Bank Transfer</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+      )}
+
+      {isIncome && (
+        <div className="expense-form-grid">
+          <label className="expense-form-field">
+            <span>Date</span>
+            <input
+              type="date"
+              name="spent_at"
+              value={formState.spent_at}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label className="expense-form-field">
+            <span>Category</span>
+            <select
+              name="category"
+              value={formState.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select category</option>
+              {incomeCategories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="expense-form-field">
+            <span>Amount</span>
+            <input
+              type="number"
+              name="amount"
+              value={formState.amount}
+              onChange={handleChange}
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </label>
+        </div>
+      )}
+
+      {!isIncome && isInsuranceCategory && (
         <div className="expense-form-insurance">
           <h4>Insurance details</h4>
 
@@ -280,96 +445,9 @@ export default function ExpenseForm({ onClose, onExpenseAdded }) {
         </div>
       )}
 
-      <div className="expense-form-grid">
-        <label className="expense-form-field">
-          <span>Date</span>
-          <input
-            type="date"
-            name="spent_at"
-            value={formState.spent_at}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label className="expense-form-field">
-          <span>Title / Note</span>
-          <input
-            type="text"
-            name="title"
-            value={formState.title}
-            onChange={handleChange}
-            placeholder="Groceries at market"
-            required
-          />
-        </label>
-
-        <label className="expense-form-field">
-          <span>Category</span>
-          <select
-            name="category"
-            value={formState.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select category</option>
-            {expenseCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-          <p className="expense-form-helper">Buying gold, RD/FD/SIP, or investing? Add it from Assets, not here.</p>
-        </label>
-
-        <label className="expense-form-field">
-          <span>Amount</span>
-          <input
-            type="number"
-            name="amount"
-            value={formState.amount}
-            onChange={handleChange}
-            min="0"
-            step="0.01"
-            placeholder="0.00"
-            required
-          />
-        </label>
-
-        {isInsuranceCategory && (
-          <label className="expense-form-field">
-            <span>Currency</span>
-            <input
-              type="text"
-              name="currency"
-              value={formState.currency}
-              onChange={handleChange}
-              placeholder="INR"
-            />
-          </label>
-        )}
-
-        <label className="expense-form-field">
-          <span>Mode of Payment</span>
-          <select
-            name="payment_mode"
-            value={formState.payment_mode}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select mode</option>
-            <option value="cash">Cash</option>
-            <option value="card">Card</option>
-            <option value="upi">UPI</option>
-            <option value="bank_transfer">Bank Transfer</option>
-            <option value="other">Other</option>
-          </select>
-        </label>
-      </div>
-
       <div className="expense-form-actions">
         <button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Save Expense"}
+          {loading ? "Saving..." : isIncome ? "Save Income" : "Save Expense"}
         </button>
       </div>
 

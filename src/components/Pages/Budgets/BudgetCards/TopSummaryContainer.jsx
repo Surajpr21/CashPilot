@@ -71,7 +71,7 @@ export default function TopSummaryContainer({ rows, loading, onAddBudgetClick })
           {overUnder > 0 ? "Over budget:" : "Under budget:"}
           <strong>
             {overUnder > 0 ? "+" : ""}
-            {formatCurrency(overUnder)}
+            {formatCurrency(Math.abs(overUnder))}
           </strong>
         </span>
 

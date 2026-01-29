@@ -2,18 +2,16 @@ import { useMemo } from "react";
 import { useQueries } from "@tanstack/react-query";
 import {
   getAssetsSummary,
-  getGoldSummary,
-  getInsuranceTotal,
+  getMetalSummary,
+  getInsuranceSummary,
   getInvestmentsTotal,
-  getLatestGoldMarketPrice,
 } from "../lib/api/assets.api";
 
 export const assetsQueryKeys = {
   assetsTotal: (userId) => ["assets-total", userId],
   investmentsTotal: (userId) => ["investments-total", userId],
-  goldSummary: (userId) => ["gold-summary", userId],
-  insuranceTotal: (userId) => ["insurance-total", userId],
-  goldMarketPrice: ["gold-market-price"],
+  metalsSummary: (userId) => ["metals-summary", userId],
+  insuranceSummary: (userId) => ["insurance-summary", userId],
 };
 
 const safeNumber = (value) => (value ?? 0);
@@ -32,18 +30,14 @@ export function useAssetsData(userId) {
         enabled: Boolean(userId),
       },
       {
-        queryKey: assetsQueryKeys.goldSummary(userId),
-        queryFn: () => getGoldSummary(),
+        queryKey: assetsQueryKeys.metalsSummary(userId),
+        queryFn: () => getMetalSummary(),
         enabled: Boolean(userId),
       },
       {
-        queryKey: assetsQueryKeys.insuranceTotal(userId),
-        queryFn: () => getInsuranceTotal(),
+        queryKey: assetsQueryKeys.insuranceSummary(userId),
+        queryFn: () => getInsuranceSummary(),
         enabled: Boolean(userId),
-      },
-      {
-        queryKey: assetsQueryKeys.goldMarketPrice,
-        queryFn: () => getLatestGoldMarketPrice(),
       },
     ],
   });
@@ -54,37 +48,28 @@ export function useAssetsData(userId) {
   return useMemo(() => {
     const assetsSummary = results[0]?.data ?? null;
     const investmentsSummary = results[1]?.data ?? null;
-    const goldSummary = results[2]?.data ?? null;
+    const metalsSummary = results[2]?.data ?? [];
     const insuranceSummary = results[3]?.data ?? null;
-    const goldMarketPrice = results[4]?.data ?? null;
 
     const totals = {
       assets: safeNumber(assetsSummary?.total_assets),
       investments: safeNumber(investmentsSummary?.total_invested),
-      gold: safeNumber(goldSummary?.total_value),
-      goldGrams: safeNumber(goldSummary?.total_grams),
-      goldAvgBuyPrice: safeNumber(goldSummary?.avg_buy_price),
       insurance: safeNumber(insuranceSummary?.total_premiums),
     };
 
     const currencies = {
       assets: assetsSummary?.currency ?? null,
       investments: investmentsSummary?.currency ?? assetsSummary?.currency ?? null,
-      gold: goldSummary?.currency ?? investmentsSummary?.currency ?? assetsSummary?.currency ?? null,
       insurance: insuranceSummary?.currency ?? assetsSummary?.currency ?? null,
-      goldMarket: goldMarketPrice?.currency ?? goldSummary?.currency ?? null,
     };
 
     const allocation = [
       { name: "Investments", value: totals.investments },
-      { name: "Gold", value: totals.gold },
       { name: "Insurance", value: totals.insurance },
     ];
 
-    const goldMarket = {
-      pricePerGram: safeNumber(goldMarketPrice?.price_per_gram),
-      currency: currencies.goldMarket,
-    };
+    const metalHoldings = Array.isArray(metalsSummary) ? metalsSummary : [];
+    const metalTypesCount = metalHoldings.length;
 
     return {
       isLoading,
@@ -92,7 +77,9 @@ export function useAssetsData(userId) {
       totals,
       currencies,
       allocation,
-      goldMarket,
+      metalHoldings,
+      metalTypesCount,
+      insurancePoliciesCovered: safeNumber(insuranceSummary?.policies_covered),
     };
   }, [isError, isLoading, results]);
 }
@@ -100,7 +87,7 @@ export function useAssetsData(userId) {
 export function invalidateAssetsQueries(queryClient, userId) {
   queryClient.invalidateQueries({ queryKey: ["assets-total"] });
   queryClient.invalidateQueries({ queryKey: ["investments-total"] });
-  queryClient.invalidateQueries({ queryKey: ["gold-summary"] });
-  queryClient.invalidateQueries({ queryKey: ["insurance-total"] });
-  queryClient.invalidateQueries({ queryKey: assetsQueryKeys.goldMarketPrice });
+  queryClient.invalidateQueries({ queryKey: ["metals-summary"] });
+  queryClient.invalidateQueries({ queryKey: ["insurance-summary"] });
+  queryClient.invalidateQueries({ queryKey: ["insurance-policies-summary"] });
 }
