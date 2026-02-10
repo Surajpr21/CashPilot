@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import "./RecentTransactions.css";
-import { useAuth } from "../../../contexts/AuthContext";
-import { getRecentExpenses } from "../../../services/expenses.service";
-import { supabase } from "../../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useDashboardData } from "../../../contexts/DashboardDataContext";
 
 const currencyFmt = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -12,51 +10,10 @@ const currencyFmt = new Intl.NumberFormat("en-IN", {
 });
 
 const RecentTransactions = () => {
-    const { session } = useAuth();
-    const [transactions, setTransactions] = useState([]);
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { recentExpenses, refreshDashboardData, loading } = useDashboardData();
 
-    const userId = session?.user?.id || null;
-
-    const load = useCallback(async () => {
-        if (!userId) {
-            setTransactions([]);
-            return;
-        }
-        setLoading(true);
-        try {
-            const rows = await getRecentExpenses({ userId, limit: 5 });
-            setTransactions(rows || []);
-        } catch (err) {
-            setTransactions([]);
-        } finally {
-            setLoading(false);
-        }
-    }, [userId]);
-
-    useEffect(() => {
-        load();
-    }, [load]);
-
-    useEffect(() => {
-        if (!userId) return undefined;
-
-        const channel = supabase
-            .channel(`recent-expenses-${userId}`)
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "expenses", filter: `user_id=eq.${userId}` },
-                () => load()
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    }, [userId, load]);
-
-    const rows = useMemo(() => transactions ?? [], [transactions]);
+    const rows = useMemo(() => recentExpenses ?? [], [recentExpenses]);
 
     return (
         <div className="recent-trans-card">
@@ -65,7 +22,7 @@ const RecentTransactions = () => {
 
                 <div className="recent-trans-actions">
                     <button className="bills-manage" onClick={() => navigate("/expenses")}>Manage →</button>
-                    <button className="recent-trans-btn" onClick={load} disabled={loading}>
+                    <button className="recent-trans-btn" onClick={refreshDashboardData} disabled={loading}>
                         {loading ? "Refreshing..." : "Refresh"}
                     </button>
                     <select className="recent-trans-select" disabled>

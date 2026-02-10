@@ -162,8 +162,7 @@ export async function getTopCategories({ userId, days = 30 } = {}) {
 
   let query = supabase
     .from("expenses")
-    // Pull full rows so we can filter out any non-expense entries if they slip into the view
-    .select("*")
+    .select("category, amount")
     .gte("spent_at", fromStr);
 
   if (userId) {
@@ -173,17 +172,7 @@ export async function getTopCategories({ userId, days = 30 } = {}) {
   const { data, error } = await query;
   if (error) throw error;
 
-  const expenseRows = (data || []).filter((row) => {
-    const type = (row.type || row.flow || row.transaction_type || "").toLowerCase();
-    if (type && type !== "expense") return false;
-
-    const category = (row.category || "").toLowerCase();
-    if (category === "income" || category === "salary") return false;
-
-    return true;
-  });
-
-  const byCat = expenseRows.reduce((acc, row) => {
+  const byCat = (data || []).reduce((acc, row) => {
     const key = row.category || "Uncategorized";
     acc[key] = (acc[key] || 0) + Number(row.amount || 0);
     return acc;

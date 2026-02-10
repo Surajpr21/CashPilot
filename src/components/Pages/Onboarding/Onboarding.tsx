@@ -1,23 +1,26 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import { supabase } from "../../../lib/supabaseClient";
 import { seedIncomeTransaction } from "../../../services/transactions.service";
 import "./Onboarding.css";
 
 type FormState = {
+	full_name: string;
 	opening_balance: string;
 	monthly_income: string;
 	tracking_start_date: string;
 };
 
 export default function Onboarding() {
-	const { profile, persistProfile, setProfile, session } = useAuth();
+	const { profile, financial, setProfile, setFinancial, session } = useAuth();
 	const navigate = useNavigate();
 	const initialForm = useMemo<FormState>(() => ({
-		opening_balance: profile?.opening_balance ? String(profile.opening_balance) : "",
-		monthly_income: profile?.monthly_income ? String(profile.monthly_income) : "",
-		tracking_start_date: profile?.tracking_start_date ? profile.tracking_start_date : "",
-	}), [profile]);
+		full_name: profile?.full_name ? String(profile.full_name) : "",
+		opening_balance: financial?.opening_balance ? String(financial.opening_balance) : "",
+		monthly_income: financial?.monthly_income ? String(financial.monthly_income) : "",
+		tracking_start_date: financial?.tracking_start_date ? financial.tracking_start_date : "",
+	}), [financial, profile]);
 
 	const [form, setForm] = useState<FormState>(initialForm);
 	const [saving, setSaving] = useState(false);
@@ -27,7 +30,7 @@ export default function Onboarding() {
 		setForm(initialForm);
 	}, [initialForm]);
 
-	if (!profile) return null;
+	if (!profile || !financial) return null;
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
@@ -38,7 +41,17 @@ export default function Onboarding() {
 		e.preventDefault();
 		setError("");
 
-		const isFirstOnboarding = !profile?.onboarding_completed;
+		const isFirstOnboarding = !financial?.onboarding_completed;
+
+		const name = form.full_name.trim();
+		if (!name) {
+			setError("Name is required");
+			return;
+		}
+		if (name.length < 2) {
+			setError("Name must be at least 2 characters");
+			return;
+		}
 
 		if (!form.opening_balance.trim()) {
 			setError("Opening balance is required");
@@ -60,14 +73,28 @@ export default function Onboarding() {
 		setSaving(true);
 
 		try {
-			const updated = await persistProfile({
-				onboarding_completed: true,
-				opening_balance: openingBalanceNumber,
-				monthly_income: monthlyIncomeNumber,
-				tracking_start_date: form.tracking_start_date || null,
-			});
+			const userId = session?.user?.id || profile?.id;
+			if (!userId) throw new Error("Missing user session");
 
-			const userId = session?.user?.id || updated?.id || profile?.id;
+			const { error: profileError } = await supabase
+				.from("profiles")
+				.update({ full_name: name })
+				.eq("id", userId);
+
+			if (profileError) throw profileError;
+
+			const { error: financialError } = await supabase
+				.from("financial_settings")
+				.update({
+					onboarding_completed: true,
+					opening_balance: openingBalanceNumber,
+					monthly_income: monthlyIncomeNumber,
+					tracking_start_date: form.tracking_start_date || null,
+				})
+				.eq("user_id", userId);
+
+			if (financialError) throw financialError;
+
 			if (isFirstOnboarding && monthlyIncomeNumber && userId) {
 				const occurredOn = form.tracking_start_date || new Date().toISOString().split("T")[0];
 				try {
@@ -82,7 +109,18 @@ export default function Onboarding() {
 				}
 			}
 
-			setProfile(updated);
+			setProfile(prev => ({
+				...(prev || {}),
+				id: userId,
+				full_name: name,
+			}));
+			setFinancial(prev => ({
+				...(prev || {}),
+				onboarding_completed: true,
+				opening_balance: openingBalanceNumber,
+				monthly_income: monthlyIncomeNumber,
+				tracking_start_date: form.tracking_start_date || null,
+			}));
 			navigate("/dashboard", { replace: true });
 		} catch (err) {
 			const message = err instanceof Error ? err.message : "Failed to save onboarding";
@@ -104,6 +142,19 @@ export default function Onboarding() {
 				{error && <div className="onboarding-error">{error}</div>}
 
 				<form onSubmit={handleSubmit} className="onboarding-form">
+					<label className="onboarding-field">
+						<span>Name *</span>
+						<input
+							name="full_name"
+							type="text"
+							value={form.full_name}
+							onChange={handleChange}
+							placeholder="Your name"
+							minLength={2}
+							required
+						/>
+					</label>
+
 					<label className="onboarding-field">
 						<span>Opening balance *</span>
 						<input

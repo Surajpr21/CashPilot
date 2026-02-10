@@ -1,0 +1,25 @@
+.profile-photo-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-photo-avatar {
+  width: 170px;
+  height: 159px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+}
+
+.profile-photo-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}

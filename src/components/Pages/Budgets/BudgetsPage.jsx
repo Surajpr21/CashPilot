@@ -6,11 +6,18 @@ import AddBudgetModal from "./BudgetCards/AddBudgetModal";
 import { getBudgetsByMonth } from "../../../services/budgets.service";
 import { getActualSpendByCategory } from "../../../services/budgetActuals.service";
 
+// Keep month math stable across timezones by working with year/month integers and manual formatting.
+const pad2 = (n) => String(n).padStart(2, "0");
+const formatMonthKey = (year, monthIndex) => `${year}-${pad2(monthIndex + 1)}-01`;
+const parseMonthKey = (monthKey) => {
+  const [y, m] = (monthKey || "").split("-").map(Number);
+  return { year: y || 1970, monthIndex: (m || 1) - 1 };
+};
+
 function getEndOfMonth(monthStr) {
-  const date = new Date(monthStr);
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0)
-    .toISOString()
-    .split("T")[0];
+  const { year, monthIndex } = parseMonthKey(monthStr);
+  const end = new Date(year, monthIndex + 1, 0);
+  return `${end.getFullYear()}-${pad2(end.getMonth() + 1)}-${pad2(end.getDate())}`;
 }
 
 function mergeData(budgets, actualByCategory) {
@@ -35,12 +42,16 @@ export default function BudgetVsActualPage() {
   const [budgets, setBudgets] = useState([]);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentMonth, setCurrentMonth] = useState("2026-01-01");  // STEP 1: Always YYYY-MM-01
+  const today = new Date();
+  const startOfThisMonth = formatMonthKey(today.getFullYear(), today.getMonth());
+
+  const [currentMonth, setCurrentMonth] = useState(startOfThisMonth);  // STEP 1: Always YYYY-MM-01
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Format month to display (e.g., "January 2026")
   const getMonthDisplay = () => {
-    const date = new Date(currentMonth);
+    const { year, monthIndex } = parseMonthKey(currentMonth);
+    const date = new Date(year, monthIndex, 1);
     return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   };
 
@@ -68,17 +79,17 @@ export default function BudgetVsActualPage() {
   }, [currentMonth]);
 
   const handlePrevMonth = () => {
-    const date = new Date(currentMonth);
+    const { year, monthIndex } = parseMonthKey(currentMonth);
+    const date = new Date(year, monthIndex, 1);
     date.setMonth(date.getMonth() - 1);
-    const yearMonth = date.toISOString().split("T")[0].slice(0, 7);
-    setCurrentMonth(`${yearMonth}-01`);
+    setCurrentMonth(formatMonthKey(date.getFullYear(), date.getMonth()));
   };
 
   const handleNextMonth = () => {
-    const date = new Date(currentMonth);
+    const { year, monthIndex } = parseMonthKey(currentMonth);
+    const date = new Date(year, monthIndex, 1);
     date.setMonth(date.getMonth() + 1);
-    const yearMonth = date.toISOString().split("T")[0].slice(0, 7);
-    setCurrentMonth(`${yearMonth}-01`);
+    setCurrentMonth(formatMonthKey(date.getFullYear(), date.getMonth()));
   };
 
   // Handle successful budget addition

@@ -3,11 +3,13 @@ import Sidebar from "./Sidebar/Sidebar";
 import Snowfall from "react-snowfall";
 import { Outlet, useLocation } from "react-router-dom";
 import "./Dashboard.css";
+import { DashboardDataProvider } from "../../contexts/DashboardDataContext";
 
 export default function DashboardLayout() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [snowKey, setSnowKey] = useState(Date.now());
   const { pathname } = useLocation();
+  const isProfileRoute = pathname.startsWith("/profile");
 
   useEffect(() => {
     // remount Snowfall briefly after route changes so the canvas sizes correctly
@@ -15,7 +17,7 @@ export default function DashboardLayout() {
     return () => clearTimeout(t);
   }, [pathname]);
 
-  return (
+  const layoutContent = (
     <div className="dashboard-container">
       <Snowfall
         key={snowKey}
@@ -48,4 +50,8 @@ export default function DashboardLayout() {
       </div>
     </div>
   );
+
+  if (isProfileRoute) return layoutContent;
+
+  return <DashboardDataProvider>{layoutContent}</DashboardDataProvider>;
 }

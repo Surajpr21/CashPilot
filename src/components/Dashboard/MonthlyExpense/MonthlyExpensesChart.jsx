@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./MonthlyExpensesChart.css";
-import { useAuth } from "../../../contexts/AuthContext";
-import { supabase } from "../../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useDashboardData } from "../../../contexts/DashboardDataContext";
 
 const SERIES = {
   expenses: {
@@ -106,19 +105,12 @@ export default function MonthlyExpensesChart() {
   const [mode, setMode] = useState("expenses");
   const [range, setRange] = useState("6m");
   const [tooltip, setTooltip] = useState(null);
-  const { session } = useAuth();
-  const userId = session?.user?.id || null;
   const navigate = useNavigate();
+  const { chartSeriesByRange, loading } = useDashboardData();
   const baseBuckets = useMemo(() => buildBaseBuckets(range), [range]);
-  const [series, setSeries] = useState(() => {
+  const emptySeries = useMemo(() => {
     const zeroes = baseBuckets.map((b) => ({ ...b, value: 0 }));
     return { expenses: zeroes, savings: zeroes };
-  });
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const zeroes = baseBuckets.map((b) => ({ ...b, value: 0 }));
-    setSeries({ expenses: zeroes, savings: zeroes });
   }, [baseBuckets]);
 
   useEffect(() => {
@@ -139,151 +131,7 @@ export default function MonthlyExpensesChart() {
     }
   }, []);
 
-  const load = useCallback(async () => {
-    const zeroes = baseBuckets.map((b) => ({ ...b, value: 0 }));
-
-    if (!userId) {
-      setSeries({ expenses: zeroes, savings: zeroes });
-      return;
-    }
-
-    const config = RANGE_CONFIG[range] || RANGE_CONFIG["6m"];
-
-    // compute fromDate based on range type using Date math (no string concatenation)
-    let fromDate;
-    const today = new Date();
-    if (config.type === "daily") {
-      const start = new Date(today);
-      start.setDate(start.getDate() - 6);
-      fromDate = start.toISOString().slice(0, 10);
-    } else if (config.type === "weekly") {
-      const start = new Date(today);
-      start.setDate(start.getDate() - 29);
-      fromDate = start.toISOString().slice(0, 10);
-    } else {
-      const months = config.months || 6;
-      const start = new Date(today.getFullYear(), today.getMonth() - (months - 1), 1);
-      fromDate = start.toISOString().slice(0, 10);
-    }
-
-    if (!fromDate) {
-      setSeries({ expenses: zeroes, savings: zeroes });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const [{ data: expenseRows, error: expenseError }, { data: incomeRows, error: incomeError }] = await Promise.all([
-        supabase
-          .from("expenses")
-          .select("amount, spent_at")
-          .eq("user_id", userId)
-          .gte("spent_at", fromDate),
-        supabase
-          .from("transactions")
-          .select("amount, occurred_on")
-          .eq("user_id", userId)
-          .eq("type", "income")
-          .gte("occurred_on", fromDate),
-      ]);
-
-      if (expenseError) throw expenseError;
-      if (incomeError) throw incomeError;
-
-      const expenseMap = (expenseRows || []).reduce((acc, row) => {
-        const spent = row.spent_at || "";
-        if (config.type === "daily") {
-          const key = spent.slice(0, 10);
-          if (!key) return acc;
-          acc[key] = (acc[key] || 0) + Number(row.amount || 0);
-          return acc;
-        }
-        if (config.type === "weekly") {
-          const daysAgo = Math.floor((new Date() - new Date(spent)) / 86400000);
-          if (daysAgo < 0 || daysAgo > 29) return acc;
-          const bucketKey =
-            daysAgo <= 6 ? "w4" :
-            daysAgo <= 13 ? "w3" :
-            daysAgo <= 20 ? "w2" : "w1";
-          acc[bucketKey] = (acc[bucketKey] || 0) + Number(row.amount || 0);
-          return acc;
-        }
-        const key = spent.slice(0, 7);
-        if (!key) return acc;
-        acc[key] = (acc[key] || 0) + Number(row.amount || 0);
-        return acc;
-      }, {});
-
-      const incomeMap = (incomeRows || []).reduce((acc, row) => {
-        const occurred = row.occurred_on || "";
-        if (config.type === "daily") {
-          const key = occurred.slice(0, 10);
-          if (!key) return acc;
-          acc[key] = (acc[key] || 0) + Number(row.amount || 0);
-          return acc;
-        }
-        if (config.type === "weekly") {
-          const daysAgo = Math.floor((new Date() - new Date(occurred)) / 86400000);
-          if (daysAgo < 0 || daysAgo > 29) return acc;
-          const bucketKey =
-            daysAgo <= 6 ? "w4" :
-            daysAgo <= 13 ? "w3" :
-            daysAgo <= 20 ? "w2" : "w1";
-          acc[bucketKey] = (acc[bucketKey] || 0) + Number(row.amount || 0);
-          return acc;
-        }
-        const key = occurred.slice(0, 7);
-        if (!key) return acc;
-        acc[key] = (acc[key] || 0) + Number(row.amount || 0);
-        return acc;
-      }, {});
-
-      const alignedExpenses = baseBuckets.map((bucket) => ({
-        ...bucket,
-        value: Number(expenseMap[bucket.key] || 0),
-      }));
-
-      const alignedIncome = baseBuckets.map((bucket) => ({
-        ...bucket,
-        value: Number(incomeMap[bucket.key] || 0),
-      }));
-
-      const alignedSavings = baseBuckets.map((bucket, idx) => ({
-        ...bucket,
-        value: Math.max(0, Number((alignedIncome[idx]?.value || 0) - (alignedExpenses[idx]?.value || 0))),
-      }));
-
-      setSeries({ expenses: alignedExpenses, savings: alignedSavings });
-    } catch (err) {
-      setSeries({ expenses: zeroes, savings: zeroes });
-    } finally {
-      setLoading(false);
-    }
-  }, [userId, baseBuckets, range]);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  useEffect(() => {
-    if (!userId) return undefined;
-
-    const channel = supabase
-      .channel(`expenses-monthly-${userId}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "expenses", filter: `user_id=eq.${userId}` },
-        () => load()
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${userId}` },
-        () => load()
-      )
-      .subscribe();
-
-    return () => supabase.removeChannel(channel);
-  }, [userId, load]);
+  const seriesForRange = chartSeriesByRange[range] || emptySeries;
 
   const padding = { top: 18, right: 18, bottom: 46, left: 50 };
   const chartW = Math.max(0, width - padding.left - padding.right);
@@ -291,10 +139,10 @@ export default function MonthlyExpensesChart() {
 
   const mergedSeries = useMemo(
     () => ({
-      expenses: { ...SERIES.expenses, data: series.expenses },
-      savings: { ...SERIES.savings, data: series.savings },
+      expenses: { ...SERIES.expenses, data: seriesForRange.expenses },
+      savings: { ...SERIES.savings, data: seriesForRange.savings },
     }),
-    [series]
+    [seriesForRange.expenses, seriesForRange.savings]
   );
 
   const currentSeries = mergedSeries[mode];

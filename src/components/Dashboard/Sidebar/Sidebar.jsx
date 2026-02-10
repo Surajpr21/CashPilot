@@ -67,7 +67,7 @@ const Sidebar = () => {
             <button className="icon-btn">
               <Bell size={18} />
             </button>
-            <button className="icon-btn">
+            <button className="icon-btn" onClick={() => navigate("/profile")} title="Profile & Settings">
               <User size={18} />
             </button>
           </div>
