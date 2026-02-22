@@ -15,9 +15,14 @@ export default function ProfileTheme() {
         <label><input type="radio" name="theme" defaultChecked={currentTheme === "dark"} /> Dark</label>
       </div>
 
-      <a className="profile-link" href="#" onClick={(e) => e.preventDefault()} style={{ marginTop: 12, display: "inline-flex" }}>
+      <button
+        type="button"
+        className="profile-link"
+        style={{ marginTop: 12, display: "inline-flex" }}
+        onClick={() => {}}
+      >
         Manage 2FA →
-      </a>
+      </button>
     </section>
   );
 }

@@ -272,9 +272,6 @@ export function DashboardDataProvider({ children }) {
     const today = new Date();
     const monthStartDate = new Date(today.getFullYear(), today.getMonth(), 1);
     const monthEndDate = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
-    const monthStart = monthStartDate.toISOString().slice(0, 10);
-    const monthEnd = monthEndDate.toISOString().slice(0, 10);
-
     const monthlyExpenses = state.expenses.filter((e) => isWithinRange(e.spent_at, monthStartDate, monthEndDate));
     const monthlyIncomes = state.incomes.filter((i) => isWithinRange(i.occurred_on, monthStartDate, monthEndDate));
 

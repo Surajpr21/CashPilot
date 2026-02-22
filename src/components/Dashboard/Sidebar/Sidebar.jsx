@@ -9,7 +9,6 @@ import {
   BarChart2,
   Settings,
   Bell,
-  User,
   LogOut,
   PiggyBank,
 } from "lucide-react";

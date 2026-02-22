@@ -45,9 +45,9 @@ export default function ProfileTwoFactor() {
       <p className="profile-support-text" style={{ marginTop: 10 }}>
         Enable extra layer of account security.
       </p>
-      <a className="profile-link" href="#" onClick={(e) => e.preventDefault()}>
+      <button type="button" className="profile-link" onClick={() => {}}>
         Manage 2FA →
-      </a>
+      </button>
       {message && <p className="profile-2fa-message">{message}</p>}
     </section>
   );
