@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import "./ExpensesFilters.css";
 import ExpenseForm from "./ExpenseForm/ExpenseForm";
 import { getExpenseStats } from "../../../../services/expenses.service";
 import { CATEGORIES } from "../../../../constants/categories";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 
 export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdded }) {
   const [showForm, setShowForm] = useState(false);
-  const [localFilters, setLocalFilters] = useState(filters);
+  const [localFilters, setLocalFilters] = useState({
+    ...filters,
+    amountSort: filters?.amountSort || "",
+    search: filters?.search || "",
+  });
   const [stats, setStats] = useState({
     total_spent: 0,
     avg_per_day: 0,
@@ -17,7 +23,11 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
 
   // Update local filters when parent filters change
   useEffect(() => {
-    setLocalFilters(filters);
+    setLocalFilters({
+      ...filters,
+      amountSort: filters?.amountSort || "",
+      search: filters?.search || "",
+    });
   }, [filters]);
 
   useEffect(() => {
@@ -63,10 +73,8 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
       fromDate: from,
       toDate: to,
       category: "",
-      minAmount: "",
-      maxAmount: "",
+      amountSort: "",
       paymentMode: "",
-      source: "",
       search: "",
     };
     setLocalFilters(resetFilters);
@@ -74,6 +82,13 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
   };
 
   const setDatePreset = (preset) => {
+    if (preset === "custom") {
+      const customFilters = { ...localFilters, fromDate: "", toDate: "" };
+      setLocalFilters(customFilters);
+      onFilterChange(customFilters);
+      return;
+    }
+
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -99,6 +114,33 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
   const formatNumber = (value) =>
     Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 });
 
+  const datePresetOptions = [
+    { value: "This month", label: "This month" },
+    { value: "Last month", label: "Last month" },
+    { value: "Last year", label: "Last year" },
+    { value: "Custom range", label: "Custom range" },
+  ];
+
+  const categoryOptions = [
+    { value: "", label: "All categories" },
+    ...CATEGORIES.map((cat) => ({ value: cat, label: cat })),
+  ];
+
+  const amountSortOptions = [
+    { value: "", label: "Any amount" },
+    { value: "asc", label: "Amount: Low → High" },
+    { value: "desc", label: "Amount: High → Low" },
+  ];
+
+  const paymentOptions = [
+    { value: "", label: "All payment modes" },
+    { value: "upi", label: "UPI" },
+    { value: "card", label: "Card" },
+    { value: "cash", label: "Cash" },
+    { value: "bank_transfer", label: "Bank Transfer" },
+    { value: "other", label: "Other" },
+  ];
+
   // Get current date preset label
   const getDatePresetLabel = () => {
     const now = new Date();
@@ -122,24 +164,25 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
   return (
     <div className="expenses-page-filters">
       {/* 1∩╕ÅΓâú Date Filter (PRIMARY) - Dropdown with presets */}
-      <select
-        className="expenses-page-filter"
+      <CustomDropdown
         value={getDatePresetLabel()}
-        onChange={(e) => {
-          if (e.target.value === "This month") {
+        options={datePresetOptions}
+        onChange={(val) => {
+          if (val === "Custom range") {
+            const customFilters = { ...localFilters, fromDate: "", toDate: "" };
+            setLocalFilters(customFilters);
+            onFilterChange(customFilters);
+          } else if (val === "This month") {
             setDatePreset("thisMonth");
-          } else if (e.target.value === "Last month") {
+          } else if (val === "Last month") {
             setDatePreset("lastMonth");
-          } else if (e.target.value === "Last year") {
+          } else if (val === "Last year") {
             setDatePreset("lastYear");
           }
         }}
-      >
-        <option>This month</option>
-        <option>Last month</option>
-        <option>Last year</option>
-        <option>Custom range</option>
-      </select>
+        placeholder="This month"
+        width="190px"
+      />
 
       {/* Custom date range inputs (shown when needed) */}
       {getDatePresetLabel() === "Custom range" && (
@@ -160,68 +203,43 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
       )}
 
       {/* 2∩╕ÅΓâú Category Filter */}
-      <select
-        className="expenses-page-filter"
+      <CustomDropdown
         value={localFilters.category}
-        onChange={(e) => handleLocalChange("category", e.target.value)}
-      >
-        <option value="">All categories</option>
-        {CATEGORIES.map((cat) => (
-          <option key={cat} value={cat}>{cat}</option>
-        ))}
-      </select>
-
-      {/* 3∩╕ÅΓâú Amount Range Filter */}
-      <input
-        type="number"
-        className="expenses-page-filter expenses-amount-input"
-        value={localFilters.minAmount}
-        onChange={(e) => handleLocalChange("minAmount", e.target.value)}
-        placeholder="Min "
-        min="0"
+        options={categoryOptions}
+        onChange={(val) => handleLocalChange("category", val)}
+        placeholder="All categories"
+        width="190px"
       />
-      <input
-        type="number"
-        className="expenses-page-filter expenses-amount-input"
-        value={localFilters.maxAmount}
-        onChange={(e) => handleLocalChange("maxAmount", e.target.value)}
-        placeholder="Max "
-        min="0"
+
+      {/* 3∩╕ÅΓâú Any amount (sort) */}
+      <CustomDropdown
+        value={localFilters.amountSort}
+        options={amountSortOptions}
+        onChange={(val) => handleLocalChange("amountSort", val)}
+        placeholder="Any amount"
+        width="180px"
       />
 
       {/* 4∩╕ÅΓâú Payment Mode Filter */}
-      <select
-        className="expenses-page-filter"
+      <CustomDropdown
         value={localFilters.paymentMode}
-        onChange={(e) => handleLocalChange("paymentMode", e.target.value)}
-      >
-        <option value="">All payment modes</option>
-        <option value="upi">UPI</option>
-        <option value="card">Card</option>
-        <option value="cash">Cash</option>
-        <option value="bank_transfer">Bank Transfer</option>
-        <option value="other">Other</option>
-      </select>
-
-      {/* 5∩╕ÅΓâú Source Filter */}
-      <select
-        className="expenses-page-filter"
-        value={localFilters.source}
-        onChange={(e) => handleLocalChange("source", e.target.value)}
-      >
-        <option value="">All sources</option>
-        <option value="manual">Manual</option>
-        <option value="subscription">Subscription</option>
-      </select>
-
-      {/* 6∩╕ÅΓâú Search (Title) */}
-      <input
-        type="text"
-        className="expenses-page-filter"
-        value={localFilters.search}
-        onChange={(e) => handleLocalChange("search", e.target.value)}
-        placeholder="Search title..."
+        options={paymentOptions}
+        onChange={(val) => handleLocalChange("paymentMode", val)}
+        placeholder="All payment modes"
+        width="200px"
       />
+
+      {/* 5∩╕ÅΓâú Search across date/title/category/amount/payment */}
+      <div className="expenses-search-wrapper">
+        <input
+          type="text"
+          className="expenses-page-filter"
+          value={localFilters.search}
+          onChange={(e) => handleLocalChange("search", e.target.value)}
+          placeholder="Search date, title, category, amount, payment"
+        />
+        <div className="expenses-search-hint">Type dates as yyyy-mm-dd</div>
+      </div>
 
       <button className="expenses-page-clear-filters" onClick={clearFilters}>
         Clear filters
@@ -264,7 +282,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         <div className="expenses-page-stats-error">{statsError}</div>
       )}
 
-      {showForm && (
+      {showForm && createPortal(
         <div
           className="expense-modal-overlay"
           onClick={() => setShowForm(false)}
@@ -278,14 +296,15 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
               aria-label="Close"
               onClick={() => setShowForm(false)}
             >
-              
+              ×
             </button>
             <ExpenseForm 
               onClose={() => setShowForm(false)} 
               onExpenseAdded={onExpenseAdded}
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

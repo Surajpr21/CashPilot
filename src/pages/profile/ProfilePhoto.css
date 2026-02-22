@@ -1,25 +1,72 @@
 .profile-photo-content {
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 20px 0;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 }
 
-.profile-photo-avatar {
+.profile-photo-avatar,
+.profile-photo-avatar.image {
   width: 170px;
-  height: 159px;
+  height: 170px;
   border-radius: 50%;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  border: 2px solid #e5e7eb;
+  object-fit: cover;
 }
 
-.profile-photo-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+.profile-photo-avatar.image {
+  padding: 0;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.profile-photo-avatar.placeholder {
+  background: linear-gradient(135deg, #fef3c7, #fcd34d);
+}
+
+.profile-photo-avatar.skeleton {
+  background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+  background-size: 200% 100%;
+  animation: profile-skeleton 1.2s ease-in-out infinite;
+  color: transparent;
+}
+
+@keyframes profile-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.profile-avatar-change-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid #d7dce5;
+  background: #f6f7fb;
+  color: #0f172a;
+  font-weight: 700;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.profile-avatar-change-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+}
+
+.profile-avatar-change-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }

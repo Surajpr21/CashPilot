@@ -21,7 +21,7 @@
 
 //   return (
 //     <div className="expenses-page-container">
-      
+
 //       <div className="expenses-page-header">
 //         <h1 className="expenses-page-title">Expenses</h1>
 //         <p className="expenses-page-subtitle">Track and manage all your spending.</p>
@@ -50,19 +50,19 @@ function getDatePreset(preset) {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
-  
+
   if (preset === "thisMonth") {
     const from = new Date(year, month, 1).toISOString().split("T")[0];
     const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
     return { from, to };
   }
-  
+
   if (preset === "lastMonth") {
     const from = new Date(year, month - 1, 1).toISOString().split("T")[0];
     const to = new Date(year, month, 0).toISOString().split("T")[0];
     return { from, to };
   }
-  
+
   return { from: null, to: null };
 }
 
@@ -249,8 +249,8 @@ export default function ExpensesPage() {
 
   return (
     <div className="expenses-page-container">
-      {/* SVG Background */}
-     <div className="expenses-page-svg-background">
+
+      {/* <div className="expenses-page-svg-background">
   <svg
     width="100%"
     height="100%"
@@ -259,13 +259,13 @@ export default function ExpensesPage() {
     preserveAspectRatio="none"
   >
     <defs>
-      {/* Background gradient (your existing one) */}
+  
       <linearGradient id="bgGradient" x1="0%" y1="50%" x2="100%" y2="50%">
         <stop offset="0%" stopColor="#EFEDF8" />
         <stop offset="100%" stopColor="#DDDBF3" />
       </linearGradient>
 
-      {/* MASK to fade left, right, and bottom */}
+  
       <linearGradient id="fadeMask" x1="50%" y1="0%" x2="50%" y2="100%">
         <stop offset="0%" stopColor="white" stopOpacity="1" />
         <stop offset="55%" stopColor="white" stopOpacity="0.9" />
@@ -285,7 +285,7 @@ export default function ExpensesPage() {
       </mask>
     </defs>
 
-    {/* Waves */}
+
     <g mask="url(#combinedMask)">
       <path
         d="M 0,600 L 0,300 C 113.14832535885168,307.70334928229664 226.29665071770336,315.4066985645933 332,285 C 437.70334928229664,254.5933014354067 535.9617224880383,186.07655502392342 626,161 C 716.0382775119617,135.92344497607658 797.8564593301435,154.28708133971293 877,136 C 956.1435406698565,117.71291866028707 1032.6124401913876,62.77511961722488 1126,34 C 1219.3875598086124,5.224880382775121 1329.6937799043062,2.6124401913875603 1440,0 L 1440,600 L 0,600 Z"
@@ -300,7 +300,7 @@ export default function ExpensesPage() {
       />
     </g>
   </svg>
-</div>
+</div> */}
 
 
       <div className="expenses-page-content">
@@ -325,10 +325,10 @@ export default function ExpensesPage() {
 
         {activeTab === "expenses" && (
           <>
-            <ExpensesFilters 
+            <ExpensesFilters
               filters={filters}
               onFilterChange={handleFilterChange}
-              onExpenseAdded={refetchExpenses} 
+              onExpenseAdded={refetchExpenses}
             />
 
             {loading && <div className="expenses-page-loading">Loading expenses…</div>}
@@ -341,7 +341,7 @@ export default function ExpensesPage() {
                   view="expense"
                   onDelete={handleExpenseDelete}
                 />
-                
+
                 <div className="pagination">
                   <button
                     disabled={page === 1}

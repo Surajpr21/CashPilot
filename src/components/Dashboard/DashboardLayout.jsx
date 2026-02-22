@@ -9,7 +9,6 @@ export default function DashboardLayout() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [snowKey, setSnowKey] = useState(Date.now());
   const { pathname } = useLocation();
-  const isProfileRoute = pathname.startsWith("/profile");
 
   useEffect(() => {
     // remount Snowfall briefly after route changes so the canvas sizes correctly
@@ -17,41 +16,54 @@ export default function DashboardLayout() {
     return () => clearTimeout(t);
   }, [pathname]);
 
-  const layoutContent = (
-    <div className="dashboard-container">
-      <Snowfall
-        key={snowKey}
-        snowflakeCount={200}
-        color="rgba(150,150,150,0.45)"
-        radius={[0.8, 1.6]}
-        speed={[0.3, 0.7]}
-        wind={[-0.1, 0.2]}
-        style={{
-          position: "fixed",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 1, // render snow above the sidebar (sidebar z-index is 10)
-          width: "100vw",
-          height: "100vh",
-        }}
-      />
+  useEffect(() => {
+    // remount Snowfall on resize so the canvas matches the viewport
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => setSnowKey(Date.now()), 80);
+    };
 
-      <Sidebar
-        isExpanded={isSidebarExpanded}
-        setIsExpanded={setIsSidebarExpanded}
-      />
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-      <div
-        className={`dashboard-content ${
-          isSidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
-        }`}
-      >
-        <Outlet />
+  return (
+    <DashboardDataProvider>
+      <div className="dashboard-container">
+        <Snowfall
+          key={snowKey}
+          snowflakeCount={200}
+          color="rgba(150,150,150,0.45)"
+          radius={[0.8, 1.6]}
+          speed={[0.3, 0.7]}
+          wind={[-0.1, 0.2]}
+          style={{
+            position: "fixed",
+            inset: 0,
+            pointerEvents: "none",
+            zIndex: 0, // keep snow behind all dashboard UI
+            width: "100vw",
+            height: "100vh",
+          }}
+        />
+
+        <Sidebar
+          isExpanded={isSidebarExpanded}
+          setIsExpanded={setIsSidebarExpanded}
+        />
+
+        <div
+          className={`dashboard-content ${
+            isSidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
+          }`}
+        >
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </DashboardDataProvider>
   );
-
-  if (isProfileRoute) return layoutContent;
-
-  return <DashboardDataProvider>{layoutContent}</DashboardDataProvider>;
 }

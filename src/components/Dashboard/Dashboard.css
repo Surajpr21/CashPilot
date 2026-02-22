@@ -35,7 +35,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   left: 0;
   pointer-events: none;
   /* ✅ clicks pass through */
-  z-index: 20; /* ensure snow renders above the sidebar */
+  z-index: 0; /* keep snow behind all layout elements */
 }
 
 /* Ensure content stays above snow */

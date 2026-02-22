@@ -113,8 +113,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 999px;
   background: transparent;
   border: none;
@@ -124,6 +124,27 @@ body {
 
 .icon-btn:hover {
   background: rgba(0, 0, 0, 0.05);
+}
+
+.avatar-btn {
+  padding: 0;
+}
+
+.avatar-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-fallback {
+  background: #24454A;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .divider-left {

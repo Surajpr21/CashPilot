@@ -68,8 +68,7 @@
   padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid transparent;
-  background: linear-gradient(120deg, #2563eb, #1d4ed8);
-  color: #fff;
+  color: black;
   cursor: pointer;
   font-weight: 600;
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
@@ -186,4 +185,91 @@
 
 .profile-link:hover {
   text-decoration: underline;
+}
+
+.profile-avatar-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 60;
+}
+
+.profile-avatar-modal {
+width: 100%;
+    max-width: 560px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 28px 72px rgba(15, 23, 42, 0.22);
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    max-height: 450px;
+    overflow: auto;
+}
+
+.profile-avatar-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.profile-avatar-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.profile-avatar-modal-close {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  color: #0f172a;
+  font-weight: 700;
+  padding: 4px;
+  line-height: 1;
+}
+
+.profile-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.profile-avatar-choice {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.profile-avatar-choice img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.profile-avatar-choice:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
+}
+
+.profile-avatar-choice.is-selected {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16);
+}
+
+.profile-avatar-modal-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }

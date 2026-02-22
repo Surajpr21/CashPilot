@@ -21,7 +21,7 @@
 
 //   return (
 //     <div className="expenses-page-container">
-      
+
 //       <div className="expenses-page-header">
 //         <h1 className="expenses-page-title">Expenses</h1>
 //         <p className="expenses-page-subtitle">Track and manage all your spending.</p>
@@ -35,6 +35,7 @@
 //   );
 // }
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import ExpensesFilters from "./ExpensesFilters/ExpensesFilters";
 import ExpensesTable from "./ExpensesFilters/ExpensesTable";
 import "./ExpensesPage.css";
@@ -50,19 +51,19 @@ function getDatePreset(preset) {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
-  
+
   if (preset === "thisMonth") {
     const from = new Date(year, month, 1).toISOString().split("T")[0];
     const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
     return { from, to };
   }
-  
+
   if (preset === "lastMonth") {
     const from = new Date(year, month - 1, 1).toISOString().split("T")[0];
     const to = new Date(year, month, 0).toISOString().split("T")[0];
     return { from, to };
   }
-  
+
   return { from: null, to: null };
 }
 
@@ -254,58 +255,58 @@ export default function TransactionsPage() {
 
   return (
     <div className="expenses-page-container">
-      {/* SVG Background */}
-     <div className="expenses-page-svg-background">
-  <svg
-    width="100%"
-    height="100%"
-    viewBox="0 0 1440 590"
-    xmlns="http://www.w3.org/2000/svg"
-    preserveAspectRatio="none"
-  >
-    <defs>
-      {/* Background gradient (your existing one) */}
-      <linearGradient id="bgGradient" x1="0%" y1="50%" x2="100%" y2="50%">
-        <stop offset="0%" stopColor="#EFEDF8" />
-        <stop offset="100%" stopColor="#DDDBF3" />
-      </linearGradient>
+ 
+      {/* <div className="expenses-page-svg-background">
+        <svg
+          width="100%"
+          height="100%"
+          viewBox="0 0 1440 590"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+        >
+          <defs>
+      
+            <linearGradient id="bgGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stopColor="#EFEDF8" />
+              <stop offset="100%" stopColor="#DDDBF3" />
+            </linearGradient>
 
-      {/* MASK to fade left, right, and bottom */}
-      <linearGradient id="fadeMask" x1="50%" y1="0%" x2="50%" y2="100%">
-        <stop offset="0%" stopColor="white" stopOpacity="1" />
-        <stop offset="55%" stopColor="white" stopOpacity="0.9" />
-        <stop offset="100%" stopColor="white" stopOpacity="0" />
-      </linearGradient>
+     
+            <linearGradient id="fadeMask" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop offset="0%" stopColor="white" stopOpacity="1" />
+              <stop offset="55%" stopColor="white" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
+            </linearGradient>
 
-      <linearGradient id="sideFadeMask" x1="0%" y1="50%" x2="100%" y2="50%">
-        <stop offset="0%" stopColor="white" stopOpacity="0" />
-        <stop offset="20%" stopColor="white" stopOpacity="1" />
-        <stop offset="80%" stopColor="white" stopOpacity="1" />
-        <stop offset="100%" stopColor="white" stopOpacity="0" />
-      </linearGradient>
+            <linearGradient id="sideFadeMask" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="20%" stopColor="white" stopOpacity="1" />
+              <stop offset="80%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
+            </linearGradient>
 
-      <mask id="combinedMask">
-        <rect width="100%" height="100%" fill="url(#fadeMask)" />
-        <rect width="100%" height="100%" fill="url(#sideFadeMask)" />
-      </mask>
-    </defs>
+            <mask id="combinedMask">
+              <rect width="100%" height="100%" fill="url(#fadeMask)" />
+              <rect width="100%" height="100%" fill="url(#sideFadeMask)" />
+            </mask>
+          </defs>
 
-    {/* Waves */}
-    <g mask="url(#combinedMask)">
-      <path
-        d="M 0,600 L 0,300 C 113.14832535885168,307.70334928229664 226.29665071770336,315.4066985645933 332,285 C 437.70334928229664,254.5933014354067 535.9617224880383,186.07655502392342 626,161 C 716.0382775119617,135.92344497607658 797.8564593301435,154.28708133971293 877,136 C 956.1435406698565,117.71291866028707 1032.6124401913876,62.77511961722488 1126,34 C 1219.3875598086124,5.224880382775121 1329.6937799043062,2.6124401913875603 1440,0 L 1440,600 L 0,600 Z"
-        fill="url(#bgGradient)"
-        fillOpacity="0.55"
-      />
+   
+          <g mask="url(#combinedMask)">
+            <path
+              d="M 0,600 L 0,300 C 113.14832535885168,307.70334928229664 226.29665071770336,315.4066985645933 332,285 C 437.70334928229664,254.5933014354067 535.9617224880383,186.07655502392342 626,161 C 716.0382775119617,135.92344497607658 797.8564593301435,154.28708133971293 877,136 C 956.1435406698565,117.71291866028707 1032.6124401913876,62.77511961722488 1126,34 C 1219.3875598086124,5.224880382775121 1329.6937799043062,2.6124401913875603 1440,0 L 1440,600 L 0,600 Z"
+              fill="url(#bgGradient)"
+              fillOpacity="0.55"
+            />
 
-      <path
-        d="M 0,600 L 0,500 C 90.78468899521536,521.6267942583731 181.56937799043072,543.2535885167464 275,533 C 368.4306220095693,522.7464114832536 464.50717703349267,480.6124401913876 580,435 C 695.4928229665073,389.3875598086124 830.4019138755982,340.29665071770336 912,309 C 993.5980861244018,277.70334928229664 1021.8851674641148,264.200956937799 1101,249 C 1180.1148325358852,233.79904306220098 1310.0574162679427,216.8995215311005 1440,200 L 1440,600 L 0,600 Z"
-        fill="url(#bgGradient)"
-        fillOpacity="0.9"
-      />
-    </g>
-  </svg>
-</div>
+            <path
+              d="M 0,600 L 0,500 C 90.78468899521536,521.6267942583731 181.56937799043072,543.2535885167464 275,533 C 368.4306220095693,522.7464114832536 464.50717703349267,480.6124401913876 580,435 C 695.4928229665073,389.3875598086124 830.4019138755982,340.29665071770336 912,309 C 993.5980861244018,277.70334928229664 1021.8851674641148,264.200956937799 1101,249 C 1180.1148325358852,233.79904306220098 1310.0574162679427,216.8995215311005 1440,200 L 1440,600 L 0,600 Z"
+              fill="url(#bgGradient)"
+              fillOpacity="0.9"
+            />
+          </g>
+        </svg>
+      </div> */}
 
 
       <div className="expenses-page-content">
@@ -327,16 +328,16 @@ export default function TransactionsPage() {
           <h1 className="expenses-page-title">Transactions</h1>
           <p className="expenses-page-subtitle">Track expenses and income in one view. Expenses stay the default.</p>
           <div className="expenses-page-guardrail">
-            <strong>Reminder:</strong> Bought gold or invested? Add it from the Assets page instead.
+        
           </div>
         </div>
 
         {activeTab === "expenses" && (
           <>
-            <ExpensesFilters 
+            <ExpensesFilters
               filters={filters}
               onFilterChange={handleFilterChange}
-              onExpenseAdded={refetchExpenses} 
+              onExpenseAdded={refetchExpenses}
             />
 
             {loading && <div className="expenses-page-loading">Loading expenses…</div>}
@@ -350,16 +351,24 @@ export default function TransactionsPage() {
                   onDelete={handleExpenseDelete}
                 />
 
-                <div className="expenses-page-guardrail-inline">
-                  Investments, gold, RD/FD/SIP must be added via Assets. Expense categories exclude asset-like items to keep data clean.
-                </div>
-                
+           
+
                 <div className="pagination">
                   <button
                     disabled={page === 1}
                     onClick={() => setPage(page - 1)}
+                    aria-label="Previous page"
                   >
-                    Prev
+                    <svg
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
                   </button>
 
                   <span>
@@ -369,8 +378,18 @@ export default function TransactionsPage() {
                   <button
                     disabled={page === totalPages || totalPages === 0}
                     onClick={() => setPage(page + 1)}
+                    aria-label="Next page"
                   >
-                    Next
+                    <svg
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
                   </button>
                 </div>
               </>
@@ -428,8 +447,18 @@ export default function TransactionsPage() {
                   <button
                     disabled={incomePage === 1}
                     onClick={() => setIncomePage(incomePage - 1)}
+                    aria-label="Previous page"
                   >
-                    Prev
+                    <svg
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
                   </button>
 
                   <span>
@@ -439,8 +468,18 @@ export default function TransactionsPage() {
                   <button
                     disabled={incomePage === incomeTotalPages || incomeTotalPages === 0}
                     onClick={() => setIncomePage(incomePage + 1)}
+                    aria-label="Next page"
                   >
-                    Next
+                    <svg
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
                   </button>
                 </div>
               </>
@@ -449,7 +488,7 @@ export default function TransactionsPage() {
         )}
       </div>
 
-      {showIncomeForm && (
+      {showIncomeForm && createPortal(
         <div
           className="expense-modal-overlay"
           onClick={() => setShowIncomeForm(false)}
@@ -472,7 +511,8 @@ export default function TransactionsPage() {
               onSaved={handleIncomeSaved}
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
