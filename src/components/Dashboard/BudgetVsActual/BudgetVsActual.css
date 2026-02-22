@@ -73,6 +73,14 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+.budget-empty {
+    padding: 12px;
+    background: #f5f7f8;
+    border: 1px dashed #d0d7de;
+    border-radius: 8px;
+    color: #5b6b73;
+    font-size: 14px;
+}
 }
 
 /* ROW */

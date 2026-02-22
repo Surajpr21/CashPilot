@@ -49,6 +49,7 @@ const BudgetsPage = lazy(() => import("./components/Pages/Budgets/BudgetsPage"))
 const GoalsPage = lazy(() => import("./components/Pages/Goals/GoalsPage"));
 const SavingsPage = lazy(() => import("./components/Pages/Savings/SavingsPage"));
 const AssetsPage = lazy(() => import("./components/Pages/assets/AssetsPage"));
+const ProfilePage = lazy(() => import("./pages/profile/Profile"));
 
 function LoadingScreen({ message = "Loading..." }) {
   return (
@@ -59,7 +60,7 @@ function LoadingScreen({ message = "Loading..." }) {
 }
 
 function ProtectedRoute({ children, allowOnboarding = false }) {
-  const { session, profile, initializing, profileLoading } = useAuth();
+  const { session, profile, financial, initializing, profileLoading } = useAuth();
 
   if (initializing || profileLoading) {
     return <LoadingScreen message="Loading your account..." />;
@@ -69,11 +70,11 @@ function ProtectedRoute({ children, allowOnboarding = false }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!profile) {
+  if (!profile || !financial) {
     return <LoadingScreen message="Preparing your profile..." />;
   }
 
-  if (!profile.onboarding_completed) {
+  if (!financial.onboarding_completed) {
     return allowOnboarding ? children : <Navigate to="/onboarding" replace />;
   }
 
@@ -115,6 +116,7 @@ export default function App() {
           <Route path="/savings" element={<SavingsPage />} />
           <Route path="/goals" element={<GoalsPage />} />
           <Route path="/assets" element={<AssetsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

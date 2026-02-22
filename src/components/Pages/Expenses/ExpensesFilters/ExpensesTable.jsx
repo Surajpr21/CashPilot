@@ -23,6 +23,11 @@ const resolveModeValue = (row, isIncome) => {
   return row?.payment_mode || row?.mode || "-";
 };
 
+const capitalizeFirst = (value) => {
+  if (!value || typeof value !== "string") return value || "-";
+  return value.charAt(0).toUpperCase() + value.slice(1);
+};
+
 export default function ExpensesTable({ expenses = [], view = "expense", onEdit, onDelete }) {
   const isIncome = view === "income";
   const emptyLabel = isIncome ? "No income found." : "No expenses found.";
@@ -52,7 +57,8 @@ export default function ExpensesTable({ expenses = [], view = "expense", onEdit,
 
           {expenses.map((row, index) => {
             const dateValue = resolveDateValue(row);
-            const titleValue = isIncome ? row?.note || row?.title || "-" : row?.title || row?.note || "-";
+            const rawTitle = isIncome ? row?.note || row?.title || "-" : row?.title || row?.note || "-";
+            const titleValue = capitalizeFirst(rawTitle);
             const categoryValue = row?.category || "-";
             const modeValue = resolveModeValue(row, isIncome);
             const amountValue = formatAmount(row?.amount, isIncome);
@@ -60,7 +66,7 @@ export default function ExpensesTable({ expenses = [], view = "expense", onEdit,
             return (
               <tr key={row?.id || index} className="expenses-page-tr">
                 <td className="expenses-page-td">{formatDate(dateValue)}</td>
-                <td className="expenses-page-td">{titleValue}</td>
+                <td className="expenses-page-td expenses-title-cell">{titleValue}</td>
                 <td className="expenses-page-td">{categoryValue}</td>
                 {/* <td className="expenses-page-td">{row?.sub_category || "-"}</td> */}
                 <td className="expenses-page-td expenses-page-amount">{amountValue}</td>

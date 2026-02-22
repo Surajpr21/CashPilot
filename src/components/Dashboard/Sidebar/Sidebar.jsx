@@ -9,7 +9,6 @@ import {
   BarChart2,
   Settings,
   Bell,
-  User,
   LogOut,
   PiggyBank,
 } from "lucide-react";
@@ -31,7 +30,7 @@ const NAV_TABS = [
 const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { logout } = useAuth();
+  const { logout, profile } = useAuth();
 
   async function handleLogout() {
     await logout();
@@ -41,6 +40,14 @@ const Sidebar = () => {
   // derive active tab from URL (works for nested routes too)
   const activeKey =
     NAV_TABS.find(tab => pathname.startsWith(tab.path))?.key ?? "";
+
+  const avatarUrl = profile?.avatar_url ?? null;
+  const avatarInitials = (profile?.full_name || profile?.email || "?")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0]?.toUpperCase())
+    .join("") || "?";
 
   return (
     <div className="topbar">
@@ -65,10 +72,16 @@ const Sidebar = () => {
         <div className="right-actions">
           <div className="icons">
             <button className="icon-btn">
-              <Bell size={18} />
+              <Bell size={22} />
             </button>
-            <button className="icon-btn">
-              <User size={18} />
+            <button className="icon-btn avatar-btn" onClick={() => navigate("/profile")} title="Profile & Settings">
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="Profile avatar" className="avatar-thumb" />
+              ) : (
+                <span className="avatar-thumb avatar-fallback" aria-label="Profile">
+                  {avatarInitials}
+                </span>
+              )}
             </button>
           </div>
 
@@ -76,11 +89,11 @@ const Sidebar = () => {
             <div className="divider-left" />
 
             <button className="nav-item">
-              <Settings size={18} />
+              <Settings size={22} />
             </button>
 
             <button className="nav-item" onClick={handleLogout} title="Logout">
-              <LogOut size={18} />
+              <LogOut size={22} />
             </button>
           </div>
         </div>

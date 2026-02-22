@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import "./TopCategoryDonut.css";
-import { useAuth } from "../../../contexts/AuthContext";
-import { getTopCategories } from "../../../services/expenses.service";
-import { supabase } from "../../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useDashboardData } from "../../../contexts/DashboardDataContext";
 
 const GRADIENTS = [
   { from: "#CDE7A2", to: "#90D087" },
@@ -17,13 +15,6 @@ const GRADIENTS = [
 const CATEGORY_GRADIENTS = {
   utilities: { from: "#FDE68A", to: "#F59E0B" },
   transportation: { from: "#A5B4FC", to: "#6366F1" },
-};
-
-const RANGE_DAYS = {
-  "7d": 7,
-  "30d": 30,
-  "6m": 180,
-  "1y": 365,
 };
 
 const UpArrowIcon = ({ className }) => (
@@ -52,48 +43,10 @@ const lighten = (hex, amount = 0.18) => {
 const TopCategoryDonut = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [range, setRange] = useState("6m");
-  const { session } = useAuth();
-  const userId = session?.user?.id || null;
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { topCategoriesByRange, loading } = useDashboardData();
 
-  const load = useCallback(async () => {
-    if (!userId) {
-      setData([]);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const days = RANGE_DAYS[range] || 30;
-      const rows = await getTopCategories({ userId, days });
-      setData((rows || []).slice(0, 8));
-    } catch (err) {
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [userId, range]);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  useEffect(() => {
-    if (!userId) return undefined;
-
-    const channel = supabase
-      .channel(`top-category-${userId}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "expenses", filter: `user_id=eq.${userId}` },
-        () => load()
-      )
-      .subscribe();
-
-    return () => supabase.removeChannel(channel);
-  }, [userId, load]);
+  const data = useMemo(() => (topCategoriesByRange[range] || []).slice(0, 8), [range, topCategoriesByRange]);
 
   const topCategory = useMemo(() => {
     if (!data.length) return { name: "–", value: 0 };

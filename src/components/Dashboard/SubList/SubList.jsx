@@ -75,12 +75,10 @@
 //     );
 // }
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import "./SubList.css";
-import { getUpcomingSubscriptions } from "../../../services/subscriptions.servies";
-import { supabase } from "../../../lib/supabaseClient";
-import { useAuth } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useDashboardData } from "../../../contexts/DashboardDataContext";
 
 const currencyFmt = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -89,11 +87,8 @@ const currencyFmt = new Intl.NumberFormat("en-IN", {
 });
 
 const SubList = () => {
-    const { session } = useAuth();
-    const userId = session?.user?.id || null;
-    const [subs, setSubs] = useState([]);
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { subscriptions, loading } = useDashboardData();
 
     const normalizeDate = useCallback((value) => {
         const parsed = new Date(value);
@@ -108,46 +103,9 @@ const SubList = () => {
         return d;
     }, []);
 
-    const load = useCallback(async () => {
-        if (!userId) {
-            setSubs([]);
-            return;
-        }
-        setLoading(true);
-        try {
-            const data = await getUpcomingSubscriptions(userId);
-            const filtered = (data || []).filter((row) => !row.user_id || row.user_id === userId);
-            setSubs(filtered);
-        } catch (err) {
-            setSubs([]);
-        } finally {
-            setLoading(false);
-        }
-    }, [userId]);
-
-    useEffect(() => {
-        load();
-    }, [load]);
-
-    useEffect(() => {
-        if (!userId) return undefined;
-
-        const channel = supabase
-            .channel(`subscriptions-${userId}`)
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${userId}` },
-                () => load()
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    }, [userId, load]);
-
     const orderedSubs = useMemo(() => {
-        if (!subs?.length) return [];
+        const subs = subscriptions || [];
+        if (!subs.length) return [];
 
         return [...subs]
             .sort((a, b) => {
@@ -165,8 +123,8 @@ const SubList = () => {
 
                 return aDate - bDate;
             })
-            .slice(0, 5);
-    }, [normalizeDate, subs, today]);
+                .slice(0, 5);
+            }, [normalizeDate, subscriptions, today]);
 
     const total = useMemo(() => orderedSubs.reduce((sum, s) => sum + Number(s.amount || 0), 0), [orderedSubs]);
 

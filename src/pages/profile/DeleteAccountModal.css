@@ -1,0 +1,36 @@
+.delete-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.delete-modal {
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.delete-modal h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.delete-modal p {
+  color: #42526e;
+  line-height: 1.5;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}

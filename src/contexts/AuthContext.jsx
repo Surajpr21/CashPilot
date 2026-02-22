@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [financial, setFinancial] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [profileLoading, setProfileLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,24 +18,53 @@ export function AuthProvider({ children }) {
     setProfileLoading(true);
     setError(null);
     try {
-      const nextProfile = await getProfile(userId);
-      if (nextProfile) {
+      // Pull the latest auth user so we can surface the registered email in profile UI
+      const { data: authUserData } = await supabase.auth.getUser();
+      const userEmail = authUserData?.user?.email ?? null;
+
+      const account = await getProfile(userId);
+
+      if (account) {
+        const nextProfile = {
+          id: account.id,
+          full_name: account.full_name ?? null,
+          avatar_url: account.avatar_url ?? null,
+          theme: account.theme ?? null,
+          email: userEmail,
+          two_factor_enabled: !!account.two_factor_enabled,
+        };
+        const nextFinancial = {
+          onboarding_completed: !!account.onboarding_completed,
+          opening_balance: account.opening_balance ?? null,
+          monthly_income: account.monthly_income ?? null,
+          tracking_start_date: account.tracking_start_date ?? null,
+        };
         setProfile(nextProfile);
-        return nextProfile;
+        setFinancial(nextFinancial);
+        return { profile: nextProfile, financial: nextFinancial };
       }
 
       const bootstrapProfile = {
         id: userId,
+        full_name: null,
+        avatar_url: null,
+        theme: null,
+        email: userEmail,
+        two_factor_enabled: false,
+      };
+      const bootstrapFinancial = {
         onboarding_completed: false,
         opening_balance: null,
         monthly_income: null,
         tracking_start_date: null,
       };
       setProfile(bootstrapProfile);
-      return bootstrapProfile;
+      setFinancial(bootstrapFinancial);
+      return { profile: bootstrapProfile, financial: bootstrapFinancial };
     } catch (err) {
       setError(err?.message || "Failed to load profile");
       setProfile(null);
+      setFinancial(null);
       return null;
     } finally {
       setProfileLoading(false);
@@ -58,6 +88,7 @@ export function AuthProvider({ children }) {
         await fetchProfile(nextUserId);
       } else {
         setProfile(null);
+        setFinancial(null);
       }
       setInitializing(false);
     }
@@ -78,6 +109,7 @@ export function AuthProvider({ children }) {
         fetchProfile(nextUserId);
       } else {
         setProfile(null);
+        setFinancial(null);
       }
     });
 
@@ -111,14 +143,31 @@ export function AuthProvider({ children }) {
     await signOutService();
     setSession(null);
     setProfile(null);
+    setFinancial(null);
     lastUserIdRef.current = null;
   }, []);
 
   const persistProfile = useCallback(async (updates) => {
     if (!session?.user?.id) throw new Error("No active session");
-    const nextProfile = await saveProfile(session.user.id, updates);
+    const next = await saveProfile(session.user.id, updates);
+
+    const nextProfile = {
+      id: next.id,
+      full_name: next.full_name ?? null,
+      avatar_url: next.avatar_url ?? null,
+      theme: next.theme ?? null,
+      two_factor_enabled: !!next.two_factor_enabled,
+    };
+    const nextFinancial = {
+      onboarding_completed: !!next.onboarding_completed,
+      opening_balance: next.opening_balance ?? null,
+      monthly_income: next.monthly_income ?? null,
+      tracking_start_date: next.tracking_start_date ?? null,
+    };
+
     setProfile(nextProfile);
-    return nextProfile;
+    setFinancial(nextFinancial);
+    return { profile: nextProfile, financial: nextFinancial };
   }, [session]);
 
   const refreshProfile = useCallback(async () => {
@@ -130,6 +179,7 @@ export function AuthProvider({ children }) {
     () => ({
       session,
       profile,
+      financial,
       initializing,
       profileLoading,
       error,
@@ -138,8 +188,9 @@ export function AuthProvider({ children }) {
       persistProfile,
       refreshProfile,
       setProfile,
+      setFinancial,
     }),
-    [session, profile, initializing, profileLoading, error, login, logout, persistProfile, refreshProfile]
+    [session, profile, financial, initializing, profileLoading, error, login, logout, persistProfile, refreshProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
