@@ -7,7 +7,9 @@ export default function CustomDropdown({
   value,
   onChange,
   placeholder = "Select",
-  width = "180px"
+  width = "180px",
+  menuMaxHeight,
+  disabled = false
 }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -25,20 +27,28 @@ export default function CustomDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
+
   const handleSelect = (option) => {
+    if (disabled) return;
     onChange(option.value);
     setOpen(false);
   };
 
   return (
     <div
-      className="cp-dropdown"
+      className={`cp-dropdown ${disabled ? "disabled" : ""}`}
       ref={dropdownRef}
       style={{ width }}
     >
       <div
-        className={`cp-dropdown-trigger ${open ? "open" : ""}`}
-        onClick={() => setOpen((prev) => !prev)}
+        className={`cp-dropdown-trigger ${open ? "open" : ""} ${disabled ? "disabled" : ""}`}
+        onClick={() => {
+          if (disabled) return;
+          setOpen((prev) => !prev);
+        }}
       >
         <span>
           {selectedOption ? selectedOption.label : placeholder}
@@ -62,8 +72,11 @@ export default function CustomDropdown({
         </svg>
       </div>
 
-      {open && (
-        <div className="cp-dropdown-menu">
+      {!disabled && open && (
+        <div
+          className="cp-dropdown-menu"
+          style={menuMaxHeight ? { maxHeight: menuMaxHeight, overflowY: "auto" } : undefined}
+        >
           {options.map((option) => (
             <div
               key={option.value}

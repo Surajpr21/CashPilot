@@ -71,9 +71,9 @@ const Sidebar = () => {
 
         <div className="right-actions">
           <div className="icons">
-            <button className="icon-btn">
+            {/* <button className="icon-btn">
               <Bell size={22} />
-            </button>
+            </button> */}
             <button className="icon-btn avatar-btn" onClick={() => navigate("/profile")} title="Profile & Settings">
               {avatarUrl ? (
                 <img src={avatarUrl} alt="Profile avatar" className="avatar-thumb" />
@@ -88,9 +88,9 @@ const Sidebar = () => {
           <div className="settings-group">
             <div className="divider-left" />
 
-            <button className="nav-item">
+            {/* <button className="nav-item">
               <Settings size={22} />
-            </button>
+            </button> */}
 
             <button className="nav-item" onClick={handleLogout} title="Logout">
               <LogOut size={22} />
