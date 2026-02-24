@@ -1,13 +1,17 @@
 import React from "react";
+import { useProfile } from "../../../context/ProfileContext";
 import styles from "./dashboardHeader.module.css";
 
 const DashboardHeader = () => {
+  const { profile } = useProfile();
+  const firstName = profile?.full_name?.trim()?.split(" ")?.[0] || "there";
+
   return (
     <header className={styles.header}>
       <div className={styles.left}>
         <div>
           <h2 className={styles.title}>
-            Hi, Subu
+            Hi, {firstName}
           </h2>
           <p className={styles.subtitle}>
             Track your all expense and transactions

@@ -38,6 +38,17 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
   const datePickerRef = useRef(null);
   const isIncome = mode === "income";
 
+  const policyOptions = useMemo(
+    () => [
+      { value: "", label: "Select policy" },
+      ...policies.map((policy) => ({
+        value: policy.id,
+        label: `${policy.provider || "Unknown provider"} — ${policy.policy_name || "Untitled policy"}`,
+      })),
+    ],
+    [policies]
+  );
+
   const now = useMemo(() => new Date(), []);
   const [viewMonth, setViewMonth] = useState(() => now.getMonth());
   const [viewYear, setViewYear] = useState(() => now.getFullYear());
@@ -63,6 +74,26 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
   const expenseCategories = useMemo(
     () => CATEGORIES.filter((category) => !disallowed.includes(category)),
     [disallowed]
+  );
+
+  const paymentModeOptions = useMemo(
+    () => [
+      { value: "", label: "Select mode" },
+      { value: "cash", label: "Cash" },
+      { value: "card", label: "Card" },
+      { value: "upi", label: "UPI" },
+      { value: "bank_transfer", label: "Bank Transfer" },
+      { value: "other", label: "Other" },
+    ],
+    []
+  );
+
+  const insuranceTypeOptions = useMemo(
+    () => [
+      { value: "", label: "Select type" },
+      ...INSURANCE_TYPES.map((type) => ({ value: type.value, label: type.label })),
+    ],
+    []
   );
 
   const isInsuranceCategory = useMemo(
@@ -157,13 +188,18 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
   useEffect(() => {
     const handleOutside = (e) => {
-      if (datePickerRef.current && !datePickerRef.current.contains(e.target)) {
+      if (!datePickerRef.current) return;
+
+      const isInside = datePickerRef.current.contains(e.target);
+      const isDropdownMenu = e.target.closest(".custom-dropdown-menu");
+
+      if (!isInside && !isDropdownMenu) {
         setDateOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleOutside);
-    return () => document.removeEventListener("mousedown", handleOutside);
+    document.addEventListener("pointerdown", handleOutside);
+    return () => document.removeEventListener("pointerdown", handleOutside);
   }, []);
 
   const handleMonthChange = (value) => setViewMonth(Number(value));
@@ -177,6 +213,8 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
   const handleDaySelect = (dayInfo) => {
     const dateStr = formatDate(viewYear, viewMonth + dayInfo.monthOffset, dayInfo.day);
+    if (dateStr > todayString) return;
+
     setFormState((prev) => ({ ...prev, spent_at: dateStr }));
 
     const target = new Date(viewYear, viewMonth + dayInfo.monthOffset, dayInfo.day);
@@ -201,7 +239,9 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
           <button
             type="button"
             className={`date-picker-trigger ${dateOpen ? "open" : ""}`}
-            onClick={() => setDateOpen((prev) => !prev)}
+            onClick={() => {
+              setDateOpen((prev) => !prev);
+            }}
             aria-expanded={dateOpen}
             aria-haspopup="dialog"
           >
@@ -223,7 +263,17 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
           </button>
 
           {dateOpen && (
-            <div className="expense-date-popover">
+            <div
+              className="expense-date-popover"
+              onPointerDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
               <div className="expense-date-picker">
                 <div className="date-picker-header">
                   <button
@@ -241,6 +291,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
                       value={viewMonth}
                       options={monthOptions}
                       onChange={handleMonthChange}
+                      menuMaxHeight="240px"
                     />
 
                     <CustomDropdown
@@ -248,6 +299,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
                       value={viewYear}
                       options={yearOptions}
                       onChange={handleYearChange}
+                      menuMaxHeight="240px"
                     />
                   </div>
 
@@ -274,6 +326,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
                     const isOutside = day.monthOffset !== 0;
                     const isSelected = formState.spent_at === day.dateStr;
                     const isToday = todayString === day.dateStr;
+                    const isFuture = day.dateStr > todayString;
 
                     return (
                       <button
@@ -281,10 +334,14 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
                         key={day.dateStr}
                         className={`date-cell ${isOutside ? "outside" : ""} ${
                           isSelected ? "selected" : ""
-                        } ${isToday ? "today" : ""}`}
-                        onClick={() => handleDaySelect(day)}
+                        } ${isToday ? "today" : ""} ${isFuture ? "future" : ""}`}
+                        onClick={() => {
+                          if (!isFuture) handleDaySelect(day);
+                        }}
+                        disabled={isFuture}
                         aria-label={`Select ${day.dateStr}`}
                         aria-pressed={isSelected}
+                        aria-disabled={isFuture}
                       >
                         {day.day}
                       </button>
@@ -360,6 +417,31 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
         setError("Please pick a date");
         setLoading(false);
         return;
+      }
+
+      if (formState.spent_at > todayString) {
+        setError("Date cannot be in the future");
+        setLoading(false);
+        return;
+      }
+
+      if (isIncome) {
+        if (!formState.category) {
+          setError("Please select an income category");
+          setLoading(false);
+          return;
+        }
+      } else {
+        if (!formState.category) {
+          setError("Please select a category");
+          setLoading(false);
+          return;
+        }
+        if (!formState.payment_mode) {
+          setError("Please select a payment mode");
+          setLoading(false);
+          return;
+        }
       }
 
       if (isIncome) {
@@ -439,16 +521,6 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
     <form className="expense-form" onSubmit={handleSubmit}>
       <div className="expense-form-header">
         <h3>{isIncome ? "Add Income" : "Add Expense"}</h3>
-        {onClose && (
-          <button
-            type="button"
-            className="expense-form-close"
-            aria-label="Close"
-            onClick={onClose}
-          >
-            ×
-          </button>
-        )}
       </div>
 
       {!isIncome && (
@@ -469,19 +541,14 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
           <label className="expense-form-field">
             <span>Category</span>
-            <select
-              name="category"
+            <CustomDropdown
               value={formState.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select category</option>
-              {expenseCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+              options={[{ value: "", label: "Select category" }, ...expenseCategories.map((category) => ({ value: category, label: category }))]}
+              onChange={(val) => setFormState((prev) => ({ ...prev, category: val }))}
+              placeholder="Select category"
+              width="100%"
+              menuMaxHeight="260px"
+            />
             <p className="expense-form-helper">Buying gold, RD/FD/SIP, or investing? Add it from Assets, not here.</p>
           </label>
 
@@ -514,19 +581,13 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
           <label className="expense-form-field">
             <span>Mode of Payment</span>
-            <select
-              name="payment_mode"
+            <CustomDropdown
               value={formState.payment_mode}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select mode</option>
-              <option value="cash">Cash</option>
-              <option value="card">Card</option>
-              <option value="upi">UPI</option>
-              <option value="bank_transfer">Bank Transfer</option>
-              <option value="other">Other</option>
-            </select>
+              options={paymentModeOptions}
+              onChange={(val) => setFormState((prev) => ({ ...prev, payment_mode: val }))}
+              placeholder="Select mode"
+              width="100%"
+            />
           </label>
         </div>
       )}
@@ -537,19 +598,14 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
           <label className="expense-form-field">
             <span>Category</span>
-            <select
-              name="category"
+            <CustomDropdown
               value={formState.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select category</option>
-              {incomeCategories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
+              options={[{ value: "", label: "Select category" }, ...incomeCategories.map((cat) => ({ value: cat, label: cat }))]}
+              onChange={(val) => setFormState((prev) => ({ ...prev, category: val }))}
+              placeholder="Select category"
+              width="100%"
+              menuMaxHeight="240px"
+            />
           </label>
 
           <label className="expense-form-field">
@@ -575,22 +631,18 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
           <div className="expense-form-grid">
             <label className="expense-form-field">
               <span>Existing policy</span>
-              <select
-                name="policyId"
+              <CustomDropdown
                 value={formState.policyId}
-                onChange={(e) => {
+                options={policyOptions}
+                onChange={(val) => {
                   setPolicyMode("existing");
-                  setFormState((prev) => ({ ...prev, policyId: e.target.value }));
+                  setFormState((prev) => ({ ...prev, policyId: val }));
                 }}
+                placeholder="Select policy"
+                width="100%"
+                menuMaxHeight="240px"
                 disabled={policyMode === "new"}
-              >
-                <option value="">Select policy</option>
-                {policies.map((policy) => (
-                  <option key={policy.id} value={policy.id}>
-                    {policy.provider || "Unknown provider"} — {policy.policy_name || "Untitled policy"}
-                  </option>
-                ))}
-              </select>
+              />
               {policiesLoading && <p className="expense-form-helper">Loading your policies...</p>}
             </label>
 
@@ -650,19 +702,14 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
               <label className="expense-form-field">
                 <span>Insurance Type</span>
-                <select
-                  name="insuranceType"
+                <CustomDropdown
                   value={formState.insuranceType}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select type</option>
-                  {INSURANCE_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
+                  options={insuranceTypeOptions}
+                  onChange={(val) => setFormState((prev) => ({ ...prev, insuranceType: val }))}
+                  placeholder="Select type"
+                  width="100%"
+                  menuMaxHeight="240px"
+                />
               </label>
             </div>
           )}

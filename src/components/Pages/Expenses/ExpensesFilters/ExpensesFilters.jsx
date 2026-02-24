@@ -209,6 +209,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         onChange={(val) => handleLocalChange("category", val)}
         placeholder="All categories"
         width="190px"
+        menuMaxHeight="260px"
       />
 
       {/* 3∩╕ÅΓâú Any amount (sort) */}
