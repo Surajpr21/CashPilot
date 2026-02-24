@@ -1,17 +1,6 @@
 import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import {
-  LayoutDashboard,
-  PieChart,
-  List,
-  CreditCard,
-  Wallet,
-  BarChart2,
-  Settings,
-  Bell,
-  LogOut,
-  PiggyBank,
-} from "lucide-react";
+import { LayoutDashboard, PieChart, List, CreditCard, Wallet, BarChart2, LogOut, PiggyBank } from "lucide-react";
 import "./Sidebar.css";
 import { useAuth } from "../../../contexts/AuthContext";
 
