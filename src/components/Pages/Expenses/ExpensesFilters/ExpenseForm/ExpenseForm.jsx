@@ -38,7 +38,6 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense",
   const [dateOpen, setDateOpen] = useState(false);
   const datePickerRef = useRef(null);
   const isIncome = mode === "income";
-  const isEditing = Boolean(editingId);
 
   const policyOptions = useMemo(
     () => [

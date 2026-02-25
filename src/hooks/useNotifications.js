@@ -21,6 +21,8 @@ const MOCK_NOTIFICATIONS = [
   },
 ];
 
+const USE_MOCK_NOTIFICATIONS = true;
+
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,11 +31,11 @@ export const useNotifications = () => {
     setLoading(true);
 
     // Temporary UI fix: load mock notifications instead of hitting Supabase
-    if (!signal.cancelled) {
+    if (USE_MOCK_NOTIFICATIONS && !signal.cancelled) {
       setNotifications(MOCK_NOTIFICATIONS);
       setLoading(false);
+      return;
     }
-    return;
 
     try {
       const data = await getUnreadNotifications();
