@@ -1,0 +1,99 @@
+.cp-notif-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cp-notif-card {
+  background: var(--surface-container, rgba(255, 255, 255, 0.9));
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cp-notif-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+}
+
+.cp-notif-content h4 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: var(--on-surface, #0f172a);
+}
+
+.cp-notif-content p {
+  margin: 0;
+  color: #475467;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cp-notif-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cp-notif-action {
+  background: var(--primary, #2b7de9);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 8px 16px rgba(43, 125, 233, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cp-notif-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(43, 125, 233, 0.3);
+}
+
+.cp-notif-dismiss {
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+  padding: 7px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.cp-notif-dismiss:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.cp-notif-loading,
+.cp-notif-empty {
+  background: var(--surface-container-low, rgba(255, 255, 255, 0.85));
+  border-radius: 14px;
+  padding: 14px 16px;
+  color: #475467;
+  font-weight: 600;
+  border: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .cp-notif-card {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cp-notif-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

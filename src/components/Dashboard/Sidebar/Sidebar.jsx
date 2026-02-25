@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, PieChart, List, CreditCard, Wallet, BarChart2, LogOut, PiggyBank } from "lucide-react";
+import { LayoutDashboard, PieChart, List, CreditCard, Wallet, BarChart2, LogOut, PiggyBank, Bell } from "lucide-react";
 import "./Sidebar.css";
 import { useAuth } from "../../../contexts/AuthContext";
 
@@ -16,7 +16,7 @@ const NAV_TABS = [
   { key: "goals", label: "Goals", path: "/goals", icon: <BarChart2 size={18} /> },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ onToggleNotifications }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { logout, profile } = useAuth();
@@ -60,9 +60,9 @@ const Sidebar = () => {
 
         <div className="right-actions">
           <div className="icons">
-            {/* <button className="icon-btn">
+            <button className="icon-btn" onClick={onToggleNotifications} title="Notifications">
               <Bell size={22} />
-            </button> */}
+            </button>
             <button className="icon-btn avatar-btn" onClick={() => navigate("/profile")} title="Profile & Settings">
               {avatarUrl ? (
                 <img src={avatarUrl} alt="Profile avatar" className="avatar-thumb" />

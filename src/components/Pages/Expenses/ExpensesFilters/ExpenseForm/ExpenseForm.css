@@ -16,15 +16,30 @@
 
 .expense-modal {
   position: relative;
-  background: #ffffff;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.68));
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 18px;
   width: min(820px, 100%);
   box-shadow:
     0 28px 60px rgba(15, 23, 42, 0.24),
-    0 8px 18px rgba(0, 0, 0, 0.08);
+    0 14px 30px rgba(9, 12, 27, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   padding: 24px 26px 26px;
   max-height: 88vh;
   overflow: visible;
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+
+.expense-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.4), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.3), transparent 32%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .expense-modal-close {
@@ -39,7 +54,7 @@
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  color: #1f2937;
+  color: #4b5563;
   display: grid;
   place-items: center;
   transition: background 0.2s ease, transform 0.1s ease;
@@ -69,7 +84,7 @@
 .expense-form-header h3 {
   margin: 0;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
 }
 
@@ -98,30 +113,42 @@
 }
 
 .expense-form-field span {
-  font-weight: 600;
-  color: #1f2937;
+  font-weight: 400;
+  color: #4b5563;
 }
 
 .expense-form-field input,
 .expense-form-field select {
-  /* width: 100%; */
   padding: 12px 13px;
   border-radius: 12px;
-  border: 1px solid #d5dce6;
+  border: 1px solid rgba(12, 32, 64, 0.08);
   background: linear-gradient(90deg, #e8e0ff 0%, #dff7ec 45%, #e6e5e5 100%);
   font-size: 14px;
+  font-weight: 400;
   color: #0f172a;
   height: 44px;
   box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 10px 22px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.expense-form-field input::placeholder,
+.expense-form-field select::placeholder {
+  color: rgba(15, 23, 42, 0.45);
 }
 
 .expense-form-field input:focus,
 .expense-form-field select:focus {
   outline: none;
-  border-color: #1fb6aa;
-  box-shadow: 0 0 0 3px rgba(31, 182, 170, 0.18);
+  border-color: rgba(31, 182, 170, 0.6);
+  box-shadow:
+    0 0 0 3px rgba(31, 182, 170, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 24px rgba(0, 0, 0, 0.08);
   background: linear-gradient(90deg, #e8e0ff 0%, #dff7ec 45%, #e6e5e5 100%);
+  color: #0b1628;
 }
 
 .expense-form-helper {
@@ -149,7 +176,7 @@
   border: none;
   border-radius: 12px;
   padding: 12px 18px;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 14px;
   cursor: pointer;
   box-shadow:
@@ -194,21 +221,30 @@
   width: 100%;
 }
 
+
 .date-picker-trigger {
   width: 100%;
   height: 44px;
   padding: 0 14px;
   border-radius: 14px;
-  border: 1px solid #d5dce6;
+  border: 1px solid rgba(12, 32, 64, 0.08);
   background: linear-gradient(90deg, #e8e0ff 0%, #dff7ec 45%, #e6e5e5 100%);
   color: #0f172a;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 10px 22px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.date-picker-trigger.placeholder,
+.date-picker-trigger .placeholder {
+  color: rgba(15, 23, 42, 0.45);
 }
 
 .expense-form-field input[type="date"] {
@@ -219,15 +255,19 @@
 }
 
 .date-picker-trigger:hover {
-  background: linear-gradient(90deg, #e2d9ff 0%, #d3f1e5 45%, #dddddd 100%);
+  background: linear-gradient(90deg, #e8e0ff 0%, #dff7ec 45%, #e6e5e5 100%);
 }
 
 .date-picker-trigger.open,
 .date-picker-trigger:focus-visible {
   outline: none;
-  border-color: #1fb6aa;
-  box-shadow: 0 0 0 3px rgba(31, 182, 170, 0.18);
+  border-color: rgba(31, 182, 170, 0.6);
+  box-shadow:
+    0 0 0 3px rgba(31, 182, 170, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 24px rgba(0, 0, 0, 0.08);
   background: linear-gradient(90deg, #e8e0ff 0%, #dff7ec 45%, #e6e5e5 100%);
+  color: #0b1628;
 }
 
 .date-picker-icon {
@@ -248,13 +288,15 @@
 
 .expense-date-picker {
   width: 100%;
-  background: #f2f4f7;
-  border: 1px solid #e0e7f0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(247, 251, 255, 0.88));
+  border: 1px solid rgba(12, 32, 64, 0.08);
   border-radius: 18px;
   padding: 14px;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   pointer-events: auto;
+  backdrop-filter: blur(12px) saturate(110%);
+  -webkit-backdrop-filter: blur(12px) saturate(110%);
 }
 
 .date-picker-header {
@@ -302,7 +344,7 @@
   margin: 12px 0 10px;
   font-size: 12px;
   font-weight: 700;
-  color: #8a93a5;
+  color: rgba(15, 23, 42, 0.55);
   text-align: center;
 }
 
@@ -319,22 +361,22 @@
 .date-cell {
   height: 40px;
   border-radius: 12px;
-  border: 1px solid #e1e6f0;
-  background: #ffffff;
-  color: #1f2937;
+  border: 1px solid rgba(12, 32, 64, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(249, 252, 255, 0.9));
+  color: #0f172a;
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   display: grid;
   place-items: center;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.16s ease;
 }
 
 .date-cell.future {
-  color: #a0a8b8;
-  background: #f4f5f8;
-  border-color: #e6e9f0;
+  color: rgba(15, 23, 42, 0.35);
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(12, 32, 64, 0.06);
   box-shadow: none;
   cursor: not-allowed;
   opacity: 0.8;
@@ -346,19 +388,19 @@
 }
 
 .date-cell:hover {
-  background: #eef3ff;
-  border-color: #cfd8f5;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(249, 252, 255, 0.96));
+  border-color: rgba(31, 182, 170, 0.35);
 }
 
 .date-cell.outside {
-  color: #c3c8d3;
-  background: #f6f7fb;
+  color: rgba(15, 23, 42, 0.35);
+  background: rgba(255, 255, 255, 0.4);
   box-shadow: none;
 }
 
 .date-cell.today:not(.selected) {
-  border-color: #2f5bff;
-  box-shadow: 0 0 0 3px rgba(47, 91, 255, 0.12);
+  border-color: rgba(47, 91, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(47, 91, 255, 0.18);
 }
 
 .date-cell.selected {
