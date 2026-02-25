@@ -36,9 +36,11 @@
 // }
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ExpensesFilters from "./ExpensesFilters/ExpensesFilters";
 import ExpensesTable from "./ExpensesFilters/ExpensesTable";
 import "./ExpensesPage.css";
+import CustomDropdown from "../../CustomDropdown/CustomDropdown";
 import { getExpensesPaginated, deleteExpense } from "../../../services/expenses.service";
 import { getIncomePaginated, deleteIncomeTransaction } from "../../../services/transactions.service";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -69,6 +71,8 @@ function getDatePreset(preset) {
 
 export default function TransactionsPage() {
   const [activeTab, setActiveTab] = useState("expenses");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [expenses, setExpenses] = useState([]);
   const [page, setPage] = useState(1);
@@ -83,6 +87,8 @@ export default function TransactionsPage() {
   const [incomeError, setIncomeError] = useState("");
   const [showIncomeForm, setShowIncomeForm] = useState(false);
   const [editingIncome, setEditingIncome] = useState(null);
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [editingExpense, setEditingExpense] = useState(null);
 
   const { session } = useAuth();
   const lastExpensesKeyRef = useRef(null);
@@ -107,6 +113,9 @@ export default function TransactionsPage() {
     async ({ force = false } = {}) => {
       const key = JSON.stringify({ page, filters, userId: session?.user?.id });
       if (!force && lastExpensesKeyRef.current === key) {
+                    <button className="expenses-page-export" type="button">
+                      View income summary
+                    </button>
         return;
       }
 
@@ -164,6 +173,15 @@ export default function TransactionsPage() {
     }
   }, [activeTab, loadIncome, filters]);
 
+  useEffect(() => {
+    if (location.state?.openIncome) {
+      setActiveTab("income");
+      setShowIncomeForm(true);
+      setEditingIncome(null);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, navigate]);
+
   const refetchExpenses = async () => {
     await loadExpenses({ force: true });
   };
@@ -191,6 +209,12 @@ export default function TransactionsPage() {
     setShowIncomeForm(false);
     setEditingIncome(null);
     await loadIncome({ force: true });
+  };
+
+  const handleExpenseSaved = async () => {
+    setShowExpenseForm(false);
+    setEditingExpense(null);
+    await refetchExpenses();
   };
 
   const handleIncomeDelete = async (row) => {
@@ -348,6 +372,10 @@ export default function TransactionsPage() {
                 <ExpensesTable
                   expenses={expenses}
                   view="expense"
+                  onEdit={(row) => {
+                    setEditingExpense(row);
+                    setShowExpenseForm(true);
+                  }}
                   onDelete={handleExpenseDelete}
                 />
 
@@ -400,31 +428,41 @@ export default function TransactionsPage() {
         {activeTab === "income" && (
           <div className="income-view">
             <div className="expenses-page-filters income-filters">
-              <select
-                className="expenses-page-filter"
-                value={incomePreset}
-                onChange={(e) => handleIncomePresetChange(e.target.value)}
-              >
-                <option value="thisMonth">This month</option>
-                <option value="lastMonth">Last month</option>
-                <option value="custom">Custom (from expenses filters)</option>
-              </select>
+              <div className="income-filters-left">
+                <CustomDropdown
+                  value={incomePreset}
+                  options={[
+                    { value: "thisMonth", label: "This month" },
+                    { value: "lastMonth", label: "Last month" },
+                    { value: "custom", label: "Custom (from expenses filters)" },
+                  ]}
+                  onChange={(val) => handleIncomePresetChange(val)}
+                  placeholder="This month"
+                  width="190px"
+                />
+              </div>
 
-              <div className="income-summary-group">
-                <div className="expenses-page-summary-item">
-                  <span className="expenses-page-summary-label">Total income (this month):</span>
+              <div className="income-filters-right">
+                <div className="income-actions">
+                  <button className="expenses-page-add-expense" onClick={() => { setEditingIncome(null); setShowIncomeForm(true); }}>
+                    Add Income
+                  </button>
+                  
+                </div>
+              </div>
+              <div className="income-summary-inline">
+                <div className="income-summary-item">
+                  <span className="expenses-page-summary-label">Total income:</span>
                   <span className="expenses-page-summary-value income-amount">{formattedIncomeTotal}</span>
                 </div>
-                <div className="expenses-page-summary-item">
+                <div className="income-summary-divider" />
+                <div className="income-summary-item">
                   <span className="expenses-page-summary-label">Entries:</span>
                   <span className="expenses-page-summary-value">{incomeRows.length}</span>
                 </div>
-              </div>
-              <div className="income-actions">
-                <button className="expenses-page-add-expense" onClick={() => { setEditingIncome(null); setShowIncomeForm(true); }}>
-                  Add Income
+                <button className="expenses-page-export income-summary-action" type="button">
+                  View income summary
                 </button>
-                <a className="savings-link" href="/savings">View savings summary →</a>
               </div>
             </div>
 
@@ -502,13 +540,62 @@ export default function TransactionsPage() {
               aria-label="Close"
               onClick={() => setShowIncomeForm(false)}
             >
-              ×
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                width="18"
+                height="18"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
             </button>
             <ExpenseForm
               mode="income"
               initialData={editingIncome}
               onClose={() => setShowIncomeForm(false)}
-              onSaved={handleIncomeSaved}
+              onExpenseAdded={handleIncomeSaved}
+            />
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {showExpenseForm && createPortal(
+        <div
+          className="expense-modal-overlay"
+          onClick={() => setShowExpenseForm(false)}
+        >
+          <div
+            className="expense-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="expense-modal-close"
+              aria-label="Close"
+              onClick={() => setShowExpenseForm(false)}
+            >
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                width="18"
+                height="18"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+            <ExpenseForm
+              mode="expense"
+              initialData={editingExpense}
+              onClose={() => setShowExpenseForm(false)}
+              onExpenseAdded={handleExpenseSaved}
             />
           </div>
         </div>,

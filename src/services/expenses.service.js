@@ -30,6 +30,46 @@ export async function addExpense(expense) {
   return { data, error };
 }
 
+export async function updateExpense(expense) {
+  const {
+    id,
+    spent_at,
+    title,
+    category,
+    sub_category,
+    amount,
+    payment_mode,
+    user_id,
+  } = expense;
+
+  if (!id) {
+    throw new Error("Missing expense id for update");
+  }
+
+  if (!user_id) {
+    throw new Error("Missing user id for expense update");
+  }
+
+  const { data, error } = await supabase
+    .from("expenses")
+    .update({
+      spent_at,
+      title,
+      category,
+      sub_category,
+      amount,
+      payment_mode,
+      user_id,
+    })
+    .eq("id", id)
+    .eq("user_id", user_id)
+    .select()
+    .maybeSingle();
+
+  if (error) throw error;
+  return { data, error: null };
+}
+
 // Aggregate expense stats between optional dates.
 export async function getExpenseStats(fromDate, toDate, userId) {
   let query = supabase.from("expenses").select("amount, spent_at, user_id");

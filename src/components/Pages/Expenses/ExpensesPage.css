@@ -133,22 +133,81 @@
   margin: 14px 0 0;
 } */
 
+
 .income-filters {
-  justify-content: space-between;
+  display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  /* width: 100%; */
+}
+
+/* Align income dropdown sizing with expense filters */
+.income-filters .cp-dropdown {
+  width: 190px;
+}
+
+.income-filters .cp-dropdown-trigger,
+.income-filters .cp-dropdown-item {
+  font-size: 14px;
+}
+
+.income-filters-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.income-filters-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .income-summary-group {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .income-actions {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.income-summary-inline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  /* margin-top: 8px; */
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.income-summary-action {
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.income-summary-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f172a;
+}
+
+.income-summary-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .income-actions .savings-link {
@@ -160,6 +219,36 @@
 .income-amount {
   color: #047857;
   font-weight: 700;
+}
+
+@media (max-width: 1400px) {
+  .income-filters .cp-dropdown-trigger,
+  .income-filters .cp-dropdown-item {
+    font-size: 13px;
+  }
+
+  .income-filters .cp-dropdown-trigger {
+    height: 40px;
+  }
+
+  .income-summary-item {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1350px) {
+  /* Match responsive dropdown width/padding to expense filters */
+  .income-filters .cp-dropdown {
+    width: 165px !important;
+  }
+
+  .income-filters .cp-dropdown-trigger {
+    padding: 9px 12px;
+  }
+
+  .income-filters .cp-dropdown-item {
+    padding: 8px 12px;
+  }
 }
 
 .income-empty {

@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar/Sidebar";
 import Snowfall from "react-snowfall";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { DashboardDataProvider } from "../../contexts/DashboardDataContext";
+import NotificationPanel from "../NotificationPanel/NotificationPanel";
+import { useNotifications } from "../../hooks/useNotifications";
 
 export default function DashboardLayout() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [snowKey, setSnowKey] = useState(Date.now());
+  const [showNotifications, setShowNotifications] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const {
+    notifications,
+    loading: notificationsLoading,
+    markAsRead,
+  } = useNotifications();
 
   useEffect(() => {
     // remount Snowfall briefly after route changes so the canvas sizes correctly
@@ -54,7 +64,28 @@ export default function DashboardLayout() {
         <Sidebar
           isExpanded={isSidebarExpanded}
           setIsExpanded={setIsSidebarExpanded}
+          onToggleNotifications={() => setShowNotifications((prev) => !prev)}
         />
+
+        {showNotifications && (
+          <div className="notification-popover">
+            <NotificationPanel
+              notifications={notifications}
+              loading={notificationsLoading}
+              onMarkRead={(id) => {
+                markAsRead(id);
+                // close popover if all are read
+                if (notifications.length <= 1) {
+                  setShowNotifications(false);
+                }
+              }}
+              onOpenIncome={() => {
+                setShowNotifications(false);
+                navigate("/expenses", { state: { openIncome: true } });
+              }}
+            />
+          </div>
+        )}
 
         <div
           className={`dashboard-content ${

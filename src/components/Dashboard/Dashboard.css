@@ -44,6 +44,14 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   z-index: 2;
 }
 
+.notification-popover {
+  position: absolute;
+  top: 72px;
+  right: 24px;
+  z-index: 25;
+  width: min(380px, 90vw);
+}
+
 .dashboard-main {
   flex: 1;
   padding: 24px 32px;
@@ -74,6 +82,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   z-index: 2;
   /* Ensures content area fits desktop screens */
 }
+
 
 .dashboard-charts-row {
   display: grid;

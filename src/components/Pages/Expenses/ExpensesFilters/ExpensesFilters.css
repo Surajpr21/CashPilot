@@ -40,6 +40,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: rgba(15, 23, 42, 0.45);
+}
+
+.expenses-page-filters .cp-dropdown-icon {
+    color: rgba(15, 23, 42, 0.45);
 }
 
 /* Inputs and buttons */
@@ -47,6 +52,7 @@
 .expenses-page-clear-filters {
     padding: 12px 16px;
     border-radius: 10px;
+    color: rgba(15, 23, 42, 0.45);
 
     background: linear-gradient(90deg,
             #e8e0ff 0%,
@@ -274,7 +280,7 @@
 
 /* Summary section */
 .expenses-page-summary {
-    margin-top: 4px;
+    /* margin-top: 4px; */
     padding: 8px 4px 4px 4px;
     width: 100%;
     border-top: 1px solid rgba(0, 0, 0, 0.08);

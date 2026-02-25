@@ -31,6 +31,7 @@ const capitalizeFirst = (value) => {
 export default function ExpensesTable({ expenses = [], view = "expense", onEdit, onDelete }) {
   const isIncome = view === "income";
   const emptyLabel = isIncome ? "No income found." : "No expenses found.";
+  const colSpan = isIncome ? 4 : 6;
 
   return (
     <div className="expenses-page-table-wrapper">
@@ -38,18 +39,18 @@ export default function ExpensesTable({ expenses = [], view = "expense", onEdit,
         <thead className="expenses-page-thead">
           <tr className="expenses-page-tr">
             <th className="expenses-page-th">DATE</th>
-            <th className="expenses-page-th">TITLE / NOTE</th>
+            {!isIncome && <th className="expenses-page-th">TITLE / NOTE</th>}
             <th className="expenses-page-th">CATEGORY</th>
             {/* <th className="expenses-page-th">SUB-CATEGORY</th> */}
             <th className="expenses-page-th">AMOUNT</th>
-            <th className="expenses-page-th">MODE</th>
+            {!isIncome && <th className="expenses-page-th">MODE</th>}
             <th className="expenses-page-th"></th>
           </tr>
         </thead>
         <tbody className="expenses-page-tbody">
           {expenses.length === 0 && (
             <tr className="expenses-page-tr">
-              <td className="expenses-page-td" colSpan={7}>
+              <td className="expenses-page-td" colSpan={colSpan}>
                 {emptyLabel}
               </td>
             </tr>
@@ -57,7 +58,7 @@ export default function ExpensesTable({ expenses = [], view = "expense", onEdit,
 
           {expenses.map((row, index) => {
             const dateValue = resolveDateValue(row);
-            const rawTitle = isIncome ? row?.note || row?.title || "-" : row?.title || row?.note || "-";
+            const rawTitle = row?.title || row?.note || "-";
             const titleValue = capitalizeFirst(rawTitle);
             const categoryValue = row?.category || "-";
             const modeValue = resolveModeValue(row, isIncome);
@@ -66,11 +67,11 @@ export default function ExpensesTable({ expenses = [], view = "expense", onEdit,
             return (
               <tr key={row?.id || index} className="expenses-page-tr">
                 <td className="expenses-page-td">{formatDate(dateValue)}</td>
-                <td className="expenses-page-td expenses-title-cell">{titleValue}</td>
+                {!isIncome && <td className="expenses-page-td expenses-title-cell">{titleValue}</td>}
                 <td className="expenses-page-td">{categoryValue}</td>
                 {/* <td className="expenses-page-td">{row?.sub_category || "-"}</td> */}
                 <td className="expenses-page-td expenses-page-amount">{amountValue}</td>
-                <td className="expenses-page-td">{modeValue}</td>
+                {!isIncome && <td className="expenses-page-td">{modeValue}</td>}
                 <td className="expenses-page-td expenses-page-actions">
                   {onEdit && (
                     <button type="button" onClick={() => onEdit(row)}>

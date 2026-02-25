@@ -14,7 +14,8 @@ export default function CustomDropdown({
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const isPlaceholder = value === undefined || value === null || value === "";
+  const selectedOption = isPlaceholder ? null : options.find((opt) => opt.value === value);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -44,14 +45,14 @@ export default function CustomDropdown({
       style={{ width }}
     >
       <div
-        className={`cp-dropdown-trigger ${open ? "open" : ""} ${disabled ? "disabled" : ""}`}
+        className={`cp-dropdown-trigger ${open ? "open" : ""} ${disabled ? "disabled" : ""} ${isPlaceholder ? "is-placeholder" : ""}`}
         onClick={() => {
           if (disabled) return;
           setOpen((prev) => !prev);
         }}
       >
-        <span>
-          {selectedOption ? selectedOption.label : placeholder}
+        <span className={isPlaceholder ? "cp-dropdown-placeholder" : ""}>
+          {isPlaceholder ? placeholder : selectedOption?.label || placeholder}
         </span>
 
         <svg

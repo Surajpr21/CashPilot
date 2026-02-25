@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
 import { getMonthlyTotal } from "../utils/subscriptions.utils";
 import { CATEGORIES } from "../../../../constants/categories";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 
 export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], filters, onFilterChange }) {
   const [showForm, setShowForm] = useState(false);
@@ -44,45 +45,44 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
   return (
     <div className="subscriptions-page-filters-wrapper">
       <div className="subscriptions-page-filters-row">
-        <select 
-          className="subscriptions-page-filter"
+        <CustomDropdown
           value={localFilters.status}
-          onChange={(e) => handleLocalChange("status", e.target.value)}
-        >
-          <option value="">All status</option>
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-          <option value="inactive">Inactive</option>
-        </select>
+          options={[
+            { value: "", label: "All status" },
+            { value: "active", label: "Active" },
+            { value: "paused", label: "Paused" },
+            { value: "inactive", label: "Inactive" },
+          ]}
+          onChange={(val) => handleLocalChange("status", val)}
+          placeholder="All status"
+          width="170px"
+          menuMaxHeight="200px"
+        />
 
-        <select 
-          className="subscriptions-page-filter"
+        <CustomDropdown
           value={localFilters.billing_cycle}
-          onChange={(e) => handleLocalChange("billing_cycle", e.target.value)}
-        >
-          <option value="">All cycles</option>
-          <option value="monthly">Monthly</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="yearly">Yearly</option>
-        </select>
+          options={[
+            { value: "", label: "All cycles" },
+            { value: "monthly", label: "Monthly" },
+            { value: "quarterly", label: "Quarterly" },
+            { value: "yearly", label: "Yearly" },
+          ]}
+          onChange={(val) => handleLocalChange("billing_cycle", val)}
+          placeholder="All cycles"
+          width="170px"
+          menuMaxHeight="200px"
+        />
 
-        <select 
-          className="subscriptions-page-filter"
+        <CustomDropdown
           value={localFilters.category}
-          onChange={(e) => handleLocalChange("category", e.target.value)}
-        >
-          <option value="">All category</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+          options={CATEGORIES.map((cat) => ({ value: cat, label: cat }))}
+          onChange={(val) => handleLocalChange("category", val)}
+          placeholder="All categories"
+          width="190px"
+          menuMaxHeight="240px"
+        />
 
-        <button 
-          className="subscriptions-page-clear-btn"
-          onClick={clearFilters}
-        >
-          Clear filters
-        </button>
+  
 
         <div className="subscriptions-page-search">
           <input 
@@ -91,6 +91,12 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
             onChange={(e) => handleLocalChange("search", e.target.value)}
           />
         </div>
+              <button 
+          className="subscriptions-page-clear-btn"
+          onClick={clearFilters}
+        >
+          Clear filters
+        </button>
 
           <button
             className="subscriptions-page-add-btn"

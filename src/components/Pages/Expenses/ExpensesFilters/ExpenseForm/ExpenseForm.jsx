@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { addExpense } from "../../../../../services/expenses.service";
+import { addExpense, updateExpense } from "../../../../../services/expenses.service";
 import { upsertIncomeTransaction } from "../../../../../services/transactions.service";
 import { supabase } from "../../../../../lib/supabaseClient";
 import { CATEGORIES } from "../../../../../constants/categories";
@@ -26,8 +26,9 @@ const initialState = {
   policyId: "",
 };
 
-export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" }) {
+export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense", initialData = null }) {
   const [formState, setFormState] = useState(initialState);
+  const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,6 +38,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
   const [dateOpen, setDateOpen] = useState(false);
   const datePickerRef = useRef(null);
   const isIncome = mode === "income";
+  const isEditing = Boolean(editingId);
 
   const policyOptions = useMemo(
     () => [
@@ -78,7 +80,6 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
   const paymentModeOptions = useMemo(
     () => [
-      { value: "", label: "Select mode" },
       { value: "cash", label: "Cash" },
       { value: "card", label: "Card" },
       { value: "upi", label: "UPI" },
@@ -202,6 +203,30 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
     return () => document.removeEventListener("pointerdown", handleOutside);
   }, []);
 
+  // Prefill when editing
+  useEffect(() => {
+    if (initialData) {
+      setEditingId(initialData.id || null);
+      setFormState((prev) => ({
+        ...prev,
+        spent_at:
+          initialData.spent_at ||
+          initialData.occurred_on ||
+          initialData.date ||
+          prev.spent_at,
+        title: initialData.title || initialData.note || "",
+        category: initialData.category || "",
+        amount: initialData.amount ? String(initialData.amount) : "",
+        payment_mode: initialData.payment_mode || initialData.mode || "",
+        currency: initialData.currency || "INR",
+      }));
+    } else {
+      setEditingId(null);
+      setFormState(initialState);
+      setEditingId(null);
+    }
+  }, [initialData]);
+
   const handleMonthChange = (value) => setViewMonth(Number(value));
   const handleYearChange = (value) => setViewYear(Number(value));
 
@@ -231,6 +256,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
           year: "numeric",
         })
       : "Select date";
+    const isDatePlaceholder = !formState.spent_at;
 
     return (
       <label className="expense-form-field">
@@ -238,14 +264,14 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
         <div className="expense-date-wrapper" ref={datePickerRef}>
           <button
             type="button"
-            className={`date-picker-trigger ${dateOpen ? "open" : ""}`}
+            className={`date-picker-trigger ${dateOpen ? "open" : ""} ${isDatePlaceholder ? "placeholder" : ""}`}
             onClick={() => {
               setDateOpen((prev) => !prev);
             }}
             aria-expanded={dateOpen}
             aria-haspopup="dialog"
           >
-            <span>{displayValue}</span>
+            <span className={isDatePlaceholder ? "placeholder" : ""}>{displayValue}</span>
             <span className="date-picker-icon" aria-hidden="true">
               <svg
                 width="18"
@@ -446,6 +472,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
 
       if (isIncome) {
         const incomePayload = {
+          id: editingId || undefined,
           user_id: user.id,
           occurred_on: formState.spent_at,
           amount: formState.amount ? Number(formState.amount) : 0,
@@ -454,11 +481,12 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
         };
 
         await upsertIncomeTransaction(incomePayload);
-        setSuccess("Income added successfully");
+        setSuccess(editingId ? "Income updated successfully" : "Income added successfully");
       } else {
         const isInsurance = isInsuranceCategory;
 
         const expensePayload = {
+          id: editingId || undefined,
           spent_at: formState.spent_at,
           title: formState.title,
           category: formState.category,
@@ -468,8 +496,12 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
           user_id: user.id,
         };
 
-        const { error: submitError } = await addExpense(expensePayload);
-        if (submitError) throw submitError;
+        if (editingId) {
+          await updateExpense(expensePayload);
+        } else {
+          const { error: submitError } = await addExpense(expensePayload);
+          if (submitError) throw submitError;
+        }
 
         if (isInsurance) {
           let policyId = formState.policyId;
@@ -500,7 +532,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
           await addInsurancePremium(insurancePayload);
         }
 
-        setSuccess("Expense added successfully");
+        setSuccess(editingId ? "Expense updated successfully" : "Expense added successfully");
       }
 
       setFormState(initialState);
@@ -543,7 +575,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
             <span>Category</span>
             <CustomDropdown
               value={formState.category}
-              options={[{ value: "", label: "Select category" }, ...expenseCategories.map((category) => ({ value: category, label: category }))]}
+              options={expenseCategories.map((category) => ({ value: category, label: category }))}
               onChange={(val) => setFormState((prev) => ({ ...prev, category: val }))}
               placeholder="Select category"
               width="100%"
@@ -587,6 +619,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
               onChange={(val) => setFormState((prev) => ({ ...prev, payment_mode: val }))}
               placeholder="Select mode"
               width="100%"
+              menuMaxHeight="100px"
             />
           </label>
         </div>
@@ -600,7 +633,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense" 
             <span>Category</span>
             <CustomDropdown
               value={formState.category}
-              options={[{ value: "", label: "Select category" }, ...incomeCategories.map((cat) => ({ value: cat, label: cat }))]}
+              options={incomeCategories.map((cat) => ({ value: cat, label: cat }))}
               onChange={(val) => setFormState((prev) => ({ ...prev, category: val }))}
               placeholder="Select category"
               width="100%"

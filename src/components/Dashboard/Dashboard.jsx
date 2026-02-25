@@ -10,7 +10,6 @@ import RecentTransactions from "../Dashboard/RecentTransactions/RecentTransactio
 import BudgetVsActual from "../Dashboard/BudgetVsActual/BudgetVsActual";
 import Insights from "../Dashboard/Insights/Insights";
 import Goals from "../Dashboard/Goals/Goals";
-
 const Dashboard = () => {
   return (
     <>
