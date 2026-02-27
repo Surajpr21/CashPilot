@@ -38,12 +38,14 @@ export default function UpcomingSubscriptions() {
     <div className="subscriptions-page-upcoming">
       <h3 className="subscriptions-page-upcoming-title">Upcoming Payments</h3>
 
-      {loading && <div style={{ fontSize: "14px", color: "#999" }}>Loading…</div>}
-      {error && <div style={{ fontSize: "14px", color: "#d64545" }}>{error}</div>}
+      {loading && <div className="subscriptions-page-upcoming-hint">Loading…</div>}
+      {error && <div className="subscriptions-page-upcoming-error">{error}</div>}
 
       {!loading && upcoming.length === 0 && (
         <div className="subscriptions-page-upcoming-item">
-          <span>No upcoming payments</span>
+          <div className="subscriptions-page-upcoming-left">
+            <div className="subscriptions-page-upcoming-name">No upcoming payments</div>
+          </div>
         </div>
       )}
 
@@ -52,8 +54,11 @@ export default function UpcomingSubscriptions() {
         const dueText = `in ${dLeft} days • ${dateLabel(s.next_due)}`;
         return (
           <div key={s.id} className="subscriptions-page-upcoming-item">
-            <span>{s.name} <small style={{ color: '#6b7280' }}>({dueText})</small></span>
-            <span>{formatAmount(s.amount)}</span>
+            <div className="subscriptions-page-upcoming-left">
+              <div className="subscriptions-page-upcoming-name">{s.name}</div>
+              <div className="subscriptions-page-upcoming-meta">- {dueText}</div>
+            </div>
+            <div className="subscriptions-page-upcoming-amount">{formatAmount(s.amount)}</div>
           </div>
         );
       })}
