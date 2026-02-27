@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { formatAmount, daysLeft, getStatus, cycleLabel, dateLabel } from "../utils/subscriptions.utils";
 import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
+import SmartAvatar from "./SubscriptionForm/SmartAvatar";
 import ConfirmDialog from "./ConfirmDialog/ConfirmDialog";
 import ReactivateDialog from "./ReactivateDialog/ReactivateDialog";
 
@@ -55,21 +56,30 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
   return (
     <div className="subscriptions-page-table">
       {subs.map((sub) => {
+        const displayName = (sub?.name || "").toString().trim() || "Subscription";
         const dLeft = daysLeft(sub.next_due);
         const dueText = `in ${dLeft} days on ${dateLabel(sub.next_due)}`;
         const uiStatus = getStatus(sub);
+        const statusLabel = uiStatus === "due-soon"
+          ? "Due soon"
+          : uiStatus.charAt(0).toUpperCase() + uiStatus.slice(1);
         const canPause = sub.status === "active";
         const canResume = sub.status === "paused";
         const isCancelled = sub.status === "inactive";
         const showMarkAsPaid = sub.status === "active";
+        const amountText = formatAmount(sub.amount);
+        const metaText = isCancelled ? amountText : `${amountText} · ${dueText}`;
 
         return (
           <div key={sub.id} className="subscriptions-page-card">
             <div className="subscriptions-page-card-left">
-              <div className="subscriptions-page-card-title">{sub.name}</div>
+              <div className="subscriptions-page-card-header">
+                <SmartAvatar name={sub?.name} domain={sub?.website} size={48} />
+                <div className="subscriptions-page-card-title">{displayName}</div>
+              </div>
 
               <div className="subscriptions-page-card-meta">
-                {formatAmount(sub.amount)} · {dueText}
+                {metaText}
               </div>
 
               <div className="subscriptions-page-card-category">
@@ -79,7 +89,7 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
 
             <div className="subscriptions-page-card-right">
               <span className={`subscriptions-page-status subscriptions-page-status-${uiStatus}`}>
-                {uiStatus}
+                {statusLabel}
               </span>
 
               <div className="subscriptions-page-actions">
@@ -89,22 +99,22 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
                   </button>
                 )}
                 {!isCancelled && canPause && (
-                  <button onClick={() => onPause && onPause(sub.id)}>
+                  <button className="pause-btn" onClick={() => onPause && onPause(sub.id)}>
                     Pause
                   </button>
                 )}
                 {!isCancelled && canResume && (
-                  <button onClick={() => onResume && onResume(sub.id)}>
+                  <button className="resume-btn" onClick={() => onResume && onResume(sub.id)}>
                     Resume
                   </button>
                 )}
                 {!isCancelled && (
-                  <button onClick={() => handleEditClick(sub)}>
+                  <button className="edit-btn" onClick={() => handleEditClick(sub)}>
                     Edit
                   </button>
                 )}
                 {!isCancelled ? (
-                  <button className="danger" onClick={() => handleCancelClick(sub.id)}>
+                  <button className="cancel-btn" onClick={() => handleCancelClick(sub.id)}>
                     Cancel
                   </button>
                 ) : (
