@@ -226,16 +226,6 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
     <form className="subs-form" onSubmit={handleSubmit}>
       <div className="subs-form-header">
         <h3>{editMode ? "Edit Subscription" : "Add Subscription"}</h3>
-        {onClose && (
-          <button
-            type="button"
-            className="subs-form-close"
-            aria-label="Close"
-            onClick={onClose}
-          >
-            ×
-          </button>
-        )}
       </div>
 
       <div className="subs-form-grid">

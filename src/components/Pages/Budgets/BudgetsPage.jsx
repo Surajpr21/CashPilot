@@ -110,16 +110,6 @@ export default function BudgetVsActualPage() {
             Track how your spending compares to your planned budget
           </p>
         </div>
-
-        <div className="bVa-page-month-selector">
-          <button className="bVa-page-month-btn" onClick={handlePrevMonth}>
-            ‹
-          </button>
-          <span>{getMonthDisplay()}</span>
-          <button className="bVa-page-month-btn" onClick={handleNextMonth}>
-            ›
-          </button>
-        </div>
       </div>
 
       {/* Container 1: Summary with merged data */}
@@ -127,6 +117,9 @@ export default function BudgetVsActualPage() {
         rows={rows}
         loading={loading}
         onAddBudgetClick={() => setIsModalOpen(true)}
+        monthDisplay={getMonthDisplay()}
+        onPrevMonth={handlePrevMonth}
+        onNextMonth={handleNextMonth}
       />
 
       {/* Container 2: Category breakdown with merged data */}

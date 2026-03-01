@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
 import { getMonthlyTotal } from "../utils/subscriptions.utils";
 import { CATEGORIES } from "../../../../constants/categories";
@@ -112,28 +114,31 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
         subscriptions.
       </div>
 
-      {showForm && (
-        <div
-          className="subs-modal-overlay"
-          onClick={() => setShowForm(false)}
-        >
+      {showForm && ReactDOM.createPortal(
+        (
           <div
-            className="subs-modal"
-            onClick={(e) => e.stopPropagation()}
+            className="subs-modal-overlay"
+            onClick={() => setShowForm(false)}
           >
-            <button
-              className="subs-modal-close"
-              aria-label="Close"
-              onClick={() => setShowForm(false)}
+            <div
+              className="subs-modal"
+              onClick={(e) => e.stopPropagation()}
             >
-              ×
-            </button>
-            <SubscriptionForm
-              onClose={() => setShowForm(false)}
-              onSubscriptionAdded={onSubscriptionAdded}
-            />
+              <button
+                className="subs-modal-close"
+                aria-label="Close"
+                onClick={() => setShowForm(false)}
+              >
+                <XMarkIcon width={18} height={18} aria-hidden="true" />
+              </button>
+              <SubscriptionForm
+                onClose={() => setShowForm(false)}
+                onSubscriptionAdded={onSubscriptionAdded}
+              />
+            </div>
           </div>
-        </div>
+        ),
+        document.body
       )}
     </div>
   );

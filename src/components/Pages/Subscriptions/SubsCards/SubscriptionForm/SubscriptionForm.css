@@ -3,15 +3,14 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.32);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+    background: rgba(15, 23, 42, 0.32);
+    backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
   box-sizing: border-box;
-  z-index: 5000;
+  z-index: 10000;
 }
 
 .subs-modal {
@@ -59,6 +58,9 @@
   place-items: center;
   transition: background 0.2s ease, transform 0.1s ease;
 }
+
+/* Let clicks on the icon hit the button */
+.subs-modal-close svg { pointer-events: none; }
 
 .subs-modal-close:hover { background: #e0e7ef; }
 .subs-modal-close:active { transform: scale(0.96); }
@@ -139,8 +141,18 @@
   padding-right: 40px;
 }
 
+.subs-form ::placeholder,
 .subs-form-field input::placeholder,
-.subs-form-field select::placeholder {
+.subs-form-field select::placeholder,
+.subs-date-trigger.placeholder,
+.subs-date-trigger .placeholder {
+  color: rgba(15, 23, 42, 0.45);
+}
+
+/* Ensure dropdown placeholders/icons in this form use the same placeholder color */
+.subs-form .cp-dropdown-trigger.is-placeholder,
+.subs-form .cp-dropdown-placeholder,
+.subs-form .cp-dropdown-trigger.is-placeholder .cp-dropdown-icon {
   color: rgba(15, 23, 42, 0.45);
 }
 
@@ -182,7 +194,10 @@
   font-weight: 700;
 }
 
-.subs-amount-input input { padding-left: 28px; }
+.subs-amount-input input {
+  padding-left: 28px;
+  width: 100%;
+}
 
 .subs-form-actions {
   display: flex;
