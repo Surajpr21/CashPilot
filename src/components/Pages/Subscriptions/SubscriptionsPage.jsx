@@ -3,6 +3,7 @@ import SubscriptionsFilters from "./SubsCards/SubscriptionsFilters";
 import SubscriptionsTable from "./SubsCards/SubscriptionsTable";
 import UpcomingSubscriptions from "./SubsCards/UpcomingSubscriptions";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { getSubscriptionsPaginated, updateSubscription, cancelSubscription, markSubscriptionAsPaid } from "../../../services/subscriptions";
 
 const PAGE_SIZE = 5;
@@ -132,21 +133,25 @@ export default function SubscriptionsPage() {
             {totalPages > 0 && (
               <div className="pagination">
                 <button
+                  className="pagination-btn prev"
                   disabled={page === 1}
                   onClick={() => setPage(page - 1)}
+                  aria-label="Previous page"
                 >
-                  Prev
+                  <ChevronLeftIcon aria-hidden="true" />
                 </button>
 
-                <span>
+                <span className="pagination-info">
                   Page {page} of {totalPages}
                 </span>
 
                 <button
+                  className="pagination-btn next"
                   disabled={page === totalPages}
                   onClick={() => setPage(page + 1)}
+                  aria-label="Next page"
                 >
-                  Next
+                  <ChevronRightIcon aria-hidden="true" />
                 </button>
               </div>
             )}

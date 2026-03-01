@@ -1,8 +1,48 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
+import "./bVaPageTop.css";
 
-export default function TopSummaryContainer({ rows, loading, onAddBudgetClick }) {
-  const [categoryFilter, setCategoryFilter] = useState("All categories");
-  const [amountFilter, setAmountFilter] = useState("All amount");
+export default function TopSummaryContainer({
+  rows,
+  loading,
+  onAddBudgetClick,
+  monthDisplay,
+  onPrevMonth,
+  onNextMonth,
+}) {
+  const CATEGORY_ALL = "all-categories";
+  const AMOUNT_ALL = "all-amount";
+  const CYCLE_ALL = "all-cycles";
+
+  const [categoryFilter, setCategoryFilter] = useState(CATEGORY_ALL);
+  const [amountFilter, setAmountFilter] = useState(AMOUNT_ALL);
+  const [cycleFilter, setCycleFilter] = useState(CYCLE_ALL);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const categoryOptions = useMemo(() => {
+    const uniqueCategories = Array.from(
+      new Set(rows.map((r) => r.category).filter(Boolean))
+    );
+
+    return [
+      { label: "All categories", value: CATEGORY_ALL },
+      ...uniqueCategories.map((category) => ({ label: category, value: category })),
+    ];
+  }, [rows]);
+
+  const amountOptions = [
+    { label: "All amount", value: AMOUNT_ALL },
+    { label: "Over budget", value: "over" },
+    { label: "Under budget", value: "under" },
+    { label: "On track", value: "on-track" },
+  ];
+
+  const cycleOptions = [
+    { label: "All cycles", value: CYCLE_ALL },
+    { label: "Monthly", value: "monthly" },
+    { label: "Quarterly", value: "quarterly" },
+    { label: "Annual", value: "annual" },
+  ];
 
   const totalPlanned = rows.reduce((sum, r) => sum + (r.planned || 0), 0);
   const totalActual = rows.reduce((sum, r) => sum + (r.actual || 0), 0);
@@ -20,35 +60,69 @@ export default function TopSummaryContainer({ rows, loading, onAddBudgetClick })
 
   return (
     <div className="bVa-page-top-container">
+     
+
       {/* Filters */}
       <div className="bVa-page-filters">
-        <div className="bVa-page-filter">
-          <select
+         <div className="bVa-page-month-selector">
+        <button className="bVa-page-month-btn" onClick={onPrevMonth}>
+          ‹
+        </button>
+        <span>{monthDisplay}</span>
+        <button className="bVa-page-month-btn" onClick={onNextMonth}>
+          ›
+        </button>
+      </div>
+        <div className="bVa-page-filter bVa-page-filter--dropdown">
+          <CustomDropdown
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            <option>All categories</option>
-            {rows.map((r) => (
-              <option key={r.category}>{r.category}</option>
-            ))}
-          </select>
+            onChange={setCategoryFilter}
+            options={categoryOptions}
+            placeholder="All categories"
+            width="200px"
+            menuMaxHeight="240px"
+            disabled={loading}
+          />
         </div>
-        <div className="bVa-page-filter">All cycles ▾</div>
+        <div className="bVa-page-filter bVa-page-filter--dropdown">
+          <CustomDropdown
+            value={cycleFilter}
+            onChange={setCycleFilter}
+            options={cycleOptions}
+            placeholder="All cycles"
+            width="150px"
+            disabled={loading}
+          />
+        </div>
+        <div className="bVa-page-filter bVa-page-filter--dropdown">
+          <CustomDropdown
+            value={amountFilter}
+            onChange={setAmountFilter}
+            options={amountOptions}
+            placeholder="All amount"
+            width="170px"
+            disabled={loading}
+          />
+        </div>
+
         <div className="bVa-page-filter">
-          <select value={amountFilter} onChange={(e) => setAmountFilter(e.target.value)}>
-            <option>All amount</option>
-            <option>Over budget</option>
-            <option>Under budget</option>
-            <option>On track</option>
-          </select>
+          <input
+            type="text"
+            placeholder="Search date, title, category..."
+            className="bVa-page-search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
         <div className="bVa-page-filter-actions">
           <button
             className="bVa-page-clear-btn"
             onClick={() => {
-              setCategoryFilter("All categories");
-              setAmountFilter("All amount");
+              setCategoryFilter(CATEGORY_ALL);
+              setAmountFilter(AMOUNT_ALL);
+              setCycleFilter(CYCLE_ALL);
+              setSearchTerm("");
             }}
           >
             Clear filters

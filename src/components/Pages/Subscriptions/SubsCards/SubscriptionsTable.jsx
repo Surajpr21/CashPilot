@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { formatAmount, daysLeft, getStatus, cycleLabel, dateLabel } from "../utils/subscriptions.utils";
 import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
 import SmartAvatar from "./SubscriptionForm/SmartAvatar";
@@ -133,30 +135,33 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
         );
       })}
 
-      {editingSub && (
-        <div
-          className="subs-modal-overlay"
-          onClick={handleCloseEdit}
-        >
+      {editingSub && ReactDOM.createPortal(
+        (
           <div
-            className="subs-modal"
-            onClick={(e) => e.stopPropagation()}
+            className="subs-modal-overlay"
+            onClick={handleCloseEdit}
           >
-            <button
-              className="subs-modal-close"
-              aria-label="Close"
-              onClick={handleCloseEdit}
+            <div
+              className="subs-modal"
+              onClick={(e) => e.stopPropagation()}
             >
-              ×
-            </button>
-            <SubscriptionForm
-              editMode={true}
-              subscription={editingSub}
-              onClose={handleCloseEdit}
-              onSubscriptionAdded={handleEditComplete}
-            />
+              <button
+                className="subs-modal-close"
+                aria-label="Close"
+                onClick={handleCloseEdit}
+              >
+                <XMarkIcon width={18} height={18} aria-hidden="true" />
+              </button>
+              <SubscriptionForm
+                editMode={true}
+                subscription={editingSub}
+                onClose={handleCloseEdit}
+                onSubscriptionAdded={handleEditComplete}
+              />
+            </div>
           </div>
-        </div>
+        ),
+        document.body
       )}
 
       <ConfirmDialog

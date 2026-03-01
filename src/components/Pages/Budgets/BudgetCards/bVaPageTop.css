@@ -1,0 +1,245 @@
+/* ===================================================== */
+/* TOP CONTAINER (Very subtle soft surface) */
+/* ===================================================== */
+.bVa-page-top-container {
+  padding: 20px 22px 14px 22px;
+  background: linear-gradient(180deg, #cfd6e6 0%, #d7dbea 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* ================================================= */
+/* FILTER ROW CONTAINER */
+/* ================================================= */
+.bVa-page-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.bVa-page-filters > * {
+  min-width: 0;
+}
+
+/* Month Selector (neutral grey chip) */
+.bVa-page-month-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  font-weight: 500;
+  font-size: 15px;
+  color: #3c3c3c;
+}
+
+.bVa-page-month-btn {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  color: #444;
+}
+
+/* ================================================= */
+/* BASE FILTER PILL STYLE */
+/* ================================================= */
+.bVa-page-filter,
+.bVa-page-filter select,
+.bVa-page-search-input {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a4a4a;
+  background: linear-gradient(90deg, #d7d8f3 0%, #cfe9e2 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.bVa-page-filter--dropdown {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  height: auto;
+}
+
+.bVa-page-filters .cp-dropdown-icon {
+  color: rgba(15, 23, 42, 0.45);
+}
+
+.bVa-page-filters .cp-dropdown-trigger span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(15, 23, 42, 0.45);
+}
+
+/* Dropdown select cleanup */
+.bVa-page-filter select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23666' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px;
+}
+
+/* Hover */
+.bVa-page-filter select:hover,
+.bVa-page-search-input:hover {
+  transform: translateY(-1px);
+}
+
+/* Focus */
+.bVa-page-filter select:focus,
+.bVa-page-search-input:focus {
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 0 0 3px rgba(170, 160, 255, 0.25);
+}
+
+/* ================================================= */
+/* FLEX SIZING RULES */
+/* ================================================= */
+.bVa-page-month-selector {
+  flex: 0 0 auto;
+}
+
+.bVa-page-filter {
+  flex: 1 1 130px;
+  min-width: 90px;
+}
+
+.cp-dropdown {
+  width: 100% !important;
+}
+
+.cp-dropdown-trigger {
+  width: 100%;
+  min-width: 0;
+}
+
+.bVa-page-search-input {
+  flex: 2 1 180px;
+  min-width: 120px;
+}
+
+.bVa-page-clear-btn {
+  flex: 0 0 auto;
+}
+
+.bVa-page-add-btn {
+  flex: 0 0 auto;
+}
+
+/* ================================================= */
+/* CLEAR FILTERS (Muted variant) */
+/* ================================================= */
+.bVa-page-clear-btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(90deg, #e5e6f4 0%, #e2efea 100%);
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b6b6b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bVa-page-clear-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Push actions right */
+.bVa-page-filter-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+}
+
+/* Add Budget (soft lavender pill like image) */
+.bVa-page-add-btn {
+  padding: 0 16px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(90deg, #b8a7f4 0%, #9f8ae6 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(155, 135, 230, 0.35);
+  cursor: pointer;
+}
+
+/* ===================================================== */
+/* SUMMARY STRIP */
+/* ===================================================== */
+.bVa-page-summary-strip {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+.bVa-page-summary-strip strong {
+  font-weight: 600;
+  color: #111;
+}
+
+/* Under / Over colors (match subtle green tone) */
+.bVa-page-under {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.bVa-page-over {
+  color: #c62828;
+  font-weight: 600;
+}
+
+/* Import CSV (right aligned blue link) */
+.bVa-page-import-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #5f78ff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ================================================= */
+/* SINGLE BREAKPOINT AT 1200px */
+/* ================================================= */
+@media (max-width: 1200px) {
+  .bVa-page-filters {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .bVa-page-search-input {
+    flex: 1 1 100%;
+  }
+
+  .bVa-page-filter-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
