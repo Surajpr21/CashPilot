@@ -105,7 +105,7 @@ export default function TopSummaryContainer({
           />
         </div>
 
-        <div className="bVa-page-filter">
+        <div className="bVa-page-filter bVa-page-filter--search">
           <input
             type="text"
             placeholder="Search date, title, category..."
@@ -115,18 +115,19 @@ export default function TopSummaryContainer({
           />
         </div>
 
+        <button
+          className="bVa-page-clear-btn"
+          onClick={() => {
+            setCategoryFilter(CATEGORY_ALL);
+            setAmountFilter(AMOUNT_ALL);
+            setCycleFilter(CYCLE_ALL);
+            setSearchTerm("");
+          }}
+        >
+          Clear filters
+        </button>
+
         <div className="bVa-page-filter-actions">
-          <button
-            className="bVa-page-clear-btn"
-            onClick={() => {
-              setCategoryFilter(CATEGORY_ALL);
-              setAmountFilter(AMOUNT_ALL);
-              setCycleFilter(CYCLE_ALL);
-              setSearchTerm("");
-            }}
-          >
-            Clear filters
-          </button>
           <button className="bVa-page-add-btn" onClick={onAddBudgetClick}>
             + Add Budget
           </button>

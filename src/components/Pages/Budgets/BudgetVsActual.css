@@ -1,7 +1,3 @@
-.bVa-page-wrapper {
-  padding: 28px;
-}
-
 .bVa-page-header {
   display: flex;
   justify-content: space-between;
@@ -332,3 +328,5 @@
   }
   font-size: 13px;
 }
+
+
