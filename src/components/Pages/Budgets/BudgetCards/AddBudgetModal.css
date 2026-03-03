@@ -139,6 +139,14 @@
   cursor: not-allowed;
 }
 
+.budget-modal-field .cp-dropdown {
+  width: 100%;
+}
+
+.budget-modal-field .cp-dropdown-trigger {
+  width: 100%;
+}
+
 .budget-modal-readonly {
   background: #f9fafb !important;
   color: #6b7280 !important;
