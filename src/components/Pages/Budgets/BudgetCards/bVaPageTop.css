@@ -21,10 +21,10 @@
 .bVa-page-month-selector {
   display: flex;
   height: 42px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
-  padding: 0px 14px;
+  gap: 12px;
+  padding: 0 12px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.45);
@@ -41,6 +41,25 @@
   font-size: 16px;
   cursor: pointer;
   color: #444;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.bVa-page-month-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.bVa-page-month-selector span {
+  flex: 1 1 auto;
+  text-align: center;
+  font-weight: 600;
+  color: #2f2f2f;
+  letter-spacing: 0.1px;
 }
 
 .bVa-page-filter,

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 import "./bVaPageTop.css";
 
@@ -64,15 +65,25 @@ export default function TopSummaryContainer({
 
       {/* Filters */}
       <div className="bVa-page-filters">
-         <div className="bVa-page-month-selector">
-        <button className="bVa-page-month-btn" onClick={onPrevMonth}>
-          ‹
-        </button>
-        <span>{monthDisplay}</span>
-        <button className="bVa-page-month-btn" onClick={onNextMonth}>
-          ›
-        </button>
-      </div>
+        <div className="bVa-page-month-selector">
+          <button
+            type="button"
+            className="bVa-page-month-btn"
+            onClick={onPrevMonth}
+            aria-label="Previous month"
+          >
+            <ChevronLeftIcon className="bVa-page-month-icon" aria-hidden="true" />
+          </button>
+          <span>{monthDisplay}</span>
+          <button
+            type="button"
+            className="bVa-page-month-btn"
+            onClick={onNextMonth}
+            aria-label="Next month"
+          >
+            <ChevronRightIcon className="bVa-page-month-icon" aria-hidden="true" />
+          </button>
+        </div>
         <div className="bVa-page-filter bVa-page-filter--dropdown">
           <CustomDropdown
             value={categoryFilter}
