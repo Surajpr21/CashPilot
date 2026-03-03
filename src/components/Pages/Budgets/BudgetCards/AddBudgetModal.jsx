@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./AddBudgetModal.css";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 import { addBudget, addBudgetRPC } from "../../../../services/budgets.service";
 import { CATEGORIES } from "../../../../constants/categories";
 
@@ -8,6 +9,8 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const categoryOptions = CATEGORIES.map((cat) => ({ value: cat, label: cat }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,20 +92,15 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
 
           <div className="budget-modal-field">
             <label htmlFor="category">Category *</label>
-            <select
-              id="category"
+            <CustomDropdown
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
+              onChange={setCategory}
+              options={categoryOptions}
+              placeholder="Select a category"
+              width="100%"
+              menuMaxHeight="260px"
               disabled={loading}
-            >
-              <option value="">Select a category</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
+            />
           </div>
 
           <div className="budget-modal-field">
