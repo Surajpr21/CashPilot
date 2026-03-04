@@ -16,18 +16,10 @@ export default function CategoryBreakdownContainer({
     return `₹${Math.round(amount).toLocaleString()}`;
   };
 
-  const getStatusBadge = (diff) => {
-    if (diff > 0) {
-      return { label: `+${formatCurrency(diff)}`, type: "danger", icon: "⚠️" };
-    }
-    if (diff < 0) {
-      return {
-        label: `-${formatCurrency(Math.abs(diff))}`,
-        type: "success",
-        icon: "🎉",
-      };
-    }
-    return { label: "On track", type: "neutral", icon: "✅" };
+  const getProgressLabel = (diff) => {
+    if (diff > 0) return `exceeded ${formatCurrency(diff)}`;
+    if (diff < 0) return `saved ${formatCurrency(Math.abs(diff))}`;
+    return "on track";
   };
 
   const generateInsights = () => {
@@ -110,13 +102,44 @@ export default function CategoryBreakdownContainer({
       <h2 className="bVa-page-section-title">Category-wise Breakdown</h2>
 
       {/* STEP 6: Render budget bars from merged rows */}
-      {rows.map((row) => (
-        <div key={row.id} className="bVa-page-category-row">
-          {/* LEFT CONTENT */}
-          <div className="bVa-page-category-main">
-            <div className="bVa-page-category-title">{row.category}</div>
-            <div className="bVa-page-category-sub">
-              {formatCurrency(row.planned)} budget • {formatCurrency(row.actual)}
+      <div className="bVa-page-category-grid">
+        {rows.map((row) => (
+          <div key={row.id} className="bVa-page-category-row">
+            <div className="bVa-row-top">
+              <div className="bVa-page-category-main">
+                <div className="bVa-page-category-title">{row.category}</div>
+                <div className="bVa-page-category-sub">
+                  {formatCurrency(row.planned)} budget • {formatCurrency(row.actual)}
+                </div>
+              </div>
+
+              <div className="bVa-page-category-actions">
+                {editingId === row.id ? (
+                  <div className="bVa-page-edit-buttons">
+                    <button
+                      className="bVa-page-save-btn"
+                      onClick={() => handleSaveBudget(row.id)}
+                      disabled={updatingId === row.id}
+                    >
+                      {updatingId === row.id ? "Saving..." : "Save"}
+                    </button>
+                    <button
+                      className="bVa-page-cancel-btn"
+                      onClick={handleCancel}
+                      disabled={updatingId === row.id}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    className="bVa-page-edit-btn"
+                    onClick={() => handleEditClick(row)}
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
             </div>
 
             {editingId === row.id ? (
@@ -136,52 +159,22 @@ export default function CategoryBreakdownContainer({
               </div>
             )}
 
-            {/* STEP 6: Progress bar from merged data */}
-            <div className="bVa-page-progress-track">
-              <div
-                className={`bVa-page-progress-fill bVa-${row.status}`}
-                style={{ width: `${row.progress * 100}%` }}
-              />
+            <div className="bVa-page-progress-area">
+              <div className="bVa-page-progress-track">
+                <div
+                  className={`bVa-page-progress-fill bVa-${row.status}`}
+                  style={{ width: `${row.progress * 100}%` }}
+                />
+              </div>
+              {editingId !== row.id && (
+                <span className={`bVa-page-progress-pill bVa-${row.status}`}>
+                  {getProgressLabel(row.diff)}
+                </span>
+              )}
             </div>
           </div>
-
-          {/* RIGHT ACTIONS */}
-          <div className="bVa-page-category-actions">
-            {editingId === row.id ? (
-              <div className="bVa-page-edit-buttons">
-                <button
-                  className="bVa-page-save-btn"
-                  onClick={() => handleSaveBudget(row.id)}
-                  disabled={updatingId === row.id}
-                >
-                  {updatingId === row.id ? "Saving..." : "Save"}
-                </button>
-                <button
-                  className="bVa-page-cancel-btn"
-                  onClick={handleCancel}
-                  disabled={updatingId === row.id}
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <>
-                {/* STEP 5: Badge from merged data */}
-                <span className={`bVa-page-diff bVa-${row.status}`}>
-                  {getStatusBadge(row.diff).label}
-                </span>
-
-                <button
-                  className="bVa-page-edit-btn"
-                  onClick={() => handleEditClick(row)}
-                >
-                  {row.status === "on-track" ? "Edit" : "Edit"}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       {/* SMART INSIGHTS */}
       {insights.length > 0 && (
