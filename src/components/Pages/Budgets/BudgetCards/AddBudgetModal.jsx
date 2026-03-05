@@ -81,8 +81,8 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
     <div className="budget-modal-overlay" onClick={handleCancel}>
       <div className="budget-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="budget-modal-header">
-          <h2>Add New Budget</h2>
-          <button className="budget-modal-close" onClick={handleCancel}>
+          <h2>Add Budget</h2>
+          <button className="budget-modal-close" onClick={handleCancel} aria-label="Close">
             ×
           </button>
         </div>
@@ -90,45 +90,44 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
         <form onSubmit={handleSubmit} className="budget-modal-form">
           {error && <div className="budget-modal-error">{error}</div>}
 
-          <div className="budget-modal-field">
-            <label htmlFor="category">Category *</label>
-            <CustomDropdown
-              value={category}
-              onChange={setCategory}
-              options={categoryOptions}
-              placeholder="Select a category"
-              width="100%"
-              menuMaxHeight="260px"
-              disabled={loading}
-            />
-          </div>
+          <div className="budget-modal-grid">
+            <div className="budget-modal-field">
+              <label htmlFor="category">Category *</label>
+              <CustomDropdown
+                value={category}
+                onChange={setCategory}
+                options={categoryOptions}
+                placeholder="Select category"
+                width="100%"
+                menuMaxHeight="260px"
+                disabled={loading}
+              />
+            </div>
 
-          <div className="budget-modal-field">
-            <label htmlFor="amount">Budget Amount (₹) *</label>
-            <input
-              type="number"
-              id="amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter budget amount"
-              min="0"
-              step="0.01"
-              required
-              disabled={loading}
-            />
-          </div>
+            <div className="budget-modal-field">
+              <label htmlFor="amount">Amount (₹) *</label>
+              <input
+                type="number"
+                id="amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Enter amount"
+                min="0"
+                step="0.01"
+                required
+                disabled={loading}
+              />
+            </div>
 
-          <div className="budget-modal-field">
-            <label>Month</label>
-            <input
-              type="text"
-              value={new Date(currentMonth).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })}
-              disabled
-              className="budget-modal-readonly"
-            />
+            <div className="budget-modal-field budget-modal-span-2 budget-modal-helper">
+              <span className="budget-modal-helper-label">Month</span>
+              <span className="budget-modal-helper-text">
+                Budget will be added for {new Date(currentMonth).toLocaleDateString("en-US", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </span>
+            </div>
           </div>
 
           <div className="budget-modal-actions">
@@ -145,7 +144,7 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
               className="budget-modal-btn-submit"
               disabled={loading}
             >
-              {loading ? "Adding..." : "Add Budget"}
+              {loading ? "Adding..." : "Save Budget"}
             </button>
           </div>
         </form>
