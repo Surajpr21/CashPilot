@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { updateBudgetAmount } from "../../../../services/budgets.service";
 
 export default function CategoryBreakdownContainer({
@@ -22,24 +23,22 @@ export default function CategoryBreakdownContainer({
     return "on track";
   };
 
-  const generateInsights = () => {
-    const insightMap = new Map();
+  const getRowInsight = (row) => {
+    if (row.diff > 0) {
+      return {
+        text: `${row.category} exceeded budget by ${formatCurrency(row.diff)}`,
+        tone: "warn",
+      };
+    }
 
-    rows.forEach((row) => {
-      if (row.diff > 0) {
-        insightMap.set(
-          row.category,
-          `⚠️ ${row.category} exceeded budget by ${formatCurrency(row.diff)}`
-        );
-      } else if (row.diff < 0) {
-        insightMap.set(
-          row.category,
-          `✅ ${row.category} saved ${formatCurrency(Math.abs(row.diff))} this month`
-        );
-      }
-    });
+    if (row.diff < 0) {
+      return {
+        text: `${row.category} saved ${formatCurrency(Math.abs(row.diff))} this month`,
+        tone: "good",
+      };
+    }
 
-    return Array.from(insightMap.values());
+    return null;
   };
 
   // Handle edit budget
@@ -95,21 +94,22 @@ export default function CategoryBreakdownContainer({
     );
   }
 
-  const insights = generateInsights();
-
   return (
     <div className="bVa-page-category-container">
       <h2 className="bVa-page-section-title">Category-wise Breakdown</h2>
 
       {/* STEP 6: Render budget bars from merged rows */}
       <div className="bVa-page-category-grid">
-        {rows.map((row) => (
-          <div key={row.id} className="bVa-page-category-row">
+        {rows.map((row) => {
+          const rowInsight = getRowInsight(row);
+
+          return (
+            <div key={row.id} className="bVa-page-category-row">
             <div className="bVa-row-top">
               <div className="bVa-page-category-main">
                 <div className="bVa-page-category-title">{row.category}</div>
                 <div className="bVa-page-category-sub">
-                  {formatCurrency(row.planned)} budget • {formatCurrency(row.actual)}
+                  {formatCurrency(row.planned)} Budget • {formatCurrency(row.actual)} Actual
                 </div>
               </div>
 
@@ -155,7 +155,7 @@ export default function CategoryBreakdownContainer({
               </div>
             ) : (
               <div className="bVa-page-budget-label">
-                budget {formatCurrency(row.planned)}
+                Budget {formatCurrency(row.planned)}
               </div>
             )}
 
@@ -172,21 +172,24 @@ export default function CategoryBreakdownContainer({
                 </span>
               )}
             </div>
-          </div>
-        ))}
+              {rowInsight && (
+                <div
+                  className={`bVa-row-insight ${
+                    rowInsight.tone === "good" ? "bVa-insight-good" : "bVa-insight-warn"
+                  }`}
+                >
+                  {rowInsight.tone === "good" ? (
+                    <CheckCircleIcon className="bVa-insight-icon" />
+                  ) : (
+                    <ExclamationTriangleIcon className="bVa-insight-icon" />
+                  )}
+                  <span>{rowInsight.text}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
-
-      {/* SMART INSIGHTS */}
-      {insights.length > 0 && (
-        <div className="bVa-page-insights">
-          <h4>Smart Insights</h4>
-          <ul>
-            {insights.map((insight, idx) => (
-              <li key={idx}>{insight}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }
