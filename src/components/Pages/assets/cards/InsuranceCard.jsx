@@ -16,8 +16,11 @@ export default function InsuranceCard({ totalPremiums, currency, policiesCount, 
       <p className="assets-page-muted">Read-only values from insurance view</p>
 
       {onViewHistory ? (
-        <button type="button" className="assets-page-link" onClick={onViewHistory}>
-          Know more →
+        <button type="button" className="insurance-learn-more" onClick={onViewHistory}>
+          <span className="circle" aria-hidden="true">
+            <span className="icon arrow" />
+          </span>
+          <span className="button-text">Know more</span>
         </button>
       ) : null}
     </div>

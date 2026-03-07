@@ -25,7 +25,7 @@ export default function AllocationCard({ allocation, totalAssets, currency }) {
     <div className="assets-page-card">
       <div className="assets-page-card-header">
         <h3 className="assets-page-title">Allocation (by amount)</h3>
-        <span className="assets-page-dots">•••</span>
+        {/* <span className="assets-page-dots">•••</span> */}
       </div>
 
       <div className="assets-page-donut-wrap">

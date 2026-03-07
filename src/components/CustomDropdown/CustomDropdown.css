@@ -56,7 +56,10 @@
 }
 
 .cp-dropdown-trigger:hover {
-  background: #dde6e4;
+  background: linear-gradient(90deg,
+      #e8e0ff 0%,
+      #dff7ec 45%,
+      #e6e5e5 100%);
 }
 
 .cp-dropdown-trigger.open {
@@ -100,8 +103,9 @@
   );
   top: 0;
   left: -100px;
-  opacity: 0.6;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 0.15s ease;
 }
 
 .cp-dropdown-trigger:hover:not(.disabled) {
@@ -113,6 +117,7 @@
 }
 
 .cp-dropdown-trigger:hover:not(.disabled)::before {
+  opacity: 0.6;
   animation: cp-dropdown-shine 1.5s ease-out infinite;
 }
 

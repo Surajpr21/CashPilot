@@ -65,8 +65,9 @@
   );
   top: 0;
   left: -100px;
-  opacity: 0.6;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 0.15s ease;
 }
 
 .searchBox:hover {
@@ -78,6 +79,7 @@
 }
 
 .searchBox:hover::before {
+  opacity: 0.6;
   animation: dashboard-search-shine 1.5s ease-out infinite;
 }
 
