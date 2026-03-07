@@ -24,7 +24,7 @@ export default function SummaryCards({
         <p>Invested Amount</p>
         <h2>₹ {formatCurrency(investmentsTotal)}</h2>
         <span>Long-term investments</span>
-        <small className="assets-page-muted">Excludes gold & insurance</small>
+        <small className="assets-page-muted"> Excludes gold & insurance</small>
       </div>
 
       <div className="assets-page-summary-card">
