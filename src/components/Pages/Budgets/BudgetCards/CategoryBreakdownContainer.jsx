@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { updateBudgetAmount } from "../../../../services/budgets.service";
+
+const ROWS_PER_PAGE = 3;
+const CARDS_PER_ROW = 3;
+const ITEMS_PER_PAGE = ROWS_PER_PAGE * CARDS_PER_ROW;
 
 export default function CategoryBreakdownContainer({
   rows,
@@ -11,6 +15,11 @@ export default function CategoryBreakdownContainer({
   const [editingId, setEditingId] = useState(null);
   const [editAmount, setEditAmount] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [rows, currentMonth]);
 
   // Format currency
   const formatCurrency = (amount) => {
@@ -94,13 +103,18 @@ export default function CategoryBreakdownContainer({
     );
   }
 
+  const totalPages = Math.max(1, Math.ceil(rows.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const startIndex = (safePage - 1) * ITEMS_PER_PAGE;
+  const pageRows = rows.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   return (
     <div className="bVa-page-category-container">
       <h2 className="bVa-page-section-title">Category-wise Breakdown</h2>
 
       {/* STEP 6: Render budget bars from merged rows */}
       <div className="bVa-page-category-grid">
-        {rows.map((row) => {
+        {pageRows.map((row) => {
           const rowInsight = getRowInsight(row);
 
           return (
@@ -190,6 +204,28 @@ export default function CategoryBreakdownContainer({
           );
         })}
       </div>
+
+      {totalPages > 1 && (
+        <div className="bVa-page-pagination">
+          <button
+            className="bVa-page-pagination-btn"
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={safePage === 1}
+          >
+            Previous
+          </button>
+          <span className="bVa-page-pagination-info">
+            Page {safePage} of {totalPages}
+          </span>
+          <button
+            className="bVa-page-pagination-btn"
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={safePage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

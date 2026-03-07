@@ -310,6 +310,40 @@
   background: #22c55e;
 }
 
+.bVa-page-pagination {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.bVa-page-pagination-btn {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #111827;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bVa-page-pagination-btn:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.bVa-page-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bVa-page-pagination-info {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
 @media (max-width: 1100px) {
   .bVa-page-wrapper {
     padding: 18px;
@@ -332,6 +366,14 @@
 @media (max-width: 720px) {
   .bVa-page-category-grid {
     grid-template-columns: 1fr;
+  }
+
+  .bVa-page-pagination {
+    gap: 8px;
+  }
+
+  .bVa-page-pagination-btn {
+    padding: 8px 10px;
   }
 }
 
