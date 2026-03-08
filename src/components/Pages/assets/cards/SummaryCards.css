@@ -71,20 +71,21 @@
 
 .assets-page-summary-card p {
   color: #6b7280;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   margin: 0;
 }
 
 .assets-page-summary-card h2 {
-  margin: 6px 0;
-  font-size: 26px;
+  margin: 4px 0;
+  font-size: 22px;
+  font-weight: 700;
   line-height: 1.15;
 }
 
 .assets-page-summary-card span,
 .assets-page-summary-card small {
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
   display: block;
 }
