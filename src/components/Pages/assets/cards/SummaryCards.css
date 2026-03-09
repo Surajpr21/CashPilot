@@ -12,14 +12,68 @@
   box-shadow: 0 8px 24px rgba(0,0,0,0.05);
 }
 
+.assets-page-summary-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.assets-page-summary-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #4b5563;
+  background: #e5e7eb;
+  flex-shrink: 0;
+}
+
+.assets-page-summary-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.8;
+  color: inherit;
+}
+
+.assets-page-summary-icon:not(.assets-page-summary-icon-assets):not(.assets-page-summary-icon-investments):not(.assets-page-summary-icon-metals):not(.assets-page-summary-icon-insurance) {
+  color: #2563eb;
+  background: transparent;
+}
+
+.assets-page-summary-icon-assets {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.assets-page-summary-icon-investments {
+  color: #0f766e;
+  background: #ccfbf1;
+}
+
+.assets-page-summary-icon-metals {
+  color: #b45309;
+  background: #fef3c7;
+}
+
+.assets-page-summary-icon-insurance {
+  color: #7c3aed;
+  background: #ede9fe;
+}
+
 .assets-page-summary-card p {
   color: #6b7280;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
 }
 
 .assets-page-summary-card h2 {
   margin: 6px 0;
   font-size: 26px;
+  
 }
 
 .assets-page-summary-card span,
