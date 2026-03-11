@@ -1,12 +1,20 @@
 import React from "react";
 import "./SummaryCards.css";
 import { formatCurrency, formatNumber } from "../../../../lib/formatters";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  WalletIcon,
-  BanknotesIcon,
+  Wallet02Icon,
+  MoneyBag02Icon,
   SparklesIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/outline";
+  RupeeShieldIcon,
+} from "@hugeicons/core-free-icons";
+
+const ICON_GRADIENT_FALLBACKS = {
+  assets: "#2563eb",
+  investments: "#10b981",
+  metals: "#f59e0b",
+  insurance: "#ef4444",
+};
 
 export default function SummaryCards({
   totalAssets,
@@ -20,10 +28,36 @@ export default function SummaryCards({
 }) {
   return (
     <div className="assets-page-summary">
+      <svg className="assets-page-summary-gradient-defs" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="assets-page-summary-gradient-assets" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="100%" stopColor="#1d4ed8" />
+          </linearGradient>
+          <linearGradient id="assets-page-summary-gradient-investments" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#34d399" />
+            <stop offset="100%" stopColor="#059669" />
+          </linearGradient>
+          <linearGradient id="assets-page-summary-gradient-metals" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fcd34d" />
+            <stop offset="100%" stopColor="#f59e0b" />
+          </linearGradient>
+          <linearGradient id="assets-page-summary-gradient-insurance" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fb7185" />
+            <stop offset="100%" stopColor="#dc2626" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div className="assets-page-summary-card">
         <div className="assets-page-summary-card-header">
           <span className="assets-page-summary-icon assets-page-summary-icon-assets" aria-hidden="true">
-            <WalletIcon />
+            <HugeiconsIcon
+              icon={Wallet02Icon}
+              size={28}
+              strokeWidth={1.8}
+              color={ICON_GRADIENT_FALLBACKS.assets}
+            />
           </span>
           <p>Total Assets</p>
         </div>
@@ -34,7 +68,12 @@ export default function SummaryCards({
       <div className="assets-page-summary-card">
         <div className="assets-page-summary-card-header">
           <span className="assets-page-summary-icon assets-page-summary-icon-investments" aria-hidden="true">
-            <BanknotesIcon />
+            <HugeiconsIcon
+              icon={MoneyBag02Icon}
+              size={28}
+              strokeWidth={1.8}
+              color={ICON_GRADIENT_FALLBACKS.investments}
+            />
           </span>
           <p>Invested Amount</p>
         </div>
@@ -46,7 +85,12 @@ export default function SummaryCards({
       <div className="assets-page-summary-card">
         <div className="assets-page-summary-card-header">
           <span className="assets-page-summary-icon assets-page-summary-icon-metals" aria-hidden="true">
-            <SparklesIcon />
+            <HugeiconsIcon
+              icon={SparklesIcon}
+              size={28}
+              strokeWidth={1.8}
+              color={ICON_GRADIENT_FALLBACKS.metals}
+            />
           </span>
           <p>Precious Metals</p>
         </div>
@@ -57,7 +101,12 @@ export default function SummaryCards({
       <div className="assets-page-summary-card">
         <div className="assets-page-summary-card-header">
           <span className="assets-page-summary-icon assets-page-summary-icon-insurance" aria-hidden="true">
-            <ShieldCheckIcon />
+            <HugeiconsIcon
+              icon={RupeeShieldIcon}
+              size={28}
+              strokeWidth={1.8}
+              color={ICON_GRADIENT_FALLBACKS.insurance}
+            />
           </span>
           <p>Insurance Premiums Paid</p>
         </div>
