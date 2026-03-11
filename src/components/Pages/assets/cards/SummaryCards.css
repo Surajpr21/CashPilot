@@ -1,22 +1,28 @@
 .assets-page-summary {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-bottom: 24px;
+  background: #f2f4f2;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
 .assets-page-summary-card {
-  background: #f2f4f2;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  padding: 20px 22px;
+  min-width: 0;
+  border-right: 1px solid rgba(107, 114, 128, 0.18);
+}
+
+.assets-page-summary-card:last-child {
+  border-right: none;
 }
 
 .assets-page-summary-card-header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 5px;
 }
 
 .assets-page-summary-icon {
@@ -26,63 +32,94 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  color: #4b5563;
-  background: #e5e7eb;
   flex-shrink: 0;
 }
 
+.assets-page-summary-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .assets-page-summary-icon svg {
-  width: 20px;
-  height: 20px;
-  stroke-width: 1.8;
-  color: inherit;
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 3px 8px rgba(15, 23, 42, 0.08));
 }
 
-.assets-page-summary-icon:not(.assets-page-summary-icon-assets):not(.assets-page-summary-icon-investments):not(.assets-page-summary-icon-metals):not(.assets-page-summary-icon-insurance) {
-  color: #2563eb;
-  background: transparent;
+.assets-page-summary-icon-assets svg * {
+  stroke: url(#assets-page-summary-gradient-assets);
 }
 
-.assets-page-summary-icon-assets {
-  color: #1d4ed8;
-  background: #dbeafe;
+.assets-page-summary-icon-investments svg * {
+  stroke: url(#assets-page-summary-gradient-investments);
 }
 
-.assets-page-summary-icon-investments {
-  color: #0f766e;
-  background: #ccfbf1;
+.assets-page-summary-icon-metals svg * {
+  stroke: url(#assets-page-summary-gradient-metals);
 }
 
-.assets-page-summary-icon-metals {
-  color: #b45309;
-  background: #fef3c7;
+.assets-page-summary-icon-insurance svg path:first-of-type {
+  stroke: url(#assets-page-summary-gradient-insurance);
 }
 
-.assets-page-summary-icon-insurance {
-  color: #7c3aed;
-  background: #ede9fe;
+.assets-page-summary-icon-insurance svg path:not(:first-of-type) {
+  stroke: #b91c1c;
 }
 
 .assets-page-summary-card p {
   color: #6b7280;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   margin: 0;
 }
 
 .assets-page-summary-card h2 {
-  margin: 6px 0;
-  font-size: 26px;
-  
+  margin: 4px 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
 }
 
 .assets-page-summary-card span,
 .assets-page-summary-card small {
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
+  display: block;
 }
 
 .assets-page-summary-card .positive {
   color: #16a34a;
   font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .assets-page-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .assets-page-summary-card:nth-child(2n) {
+    border-right: none;
+  }
+
+  .assets-page-summary-card:nth-child(-n + 2) {
+    border-bottom: 1px solid rgba(107, 114, 128, 0.18);
+  }
+}
+
+@media (max-width: 640px) {
+  .assets-page-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .assets-page-summary-card {
+    border-right: none;
+    border-bottom: 1px solid rgba(107, 114, 128, 0.18);
+  }
+
+  .assets-page-summary-card:last-child {
+    border-bottom: none;
+  }
 }
