@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { formatCurrency } from "../../../../lib/formatters";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Wallet02Icon } from "@hugeicons/core-free-icons";
 import "./AllocationCard.css";
 
 const GRADIENTS = [
-  { from: "#CDE7A2", to: "#90D087" },
-  { from: "#FFE6A8", to: "#F4C86A" },
-  { from: "#B7EFE5", to: "#6ECFBC" },
+  { from: "#6EE7B7", to: "#10b981" },
+  { from: "#FCD34D", to: "#f59e0b" },
+  { from: "#67E8F9", to: "#06b6d4" },
 ];
 
 const lighten = (hex, amount = 0.18) => {
@@ -24,7 +26,12 @@ export default function AllocationCard({ allocation, totalAssets, currency }) {
   return (
     <div className="assets-page-card">
       <div className="assets-page-card-header">
-        <h3 className="assets-page-title">Allocation (by amount)</h3>
+        <div className="assets-page-card-heading">
+          <span className="assets-page-card-icon assets-page-card-icon-assets" aria-hidden="true">
+            <HugeiconsIcon icon={Wallet02Icon} size={20} strokeWidth={1.9} color="#2563eb" />
+          </span>
+          <h3 className="assets-page-title">Allocation (by amount)</h3>
+        </div>
         {/* <span className="assets-page-dots">•••</span> */}
       </div>
 

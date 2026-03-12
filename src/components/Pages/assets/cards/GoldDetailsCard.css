@@ -4,6 +4,16 @@
   margin: 10px 0;
 }
 
+.assets-page-list .assets-page-row {
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.assets-page-list .assets-page-row:last-child {
+  border-bottom: none;
+}
+
 .assets-page-row-meta {
   display: flex;
   flex-direction: column;

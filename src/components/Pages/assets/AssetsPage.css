@@ -32,6 +32,47 @@
   font-weight: 500;
 }
 
+.assets-page-card-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.assets-page-card-heading h3,
+.assets-page-card-heading .assets-page-title,
+.assets-page-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.assets-page-card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.assets-page-card-icon-assets {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(37, 99, 235, 0.14));
+}
+
+.assets-page-card-icon-investments {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.18), rgba(5, 150, 105, 0.12));
+}
+
+.assets-page-card-icon-metals {
+  background: linear-gradient(135deg, rgba(252, 211, 77, 0.24), rgba(245, 158, 11, 0.12));
+}
+
+.assets-page-card-icon-insurance {
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.18), rgba(220, 38, 38, 0.12));
+}
+
 .assets-page-muted {
   color: #6b7280;
   font-size: 12px;
