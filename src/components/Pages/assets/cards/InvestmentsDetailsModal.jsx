@@ -141,7 +141,7 @@ export default function InvestmentsDetailsModal({ isOpen, onClose, currency }) {
             {investments.map((inv) => (
               <div className="assets-page-row" key={inv.id}>
                 <div>
-                  <strong>{inv.name}</strong>
+                  <span>{inv.name}</span>
                   <div className="assets-page-muted">Type: {TYPE_LABELS[inv.investment_type] || "Other"}</div>
                   <div>Amount invested: ₹ {formatCurrency(inv.amount_invested)}</div>
                 </div>

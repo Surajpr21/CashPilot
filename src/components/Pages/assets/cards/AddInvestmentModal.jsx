@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./InvestmentsCard.css";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 
 const INVESTMENT_TYPES = [
   { label: "Mutual Fund", value: "mutual_fund" },
@@ -114,21 +115,15 @@ export default function AddInvestmentModal({
 
             <div className="assets-page-form-row">
               <label htmlFor="investment-type">Investment type *</label>
-              <select
-                id="investment-type"
-                name="investment-type"
+              <CustomDropdown
+                label="Investment type"
+                options={INVESTMENT_TYPES}
                 value={investmentType}
-                onChange={(e) => setInvestmentType(e.target.value)}
-                required
+                onChange={setInvestmentType}
+                placeholder="Select type"
+                width="100%"
                 disabled={isSubmitting}
-              >
-                <option value="">Select type</option>
-                {INVESTMENT_TYPES.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {type.label}
-                  </option>
-                ))}
-              </select>
+              />
               <span className="assets-page-hint">Values map directly to the enum in Supabase.</span>
             </div>
 

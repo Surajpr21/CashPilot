@@ -130,7 +130,7 @@ export default function InsurancePoliciesModal({ isOpen, onClose, currency }) {
             {policies.map((policy) => (
               <div className="assets-page-row" key={policy.policy_id}>
                 <div>
-                  <strong>{policy.provider} – {policy.policy_name}</strong>
+                  <span>{policy.provider} – {policy.policy_name}</span>
                   <div className="assets-page-muted">Type: {TYPE_LABELS[policy.insurance_type] || "Other"}</div>
                   <div>Premiums paid: {policy.premiums_paid_count ?? 0}</div>
                   <div>

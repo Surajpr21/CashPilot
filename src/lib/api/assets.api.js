@@ -23,7 +23,7 @@ export async function getInvestmentsTotal() {
 export async function getMetalSummary() {
   const { data, error } = await supabase
     .from("v_metal_summary")
-    .select("metal_type, total_grams, avg_buy_price")
+    .select("metal_type, total_grams, avg_buy_price, purchased_at")
     .order("metal_type", { ascending: true });
 
   if (error) throw error;

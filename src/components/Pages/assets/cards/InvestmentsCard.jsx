@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import "./InvestmentsCard.css";
 import { formatCurrency } from "../../../../lib/formatters";
 import { getInvestmentsDetails } from "../../../../lib/api/assets.api";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MoneyBag02Icon } from "@hugeicons/core-free-icons";
 
 const TYPE_LABELS = {
   mutual_fund: "Mutual Fund",
@@ -27,7 +29,12 @@ export default function InvestmentsCard({ total, currency, onAdd, onViewMore }) 
   return (
     <div className="assets-page-card">
       <div className="assets-page-card-header">
-        <h3>Investments</h3>
+        <div className="assets-page-card-heading">
+          <span className="assets-page-card-icon assets-page-card-icon-investments" aria-hidden="true">
+            <HugeiconsIcon icon={MoneyBag02Icon} size={20} strokeWidth={1.9} color="#10b981" />
+          </span>
+          <h3>Investments</h3>
+        </div>
         {onAdd ? (
           <button className="assets-page-add-btn" onClick={onAdd} type="button">
             + Add investment
@@ -37,10 +44,10 @@ export default function InvestmentsCard({ total, currency, onAdd, onViewMore }) 
 
       <div className="assets-page-row">
         <span>Total invested</span>
-        <strong>₹ {formatCurrency(total)}</strong>
+        <span>₹ {formatCurrency(total)}</span>
       </div>
 
-      <p className="assets-page-muted">Includes all instruments synced from the backend views.</p>
+      <p style={{marginTop:"-10px"}} className="assets-page-muted">Includes all instruments synced from the backend views.</p>
 
       {isLoading ? <p className="assets-page-muted">Loading investments…</p> : null}
       {isError ? <p className="assets-page-muted">Unable to load investments.</p> : null}
@@ -51,10 +58,17 @@ export default function InvestmentsCard({ total, currency, onAdd, onViewMore }) 
             {visibleInvestments.map((inv) => (
               <li key={inv.id}>
                 <div>
-                  <strong>{inv.name || "Untitled"}</strong>
+                  <span>{inv.name || "Untitled"}</span>
                   <div className="assets-page-muted">{TYPE_LABELS[inv.investment_type] || "Other"}</div>
                 </div>
-                <strong>₹ {formatCurrency(inv.amount_invested)}</strong>
+                <div style={{ textAlign: "right" }}>
+                  <span>₹ {formatCurrency(inv.amount_invested)}</span>
+                  {inv.created_at ? (
+                    <div className="assets-page-muted">
+                      {new Date(inv.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    </div>
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>
