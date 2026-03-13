@@ -14,8 +14,10 @@ const METAL_LABELS = {
   other: "Other",
 };
 
-export default function GoldDetailsCard({ metalHoldings = [], onAdd }) {
+export default function GoldDetailsCard({ metalHoldings = [], onAdd, onViewMore }) {
   const rows = Array.isArray(metalHoldings) ? metalHoldings : [];
+  const visibleRows = rows.slice(0, 2);
+  const hasMore = rows.length > 2;
 
   return (
     <div className="assets-page-card">
@@ -37,7 +39,7 @@ export default function GoldDetailsCard({ metalHoldings = [], onAdd }) {
         <p className="assets-page-muted">No metal holdings yet. Add your first lot.</p>
       ) : (
         <div className="assets-page-list">
-          {rows.map((metal) => {
+          {visibleRows.map((metal) => {
             const label = METAL_LABELS[metal?.metal_type] || "Other";
             const grams = formatNumber(metal?.total_grams ?? 0);
             const avgPrice = metal?.avg_buy_price;
@@ -62,13 +64,25 @@ export default function GoldDetailsCard({ metalHoldings = [], onAdd }) {
                   <span>{grams} g</span>
                   <span className="assets-page-muted">avg {avgPriceText}</span>
                 </div>
+                
               </div>
+              
             );
           })}
+            <p className="assets-page-muted">Quantity-based assets; no totals or pricing applied.</p>
         </div>
       )}
 
-      <p className="assets-page-muted">Quantity-based assets; no totals or pricing applied.</p>
+      {onViewMore && hasMore ? (
+        <button type="button" className="insurance-learn-more" onClick={onViewMore}>
+          <span className="circle" aria-hidden="true">
+            <span className="icon arrow" />
+          </span>
+          <span className="button-text">Know more</span>
+        </button>
+      ) : null}
+
+    
     </div>
   );
 }

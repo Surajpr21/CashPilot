@@ -8,6 +8,7 @@ import GoldDetailsCard from "./cards/GoldDetailsCard";
 import InsuranceCard from "./cards/InsuranceCard";
 import InsurancePoliciesModal from "./cards/InsurancePoliciesModal";
 import InvestmentsDetailsModal from "./cards/InvestmentsDetailsModal";
+import MetalsDetailsModal from "./cards/MetalsDetailsModal";
 import AddInvestmentModal from "./cards/AddInvestmentModal";
 import AddMetalModal from "./cards/AddMetalModal";
 import { addInvestment, addMetalHolding } from "../../../lib/api/assets.api";
@@ -41,6 +42,7 @@ export default function AssetsPage() {
   const [isMetalSubmitting, setIsMetalSubmitting] = useState(false);
   const [isInsuranceModalOpen, setIsInsuranceModalOpen] = useState(false);
   const [isInvestmentsModalOpen, setIsInvestmentsModalOpen] = useState(false);
+  const [isMetalsModalOpen, setIsMetalsModalOpen] = useState(false);
 
   const {
     isLoading,
@@ -64,6 +66,14 @@ export default function AssetsPage() {
 
   const handleCloseInvestmentsModal = () => {
     setIsInvestmentsModalOpen(false);
+  };
+
+  const handleOpenMetalsModal = () => {
+    setIsMetalsModalOpen(true);
+  };
+
+  const handleCloseMetalsModal = () => {
+    setIsMetalsModalOpen(false);
   };
 
   const handleAddMetal = () => {
@@ -164,7 +174,11 @@ export default function AssetsPage() {
           onAdd={handleAddInvestment}
           onViewMore={handleOpenInvestmentsModal}
         />
-        <GoldDetailsCard metalHoldings={metalHoldings} onAdd={handleAddMetal} />
+        <GoldDetailsCard
+          metalHoldings={metalHoldings}
+          onAdd={handleAddMetal}
+          onViewMore={handleOpenMetalsModal}
+        />
         <InsuranceCard
           totalPremiums={totals.insurance}
           currency={currencies.insurance || currencies.assets}
@@ -199,6 +213,12 @@ export default function AssetsPage() {
         isOpen={isInvestmentsModalOpen}
         onClose={handleCloseInvestmentsModal}
         currency={currencies.investments || currencies.assets}
+      />
+
+      <MetalsDetailsModal
+        isOpen={isMetalsModalOpen}
+        onClose={handleCloseMetalsModal}
+        metalHoldings={metalHoldings}
       />
     </div>
   );

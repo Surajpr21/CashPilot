@@ -78,8 +78,11 @@ export default function InvestmentsCard({ total, currency, onAdd, onViewMore }) 
       ) : null}
 
       {onViewMore && hasMore ? (
-        <button type="button" className="assets-page-link" onClick={onViewMore}>
-          Know more →
+        <button type="button" className="insurance-learn-more" onClick={onViewMore}>
+          <span className="circle" aria-hidden="true">
+            <span className="icon arrow" />
+          </span>
+          <span className="button-text">Know more</span>
         </button>
       ) : null}
     </div>
