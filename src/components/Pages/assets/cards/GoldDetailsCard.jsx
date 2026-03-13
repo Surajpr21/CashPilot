@@ -69,7 +69,7 @@ export default function GoldDetailsCard({ metalHoldings = [], onAdd, onViewMore 
               
             );
           })}
-            <p className="assets-page-muted">Quantity-based assets; no totals or pricing applied.</p>
+            <p style={{marginBottom:"10px"}} className="assets-page-muted">Quantity-based assets; no totals or pricing applied.</p>
         </div>
       )}
 

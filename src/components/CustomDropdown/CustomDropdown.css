@@ -112,16 +112,12 @@
   transform: scale(1.05);
 }
 
-.cp-dropdown-trigger:hover:not(.disabled) .cp-dropdown-icon {
-  transform: translate(4px);
-}
-
 .cp-dropdown-trigger:hover:not(.disabled)::before {
   opacity: 0.6;
   animation: cp-dropdown-shine 1.5s ease-out infinite;
 }
 
-.cp-dropdown-icon.rotate {
+.cp-dropdown-trigger .cp-dropdown-icon.rotate {
   transform: rotate(180deg);
 }
 
@@ -149,14 +145,6 @@
   /* Subtle scrollbar to match UI theme */
   scrollbar-width: thin;
   scrollbar-color: #9fb8b0 transparent;
-}
-
-.cp-dropdown-menu-portal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: auto;
-  z-index: 10000;
 }
 
 .cp-dropdown-menu::-webkit-scrollbar {
