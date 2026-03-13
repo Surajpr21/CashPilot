@@ -8,6 +8,7 @@ import {
   updateMetalHolding,
   softDeleteMetalHolding,
 } from "../../../../lib/api/assets.api";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 import "./InvestmentsCard.css";
 import "./GoldDetailsCard.css";
 
@@ -20,6 +21,16 @@ const METAL_LABELS = {
   jewelry: "Other jewellery",
   other: "Other",
 };
+
+const METAL_TYPE_OPTIONS = [
+  { label: "Gold", value: "gold" },
+  { label: "Silver", value: "silver" },
+  { label: "Platinum", value: "platinum" },
+  { label: "Palladium", value: "palladium" },
+  { label: "Diamond", value: "diamond" },
+  { label: "Other jewellery", value: "jewelry" },
+  { label: "Other", value: "other" },
+];
 
 export default function MetalsDetailsModal({ isOpen, onClose, metalHoldings = [] }) {
   const queryClient = useQueryClient();
@@ -208,22 +219,17 @@ export default function MetalsDetailsModal({ isOpen, onClose, metalHoldings = []
             <div className="assets-page-form-grid">
               <div className="assets-page-form-row">
                 <label htmlFor="metal-type-edit">Metal type *</label>
-                <select
+                <CustomDropdown
                   id="metal-type-edit"
+                  label="Metal type"
+                  options={METAL_TYPE_OPTIONS}
                   value={form.metal_type}
-                  onChange={(e) => setForm((f) => ({ ...f, metal_type: e.target.value }))}
-                  required
+                  onChange={(val) => setForm((f) => ({ ...f, metal_type: val }))}
+                  placeholder="Select metal"
+                  width="100%"
+                  menuMaxHeight="240px"
                   disabled={isSaving}
-                >
-                  <option value="">Select metal</option>
-                  <option value="gold">Gold</option>
-                  <option value="silver">Silver</option>
-                  <option value="platinum">Platinum</option>
-                  <option value="palladium">Palladium</option>
-                  <option value="diamond">Diamond</option>
-                  <option value="jewelry">Other jewellery</option>
-                  <option value="other">Other</option>
-                </select>
+                />
               </div>
 
               <div className="assets-page-form-row">
