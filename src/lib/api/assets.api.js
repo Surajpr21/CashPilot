@@ -91,6 +91,34 @@ export async function addMetalHolding(payload) {
   if (error) throw error;
 }
 
+export async function getMetalHoldingsDetails() {
+  const { data, error } = await supabase
+    .from("metal_holdings")
+    .select("id, metal_type, grams, buy_price_per_gram, purchased_at, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+
+export async function updateMetalHolding(holdingId, payload) {
+  const { error } = await supabase
+    .from("metal_holdings")
+    .update(payload)
+    .eq("id", holdingId);
+
+  if (error) throw error;
+}
+
+export async function softDeleteMetalHolding(holdingId) {
+  const { error } = await supabase
+    .from("metal_holdings")
+    .update({ is_deleted: true })
+    .eq("id", holdingId);
+
+  if (error) throw error;
+}
+
 export async function addInsurancePremium(payload) {
   const { error } = await supabase.from("insurance_premiums").insert(payload);
   if (error) throw error;

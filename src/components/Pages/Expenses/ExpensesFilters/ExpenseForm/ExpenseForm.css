@@ -126,7 +126,7 @@
   font-size: 14px;
   font-weight: 400;
   color: #0f172a;
-  height: 44px;
+  height: 46px;
   box-sizing: border-box;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 10px 22px rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(6px) saturate(110%);
@@ -224,8 +224,8 @@
 
 .date-picker-trigger {
   width: 100%;
-  height: 44px;
-  padding: 0 14px;
+  height: 46px;
+  padding: 0 12px;
   border-radius: 14px;
   border: 1px solid rgba(12, 32, 64, 0.08);
   background: linear-gradient(90deg, #e8e0ff 0%, #dff7ec 45%, #e6e5e5 100%);

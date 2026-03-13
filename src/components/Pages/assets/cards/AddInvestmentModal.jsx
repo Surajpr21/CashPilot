@@ -20,6 +20,7 @@ export default function AddInvestmentModal({
   const [name, setName] = useState("");
   const [investmentType, setInvestmentType] = useState("");
   const [amount, setAmount] = useState("");
+  const [investmentDate, setInvestmentDate] = useState("");
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function AddInvestmentModal({
       setName("");
       setInvestmentType("");
       setAmount("");
+      setInvestmentDate("");
       setFormError("");
     } else {
       setFormError("");
@@ -69,6 +71,7 @@ export default function AddInvestmentModal({
         investment_type: investmentType,
         amount_invested: amountNumber,
         currency,
+        ...(investmentDate ? { created_at: investmentDate } : {}),
       });
     } catch (err) {
       setFormError(err?.message || "Unable to add investment. Please try again.");
@@ -77,7 +80,7 @@ export default function AddInvestmentModal({
 
   return (
     <div className="assets-page-modal-backdrop" onClick={handleClose} role="dialog" aria-modal="true">
-      <div className="assets-page-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="assets-page-modal assets-page-modal-investment" onClick={(e) => e.stopPropagation()}>
         <div className="assets-page-modal-header">
           <div>
             <p className="assets-page-modal-kicker">New investment</p>
@@ -93,12 +96,12 @@ export default function AddInvestmentModal({
           </button>
         </div>
 
-        <form className="assets-page-form" onSubmit={handleSubmit}>
+        <form className="assets-page-form assets-page-form-investment" onSubmit={handleSubmit}>
           {formError || errorMessage ? (
             <div className="assets-page-form-error">{formError || errorMessage}</div>
           ) : null}
 
-          <div className="assets-page-form-grid">
+          <div className="assets-page-form-grid assets-page-form-grid-investment">
             <div className="assets-page-form-row">
               <label htmlFor="investment-name">Investment name *</label>
               <input
@@ -144,6 +147,18 @@ export default function AddInvestmentModal({
             </div>
 
             <div className="assets-page-form-row">
+              <label htmlFor="investment-date">Investment date</label>
+              <input
+                id="investment-date"
+                name="investment-date"
+                type="date"
+                value={investmentDate}
+                onChange={(e) => setInvestmentDate(e.target.value)}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="assets-page-form-row">
               <label htmlFor="investment-currency">Currency</label>
               <input
                 id="investment-currency"
@@ -161,7 +176,7 @@ export default function AddInvestmentModal({
             <p>Records long-term investments only. Account balance is unchanged.</p>
           </div>
 
-          <div className="assets-page-modal-actions">
+          <div className="assets-page-modal-actions assets-page-modal-actions-investment">
             <button
               type="button"
               className="assets-page-btn ghost"

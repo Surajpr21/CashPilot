@@ -12,8 +12,8 @@
 
 .cp-dropdown-trigger {
   position: relative;
-  height: 44px;
-  padding: 0 16px;
+  height: 46px;
+  padding: 0 12px;
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -149,6 +149,14 @@
   /* Subtle scrollbar to match UI theme */
   scrollbar-width: thin;
   scrollbar-color: #9fb8b0 transparent;
+}
+
+.cp-dropdown-menu-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: auto;
+  z-index: 10000;
 }
 
 .cp-dropdown-menu::-webkit-scrollbar {
