@@ -24,7 +24,7 @@ export default function GoldDetailsCard({ metalHoldings = [], onAdd, onViewMore 
       <div className="assets-page-card-header">
         <div className="assets-page-card-heading">
           <span className="assets-page-card-icon assets-page-card-icon-metals" aria-hidden="true">
-            <HugeiconsIcon icon={SparklesIcon} size={20} strokeWidth={1.9} color="#f59e0b" />
+            <HugeiconsIcon icon={SparklesIcon} size={25} strokeWidth={1.9} color="#f59e0b" />
           </span>
           <h3>Precious Metals</h3>
         </div>
@@ -60,7 +60,7 @@ export default function GoldDetailsCard({ metalHoldings = [], onAdd, onViewMore 
                   <span>{label}</span>
                   {purchasedAtText ? <div className="assets-page-muted">Purchased {purchasedAtText}</div> : null}
                 </div>
-                <div className="assets-page-row-meta">
+                <div style={{gap:"5px"}} className="assets-page-row-meta">
                   <span>{grams} g</span>
                   <span className="assets-page-muted">avg {avgPriceText}</span>
                 </div>

@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MoneyBag02Icon } from "@hugeicons/core-free-icons";
 import {
   getInvestmentsDetails,
   updateInvestment,
@@ -519,9 +521,11 @@ export default function InvestmentsDetailsModal({ isOpen, onClose, currency }) {
     <div className="assets-page-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
       <div className="assets-page-modal assets-page-modal-investment assets-page-modal-details" onClick={(e) => e.stopPropagation()}>
         <div className="assets-page-modal-header">
-          <div>
-            <p className="assets-page-modal-kicker">Investments</p>
-            <h4>Know more</h4>
+          <div style={{zIndex:"99"}} className="assets-page-card-heading">
+            <span className="assets-page-card-icon assets-page-card-icon-investments" aria-hidden="true">
+              <HugeiconsIcon icon={MoneyBag02Icon} size={25} strokeWidth={1.9} color="#10b981" />
+            </span>
+            <h3>Investments</h3>
           </div>
           <button
             type="button"

@@ -308,10 +308,12 @@
 
 .assets-page-row-meta .assets-action-btn-delete:not(:disabled):hover {
   border-color: transparent;
+    background-color: #b91c1c;
 }
 
 .assets-page-modal.assets-page-modal-investment {
   position: relative;
+  isolation: isolate;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.7));
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 18px;
@@ -346,11 +348,17 @@
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 0;
   border-radius: inherit;
   background:
     radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.4), transparent 30%),
     radial-gradient(circle at 82% 0%, rgba(255, 255, 255, 0.3), transparent 34%);
   pointer-events: none;
+}
+
+.assets-page-modal.assets-page-modal-investment > * {
+  position: relative;
+  z-index: 1;
 }
 
 .assets-page-form.assets-page-form-investment {

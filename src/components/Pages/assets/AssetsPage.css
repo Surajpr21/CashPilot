@@ -73,6 +73,26 @@
   background: linear-gradient(135deg, rgba(251, 113, 133, 0.18), rgba(220, 38, 38, 0.12));
 }
 
+.assets-page-card-icon-assets svg * {
+  stroke: url(#assets-page-summary-gradient-assets);
+}
+
+.assets-page-card-icon-investments svg * {
+  stroke: url(#assets-page-summary-gradient-investments);
+}
+
+.assets-page-card-icon-metals svg * {
+  stroke: url(#assets-page-summary-gradient-metals);
+}
+
+.assets-page-card-icon-insurance svg path:first-of-type {
+  stroke: url(#assets-page-summary-gradient-insurance);
+}
+
+.assets-page-card-icon-insurance svg path:not(:first-of-type) {
+  stroke: #b91c1c;
+}
+
 .assets-page-muted {
   color: #6b7280;
   font-size: 12px;

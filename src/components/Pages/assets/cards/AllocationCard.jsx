@@ -11,6 +11,13 @@ const GRADIENTS = [
   { from: "#67E8F9", to: "#06b6d4" },
 ];
 
+const ICON_GRADIENT_FALLBACKS = {
+  assets: "#2563eb",
+  investments: "#10b981",
+  metals: "#f59e0b",
+  insurance: "#ef4444",
+};
+
 const lighten = (hex, amount = 0.18) => {
   const num = parseInt(hex.replace("#", ""), 16);
   const r = Math.min(255, (num >> 16) + 255 * amount);
@@ -25,10 +32,30 @@ export default function AllocationCard({ allocation, totalAssets, currency }) {
 
   return (
     <div className="assets-page-card">
+      <svg className="assets-page-summary-gradient-defs" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="assets-page-summary-gradient-assets" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="100%" stopColor="#1d4ed8" />
+          </linearGradient>
+          <linearGradient id="assets-page-summary-gradient-investments" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#34d399" />
+            <stop offset="100%" stopColor="#059669" />
+          </linearGradient>
+          <linearGradient id="assets-page-summary-gradient-metals" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fcd34d" />
+            <stop offset="100%" stopColor="#f59e0b" />
+          </linearGradient>
+          <linearGradient id="assets-page-summary-gradient-insurance" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fb7185" />
+            <stop offset="100%" stopColor="#dc2626" />
+          </linearGradient>
+        </defs>
+      </svg>
       <div className="assets-page-card-header">
         <div className="assets-page-card-heading">
           <span className="assets-page-card-icon assets-page-card-icon-assets" aria-hidden="true">
-            <HugeiconsIcon icon={Wallet02Icon} size={20} strokeWidth={1.9} color="#2563eb" />
+            <HugeiconsIcon icon={Wallet02Icon} size={25} strokeWidth={1.9}  color={ICON_GRADIENT_FALLBACKS.assets} />
           </span>
           <h3 className="assets-page-title">Allocation (by amount)</h3>
         </div>

@@ -10,7 +10,7 @@ export default function InsuranceCard({ totalPremiums, currency, policiesCount, 
       <div className="assets-page-card-header">
         <div className="assets-page-card-heading">
           <span className="assets-page-card-icon assets-page-card-icon-insurance" aria-hidden="true">
-            <HugeiconsIcon icon={RupeeShieldIcon} size={20} strokeWidth={1.9} color="#ef4444" />
+            <HugeiconsIcon icon={RupeeShieldIcon} size={25} strokeWidth={1.9} color="#ef4444" />
           </span>
           <h3>Insurance</h3>
         </div>
