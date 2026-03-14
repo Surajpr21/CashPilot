@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { RupeeShieldIcon } from "@hugeicons/core-free-icons";
 import {
   getInsurancePoliciesSummary,
   updateInsurancePolicy,
@@ -215,9 +217,11 @@ export default function InsurancePoliciesModal({ isOpen, onClose, currency }) {
     <div className="assets-page-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
       <div className="assets-page-modal assets-page-modal-investment assets-page-modal-details" onClick={(e) => e.stopPropagation()}>
         <div className="assets-page-modal-header">
-          <div>
-            <p className="assets-page-modal-kicker">Insurance</p>
-            <h4>Know more</h4>
+          <div style={{zIndex:"99"}} className="assets-page-card-heading">
+            <span className="assets-page-card-icon assets-page-card-icon-insurance" aria-hidden="true">
+              <HugeiconsIcon icon={RupeeShieldIcon} size={25} strokeWidth={1.9} color="#ef4444" />
+            </span>
+            <h3>Insurance</h3>
           </div>
           <button
             type="button"

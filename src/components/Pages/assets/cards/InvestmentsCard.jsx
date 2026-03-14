@@ -31,7 +31,7 @@ export default function InvestmentsCard({ total, currency, onAdd, onViewMore }) 
       <div className="assets-page-card-header">
         <div className="assets-page-card-heading">
           <span className="assets-page-card-icon assets-page-card-icon-investments" aria-hidden="true">
-            <HugeiconsIcon icon={MoneyBag02Icon} size={20} strokeWidth={1.9} color="#10b981" />
+            <HugeiconsIcon icon={MoneyBag02Icon} size={25} strokeWidth={1.9} color="#10b981" />
           </span>
           <h3>Investments</h3>
         </div>

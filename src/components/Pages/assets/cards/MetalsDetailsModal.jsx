@@ -500,9 +500,11 @@ export default function MetalsDetailsModal({ isOpen, onClose, metalHoldings = []
     <div className="assets-page-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
       <div className="assets-page-modal assets-page-modal-investment" onClick={(e) => e.stopPropagation()}>
         <div className="assets-page-modal-header">
-          <div>
-            <p className="assets-page-modal-kicker">Precious Metals</p>
-            <h4>Know more</h4>
+          <div style={{zIndex:"99"}} className="assets-page-card-heading">
+            <span className="assets-page-card-icon assets-page-card-icon-metals" aria-hidden="true">
+              <HugeiconsIcon icon={SparklesIcon} size={25} strokeWidth={1.9} color="#f59e0b" />
+            </span>
+            <h3>Precious Metals Holdings</h3>
           </div>
           <button
             type="button"
@@ -515,13 +517,6 @@ export default function MetalsDetailsModal({ isOpen, onClose, metalHoldings = []
           >
             ×
           </button>
-        </div>
-
-        <div className="assets-page-card-heading" style={{ marginBottom: "12px" }}>
-          <span className="assets-page-card-icon assets-page-card-icon-metals" aria-hidden="true">
-            <HugeiconsIcon icon={SparklesIcon} size={20} strokeWidth={1.9} color="#f59e0b" />
-          </span>
-          <h3>Precious Metals Holdings</h3>
         </div>
 
         {isLoading || isFetching ? <p>Loading metal holdings…</p> : null}

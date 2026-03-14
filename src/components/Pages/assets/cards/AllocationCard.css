@@ -20,6 +20,18 @@
   margin-bottom: 12px;
 }
 
+.assets-page-summary-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.assets-page-card-icon-assets svg * {
+  stroke: url(#assets-page-summary-gradient-assets);
+}
+
 .assets-page-title {
   font-size: 16px;
   font-weight: 600;
