@@ -8,6 +8,7 @@ import {
 import { INSURANCE_TYPES } from "../../../../constants/insuranceTypes";
 import { formatCurrency } from "../../../../lib/formatters";
 import "./InvestmentsCard.css";
+import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 
 const TYPE_LABELS = INSURANCE_TYPES.reduce((acc, cur) => {
   acc[cur.value] = cur.label;
@@ -97,75 +98,39 @@ export default function InsurancePoliciesModal({ isOpen, onClose, currency }) {
     }
   };
 
-  if (!isOpen) return null;
+  const isEditPopupOpen = Boolean(editingId);
 
-  return (
-    <div className="assets-page-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="assets-page-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="assets-page-modal-header">
-          <div>
-            <p className="assets-page-modal-kicker">Insurance</p>
-            <h4>Know more</h4>
+  const renderEditPopup = () => {
+    if (!isEditPopupOpen) return null;
+
+    return (
+      <div
+        className="assets-page-modal-backdrop assets-page-modal-edit-backdrop"
+        onClick={(e) => {
+          e.stopPropagation();
+          resetForm();
+        }}
+      >
+        <div
+          className="assets-page-modal assets-page-modal-investment assets-page-modal-edit-popup"
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="assets-page-modal-header">
+            <div>
+              <p className="assets-page-modal-kicker">Insurance</p>
+              <h4>Edit policy</h4>
+            </div>
+            <button type="button" className="assets-page-modal-close" onClick={resetForm} aria-label="Close edit policy">
+              ×
+            </button>
           </div>
-          <button
-            type="button"
-            className="assets-page-modal-close"
-            onClick={() => {
-              resetForm();
-              onClose();
-            }}
-            aria-label="Close insurance details"
-          >
-            ×
-          </button>
-        </div>
 
-        {isLoading || isFetching ? <p>Loading policies…</p> : null}
-        {isError ? <p>Unable to load policies right now.</p> : null}
-
-        {policies.length === 0 && !isLoading ? (
-          <p className="assets-page-muted">No policies found.</p>
-        ) : (
-          <div className="assets-page-list">
-            {policies.map((policy) => (
-              <div className="assets-page-row" key={policy.policy_id}>
-                <div>
-                  <span>{policy.provider} – {policy.policy_name}</span>
-                  <div className="assets-page-muted">Type: {TYPE_LABELS[policy.insurance_type] || "Other"}</div>
-                  <div>Premiums paid: {policy.premiums_paid_count ?? 0}</div>
-                  <div>
-                    Total paid: ₹ {formatCurrency(policy.total_premiums_paid)}
-                  </div>
-                </div>
-                <div className="assets-page-row-meta">
-                  <button
-                    type="button"
-                    className="assets-page-btn ghost"
-                    onClick={() => startEdit(policy)}
-                    disabled={isSaving || isDeleting}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="assets-page-btn"
-                    onClick={() => handleDelete(policy.policy_id)}
-                    disabled={isSaving || isDeleting}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {editingId ? (
-          <form className="assets-page-form assets-page-form-section" onSubmit={handleUpdate}>
-            <h4>Edit policy</h4>
+          <form className="assets-page-form assets-page-form-investment" onSubmit={handleUpdate}>
             {formError ? <div className="assets-page-form-error">{formError}</div> : null}
 
-            <div className="assets-page-form-grid">
+            <div className="assets-page-form-grid assets-page-form-grid-investment">
               <div className="assets-page-form-row">
                 <label htmlFor="policy-provider">Provider *</label>
                 <input
@@ -192,36 +157,40 @@ export default function InsurancePoliciesModal({ isOpen, onClose, currency }) {
 
               <div className="assets-page-form-row">
                 <label htmlFor="policy-type">Insurance type *</label>
-                <select
+                <CustomDropdown
                   id="policy-type"
+                  label="Insurance type"
+                  options={INSURANCE_TYPES}
                   value={form.insurance_type}
-                  onChange={(e) => setForm((f) => ({ ...f, insurance_type: e.target.value }))}
-                  required
+                  onChange={(val) => setForm((f) => ({ ...f, insurance_type: val }))}
+                  placeholder="Select type"
+                  width="100%"
+                  menuMaxHeight="220px"
                   disabled={isSaving}
-                >
-                  <option value="">Select type</option>
-                  {INSURANCE_TYPES.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
 
               <div className="assets-page-form-row">
-                <label className="checkbox-inline">
-                  <input
-                    type="checkbox"
-                    checked={form.is_active}
-                    onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))}
-                    disabled={isSaving}
-                  />
-                  Active
-                </label>
+                <label htmlFor="policy-active">Status</label>
+                <button
+                  id="policy-active"
+                  type="button"
+                  className={`date-picker-trigger ${form.is_active ? "open" : "placeholder"}`}
+                  onClick={() => setForm((f) => ({ ...f, is_active: !f.is_active }))}
+                  disabled={isSaving}
+                  aria-pressed={form.is_active}
+                >
+                  <span>{form.is_active ? "Active" : "Inactive"}</span>
+                </button>
+                <span className="assets-page-hint">Use inactive when the policy is no longer active.</span>
               </div>
             </div>
 
-            <div className="assets-page-modal-actions">
+            <div className="assets-page-form-note">
+              <p>Policy details update the insurance view only. Premium history remains unchanged.</p>
+            </div>
+
+            <div className="assets-page-modal-actions assets-page-modal-actions-investment">
               <button
                 type="button"
                 className="assets-page-btn ghost"
@@ -235,10 +204,87 @@ export default function InsurancePoliciesModal({ isOpen, onClose, currency }) {
               </button>
             </div>
           </form>
-        ) : null}
+        </div>
+      </div>
+    );
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="assets-page-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="assets-page-modal assets-page-modal-investment assets-page-modal-details" onClick={(e) => e.stopPropagation()}>
+        <div className="assets-page-modal-header">
+          <div>
+            <p className="assets-page-modal-kicker">Insurance</p>
+            <h4>Know more</h4>
+          </div>
+          <button
+            type="button"
+            className="assets-page-modal-close"
+            onClick={() => {
+              resetForm();
+              onClose();
+            }}
+            aria-label="Close insurance details"
+          >
+            ×
+          </button>
+        </div>
+
+        {isLoading || isFetching ? <p>Loading policies…</p> : null}
+        {isError ? <p>Unable to load policies right now.</p> : null}
+
+        {policies.length === 0 && !isLoading ? (
+          <p className="assets-page-muted">No policies found.</p>
+        ) : (
+          <div className="assets-page-list assets-page-list-scrollable">
+            {policies.map((policy) => (
+              <div className="assets-page-row" key={policy.policy_id}>
+                <div className="assets-page-row-main">
+                  <div className="assets-item-title">{policy.provider} – {policy.policy_name}</div>
+                  <div className="assets-meta-list">
+                    <div className="assets-meta-row-line">
+                      <span className="assets-meta-label">Type</span>
+                      <span className="assets-meta-value">{TYPE_LABELS[policy.insurance_type] || "Other"}</span>
+                    </div>
+                    <div className="assets-meta-row-line">
+                      <span className="assets-meta-label">Premiums paid</span>
+                      <span className="assets-meta-value">{policy.premiums_paid_count ?? 0}</span>
+                    </div>
+                    <div className="assets-meta-row-line">
+                      <span className="assets-meta-label">Total paid</span>
+                      <span className="assets-meta-value">₹ {formatCurrency(policy.total_premiums_paid)}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="assets-page-row-meta">
+                  <button
+                    type="button"
+                    className="assets-page-btn assets-action-btn-edit"
+                    onClick={() => startEdit(policy)}
+                    disabled={isSaving || isDeleting}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    className="assets-page-btn assets-action-btn-delete"
+                    onClick={() => handleDelete(policy.policy_id)}
+                    disabled={isSaving || isDeleting}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {formError && !editingId ? <div className="assets-page-form-error">{formError}</div> : null}
       </div>
+
+      {renderEditPopup()}
     </div>
   );
 }
