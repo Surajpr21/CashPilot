@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./SavingsPage.css";
 import { supabase } from "../../../lib/supabaseClient";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Wallet02Icon,
+  MoneyBag02Icon,
+  SparklesIcon,
+  RupeeShieldIcon,
+} from "@hugeicons/core-free-icons";
 import {
   deriveSavingsState,
   formatMonthKey,
@@ -324,11 +331,17 @@ export default function SavingsPage() {
           {renderSkeletonCard(3)}
           {renderSkeletonCard(2)}
           {renderSkeletonCard(2)}
+          {renderSkeletonCard(2)}
         </section>
       ) : (
         <section className="summary-strip">
-          <div className="summary-card">
-            <p className="summary-label">{summary.label}</p>
+          <div className="summary-card summary-card-positive">
+            <div className="card-head">
+              <span className="card-icon" aria-hidden="true">
+                <HugeiconsIcon icon={MoneyBag02Icon} size={22} strokeWidth={1.9} color="currentColor" />
+              </span>
+              <p className="summary-label">{summary.label}</p>
+            </div>
             <p className={`summary-value ${summary.tone}`}>
               {summary.hasData ? formatSavingsValue(summary.savings) : "—"}
             </p>
@@ -349,8 +362,13 @@ export default function SavingsPage() {
               </span>
             </div>
           </div>
-          <div className="summary-card">
-            <p className="summary-label">Savings rate</p>
+          <div className="summary-card summary-card-accent">
+            <div className="card-head">
+              <span className="card-icon" aria-hidden="true">
+                <HugeiconsIcon icon={SparklesIcon} size={22} strokeWidth={1.9} color="currentColor" />
+              </span>
+              <p className="summary-label">Savings rate</p>
+            </div>
             <p className="summary-value neutral">{Math.round(summary.savingsRate * 100)}%</p>
             <DotScale
               filled={getDotCount(summary.savingsRate)}
@@ -358,8 +376,13 @@ export default function SavingsPage() {
               tone={getDotTone(summary.savings)}
             />
           </div>
-          <div className="summary-card">
-            <p className="summary-label">Income vs expense</p>
+          <div className="summary-card summary-card-info">
+            <div className="card-head">
+              <span className="card-icon" aria-hidden="true">
+                <HugeiconsIcon icon={Wallet02Icon} size={22} strokeWidth={1.9} color="currentColor" />
+              </span>
+              <p className="summary-label">Income vs expense</p>
+            </div>
             <p className="summary-value neutral">
               {summary.hasData
                 ? `${currency(incomeExpense.income)} vs ${currency(incomeExpense.expenses)}`
@@ -374,14 +397,37 @@ export default function SavingsPage() {
                 : "Data pending"}
             </p>
           </div>
+          <div className="summary-card summary-card-positive">
+            <div className="card-head">
+              <span className="card-icon" aria-hidden="true">
+                <HugeiconsIcon icon={SparklesIcon} size={22} strokeWidth={1.9} color="currentColor" />
+              </span>
+              <p className="summary-label">Savings consistency</p>
+            </div>
+            <DotScale
+              filled={getDotCount(consistency.ratio)}
+              tone={consistency.window === 0 ? "neutral" : "positive"}
+              ariaLabel="Savings consistency indicator"
+            />
+            <p className="subtext">
+              {consistency.window === 0
+                ? "Not enough history yet."
+                : `You saved money in ${consistency.savedMonths} of the last ${consistency.window} months.`}
+            </p>
+          </div>
         </section>
       )}
 
       <p className="legend-text">Dots indicate savings strength for the selected period.</p>
 
       <section className="plain-grid">
-        <div className="plain-card">
-          <h3>This month</h3>
+        <div className="plain-card plain-card-info">
+          <div className="section-head">
+            <span className="card-icon" aria-hidden="true">
+              <HugeiconsIcon icon={Wallet02Icon} size={22} strokeWidth={1.9} color="currentColor" />
+            </span>
+            <h3>This month</h3>
+          </div>
           <div className="plain-lines">
             <div className="line with-divider"><span>Income</span><span>{summary.hasData ? currency(incomeExpense.income) : "—"}</span></div>
             <div className="line with-divider"><span>Expenses</span><span>{summary.hasData ? currency(incomeExpense.expenses) : "—"}</span></div>
@@ -391,8 +437,13 @@ export default function SavingsPage() {
           <p className="micro-subtext">Typical month: {forecast.hasData ? formatSavingsValue(forecast.average) : "Not enough data"}</p>
         </div>
 
-        <div className="plain-card">
-          <h3>Forecast</h3>
+        <div className="plain-card plain-card-accent">
+          <div className="section-head">
+            <span className="card-icon" aria-hidden="true">
+              <HugeiconsIcon icon={SparklesIcon} size={22} strokeWidth={1.9} color="currentColor" />
+            </span>
+            <h3>Forecast</h3>
+          </div>
           <div className="plain-lines">
             <div className="line with-divider">
               <span>Projected savings (next 3 months)</span>
@@ -428,8 +479,13 @@ export default function SavingsPage() {
       </section>
 
       <section className="paired-cards">
-        <div className="plain-card">
-          <p className="badge">High savings month</p>
+        <div className="plain-card plain-card-positive">
+          <div className="section-head compact">
+            <p className="badge">High savings month</p>
+            <span className="card-icon" aria-hidden="true">
+              <HugeiconsIcon icon={MoneyBag02Icon} size={22} strokeWidth={1.9} color="currentColor" />
+            </span>
+          </div>
           <h4 className="month-title">{bestMonth ? formatMonthLabel(bestMonth.month) : "Not enough data"}</h4>
           <p className="month-amount positive">
             {bestMonth ? `Saved ${currency(bestMonth.savings)}` : "—"}
@@ -441,8 +497,13 @@ export default function SavingsPage() {
             ariaLabel="Best month strength"
           />
         </div>
-        <div className="plain-card">
-          <p className="badge">Low savings month</p>
+        <div className="plain-card plain-card-negative">
+          <div className="section-head compact">
+            <p className="badge badge-negative">Low savings month</p>
+            <span className="card-icon" aria-hidden="true">
+              <HugeiconsIcon icon={RupeeShieldIcon} size={22} strokeWidth={1.9} color="currentColor" />
+            </span>
+          </div>
           <h4 className="month-title">{lowMonth ? formatMonthLabel(lowMonth.month) : "Not enough data"}</h4>
           <p className="month-amount negative">
             {lowMonth ? `Overspent ${currency(Math.abs(lowMonth.savings))}` : "—"}
@@ -454,20 +515,6 @@ export default function SavingsPage() {
             ariaLabel="Worst month strength"
           />
         </div>
-      </section>
-
-      <section className="soft-card">
-        <p className="soft-label">Savings consistency</p>
-        <DotScale
-          filled={getDotCount(consistency.ratio)}
-          tone={consistency.window === 0 ? "neutral" : "positive"}
-          ariaLabel="Savings consistency indicator"
-        />
-        <p className="soft-text">
-          {consistency.window === 0
-            ? "Not enough history yet."
-            : `You saved money in ${consistency.savedMonths} of the last ${consistency.window} months.`}
-        </p>
       </section>
 
       <div className="inline-actions">
