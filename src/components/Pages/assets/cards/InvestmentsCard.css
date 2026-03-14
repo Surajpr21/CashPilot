@@ -38,6 +38,33 @@
   margin-top: 12px;
 }
 
+.assets-page-list.assets-page-list-scrollable {
+  max-height: 360px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #9fb8b0 transparent;
+}
+
+.assets-page-list.assets-page-list-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.assets-page-list.assets-page-list-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.assets-page-list.assets-page-list-scrollable::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b9d8cf 0%, #8bbfb2 100%);
+  border-radius: 10px;
+}
+
+.assets-page-list.assets-page-list-scrollable::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a5cfc4 0%, #7cb3a4 100%);
+}
+
 .assets-page-list li {
   display: flex;
   justify-content: space-between;
@@ -65,6 +92,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
   padding: 20px;
   animation: assets-page-modal-in 160ms ease-out;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
 .assets-page-modal-header {
@@ -77,14 +105,19 @@
 
 .assets-page-modal-kicker {
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 11px;
-  color: #94a3b8;
+  letter-spacing: 0.08em;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8a8f98;
   margin: 0;
 }
 
 .assets-page-modal h4 {
   margin: 2px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #1e1e1e;
 }
 
 .assets-page-modal-close {
@@ -93,7 +126,9 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b7280;
   cursor: pointer;
 }
 
@@ -187,6 +222,7 @@
   padding: 10px 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .assets-page-btn.ghost {
@@ -199,6 +235,79 @@
   color: #fff;
   border: none;
   box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
+}
+
+.assets-page-row {
+  gap: 18px;
+}
+
+.assets-page-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.assets-item-title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #2a2a2a;
+}
+
+.assets-meta-list {
+  margin-top: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.assets-meta-row-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.assets-meta-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.assets-meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+}
+
+.assets-action-btn-edit {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 6px 14px;
+  border-radius: 10px;
+}
+
+.assets-action-btn-delete {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fecaca;
+  padding: 6px 14px;
+  border-radius: 10px;
+}
+
+.assets-page-row-meta .assets-page-btn:not(:disabled):hover {
+  background-color: #3b82f6;
+  box-shadow: 0 0 0 5px #3b83f65f;
+  color: #fff;
+}
+
+.assets-page-row-meta .assets-action-btn-delete:not(:disabled):hover {
+  border-color: transparent;
 }
 
 .assets-page-modal.assets-page-modal-investment {
@@ -215,6 +324,22 @@
   overflow: visible;
   backdrop-filter: blur(16px) saturate(118%);
   -webkit-backdrop-filter: blur(16px) saturate(118%);
+}
+
+.assets-page-modal.assets-page-modal-investment.assets-page-modal-details {
+  overflow-y: auto;
+  overflow-x: visible;
+}
+
+.assets-page-modal-backdrop.assets-page-modal-edit-backdrop {
+  z-index: 80;
+  background: rgba(2, 6, 23, 0.42);
+}
+
+.assets-page-modal.assets-page-modal-edit-popup {
+  width: min(860px, 100%);
+  max-height: 88vh;
+  overflow-y: auto;
 }
 
 .assets-page-modal.assets-page-modal-investment::before {
