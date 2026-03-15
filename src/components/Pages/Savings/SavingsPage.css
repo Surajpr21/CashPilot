@@ -501,6 +501,39 @@
   margin-top: 6px;
 }
 
+.history-trigger[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 14px;
+}
+
+.positive-value {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.negative-value {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
 .solid-btn {
   background: linear-gradient(135deg, #6fb1c6, #4f9cf9);
   color: #fff;
@@ -513,17 +546,29 @@
 }
 
 .dot-scale {
+  --dot-size: 12px;
   display: flex;
-  gap: 6px;
+  gap: 7px;
   margin-top: 8px;
   align-items: center;
 }
 
 .dot-scale .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #e2e8f0;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  min-width: var(--dot-size);
+  min-height: var(--dot-size);
+  inline-size: var(--dot-size);
+  block-size: var(--dot-size);
+  flex: 0 0 var(--dot-size);
+  aspect-ratio: 1 / 1;
+  display: block;
+  padding: 0;
+  line-height: 0;
+  border-radius: 999px;
+  background: #dbe4ef;
+  border: 1px solid #a7b6c8;
+  box-sizing: border-box;
 }
 
 .dot-scale.positive .dot.on {
@@ -541,7 +586,9 @@
 }
 
 .dot-scale .dot.off {
-  background: #e2e8f0;
+  background: #dbe4ef;
+  border-color: #9caec3;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
 }
 
 @media (max-width: 720px) {

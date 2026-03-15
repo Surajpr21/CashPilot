@@ -99,13 +99,26 @@ export const getIncomeExpense = (monthData) => {
   return { income: monthData.income, expenses: monthData.expenses };
 };
 
-export const getDotCount = (rateFraction) => {
-  const percent = Math.round((rateFraction || 0) * 100);
-  if (percent <= 5) return 1;
-  if (percent <= 10) return 2;
-  if (percent <= 15) return 3;
-  if (percent <= 20) return 4;
-  return 5;
+export const getDotCount = (value, benchmarkValues = [], total = 5) => {
+  const safeTotal = Math.max(1, Math.floor(total) || 5);
+  const current = Number(value);
+  if (!Number.isFinite(current)) return 1;
+
+  const benchmarks = Array.isArray(benchmarkValues)
+    ? benchmarkValues.map((item) => Number(item)).filter((item) => Number.isFinite(item))
+    : [];
+
+  const scaleValues = benchmarks.length > 0 ? [...benchmarks, current] : [current];
+  const min = Math.min(...scaleValues);
+  const max = Math.max(...scaleValues);
+
+  if (max === min) {
+    return current > 0 ? safeTotal : 1;
+  }
+
+  const normalized = (current - min) / (max - min);
+  const scaled = Math.round(normalized * (safeTotal - 1)) + 1;
+  return Math.max(1, Math.min(safeTotal, scaled));
 };
 
 export const getDotTone = (amount) => {

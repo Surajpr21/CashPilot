@@ -26,16 +26,6 @@ const currency = (val) => `₹${Math.round(val).toLocaleString("en-IN")}`;
 
 const getCurrentMonthKey = () => formatMonthKey(new Date());
 
-const monthKeyFromISO = (value) => {
-  if (!value) return null;
-  const iso = String(value).split("T")[0];
-  const parts = iso.split("-");
-  if (parts.length < 2) return null;
-  const [year, month] = parts;
-  if (!year || !month) return null;
-  return `${year}-${String(month).padStart(2, "0")}-01`;
-};
-
 const formatSavingsValue = (value) => {
   if (value === null || value === undefined) return "—";
   return value >= 0 ? currency(value) : `−${currency(Math.abs(value))}`;
@@ -56,6 +46,7 @@ export default function SavingsPage() {
   const [period, setPeriod] = useState("this-month");
   const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthKey());
   const [goalModalOpen, setGoalModalOpen] = useState(false);
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
   const [goalAmount, setGoalAmount] = useState("8000");
   const [monthlySavings, setMonthlySavings] = useState([]);
   const [savingsTargets, setSavingsTargets] = useState({});
@@ -89,30 +80,16 @@ export default function SavingsPage() {
       }
       const userId = userData.user.id;
 
-      const end = new Date();
-      const start = new Date(end.getFullYear(), end.getMonth() - 11, 1);
-      const startStr = start.toISOString().split("T")[0];
-      const endStr = new Date(end.getFullYear(), end.getMonth() + 1, 0).toISOString().split("T")[0];
-
       const [
-        { data: txData, error: txError },
-        { data: expData, error: expError },
+        { data: monthlySavingsData, error: monthlySavingsError },
         { data: targetsData, error: targetsError },
       ] = await Promise.all([
         supabase
-          .from("transactions")
-          .select("occurred_on, amount, type")
+          .from("monthly_savings")
+          .select("month,total_income,total_expense")
           .eq("user_id", userId)
-          .gte("occurred_on", startStr)
-          .lte("occurred_on", endStr)
-          .order("occurred_on", { ascending: false }),
-        supabase
-          .from("expenses")
-          .select("spent_at, amount")
-          .eq("user_id", userId)
-          .gte("spent_at", startStr)
-          .lte("spent_at", endStr)
-          .order("spent_at", { ascending: false }),
+          .order("month", { ascending: false })
+          .limit(12),
         supabase
           .from("savings_targets")
           .select("month,target_amount")
@@ -121,8 +98,7 @@ export default function SavingsPage() {
           .limit(12),
       ]);
 
-      if (txError) console.error("transactions fetch error", txError);
-      if (expError) console.error("expenses fetch error", expError);
+      if (monthlySavingsError) console.error("monthly_savings fetch error", monthlySavingsError);
       if (targetsError) console.error("savings_targets fetch error", targetsError);
 
       const targetMap = Array.isArray(targetsData)
@@ -132,35 +108,15 @@ export default function SavingsPage() {
           }, {})
         : {};
 
-      const monthlyMap = new Map();
-      if (Array.isArray(txData)) {
-        txData.forEach((row) => {
-          if (!row?.occurred_on) return;
-          const key = monthKeyFromISO(row.occurred_on);
-          if (!key) return;
-          const entry = monthlyMap.get(key) || { month: key, income: 0, expenses: 0 };
-          const amount = Number(row.amount) || 0;
-          if (row.type === "income") {
-            entry.income += amount;
-          } else if (row.type === "expense") {
-            entry.expenses += amount;
-          }
-          monthlyMap.set(key, entry);
-        });
-      }
-
-      if (Array.isArray(expData)) {
-        expData.forEach((row) => {
-          if (!row?.spent_at) return;
-          const key = monthKeyFromISO(row.spent_at);
-          if (!key) return;
-          const entry = monthlyMap.get(key) || { month: key, income: 0, expenses: 0 };
-          entry.expenses += Number(row.amount) || 0;
-          monthlyMap.set(key, entry);
-        });
-      }
-
-      const normalizedSavings = normalizeSavingsItems(Array.from(monthlyMap.values()));
+      const normalizedSavings = normalizeSavingsItems(
+        Array.isArray(monthlySavingsData)
+          ? monthlySavingsData.map((row) => ({
+              month: row.month,
+              income: Number(row.total_income) || 0,
+              expenses: Number(row.total_expense) || 0,
+            }))
+          : [],
+      );
 
       if (active) {
         setMonthlySavings(normalizedSavings);
@@ -196,6 +152,36 @@ export default function SavingsPage() {
     () => deriveSavingsState(monthlySavings, savingsTargets, selectedMonth),
     [monthlySavings, savingsTargets, selectedMonth],
   );
+
+  const savingsRateSeries = useMemo(
+    () => monthlySavings.map((item) => getSavingsRate(item)).filter((value) => Number.isFinite(value)),
+    [monthlySavings],
+  );
+
+  const consistencySeries = useMemo(() => {
+    if (!Array.isArray(monthlySavings) || monthlySavings.length === 0) return [];
+
+    return monthlySavings.map((_, index, list) => {
+      const window = list.slice(index);
+      if (window.length === 0) return 0;
+
+      const savedMonths = window.filter((item) => (item.savings ?? item.income - item.expenses) > 0).length;
+      return savedMonths / window.length;
+    });
+  }, [monthlySavings]);
+
+  const previousSixMonthsSavings = useMemo(() => {
+    if (!Array.isArray(monthlySavings) || monthlySavings.length === 0) return [];
+
+    const currentMonthKey = getCurrentMonthKey();
+    return monthlySavings
+      .filter((item) => item?.month && item.month < currentMonthKey)
+      .slice(0, 6)
+      .map((item) => ({
+        month: item.month,
+        savings: Number(item.savings ?? item.income - item.expenses) || 0,
+      }));
+  }, [monthlySavings]);
 
   const { summary, targetAmount, incomeExpense, forecast, bestMonth, lowMonth, consistency, edgeStates } = savingsState;
 
@@ -371,7 +357,7 @@ export default function SavingsPage() {
             </div>
             <p className="summary-value neutral">{Math.round(summary.savingsRate * 100)}%</p>
             <DotScale
-              filled={getDotCount(summary.savingsRate)}
+              filled={getDotCount(summary.savingsRate, savingsRateSeries)}
               ariaLabel="Savings rate indicator"
               tone={getDotTone(summary.savings)}
             />
@@ -405,7 +391,7 @@ export default function SavingsPage() {
               <p className="summary-label">Savings consistency</p>
             </div>
             <DotScale
-              filled={getDotCount(consistency.ratio)}
+              filled={getDotCount(consistency.ratio, consistencySeries)}
               tone={consistency.window === 0 ? "neutral" : "positive"}
               ariaLabel="Savings consistency indicator"
             />
@@ -414,6 +400,14 @@ export default function SavingsPage() {
                 ? "Not enough history yet."
                 : `You saved money in ${consistency.savedMonths} of the last ${consistency.window} months.`}
             </p>
+            <button
+              className="link-quiet history-trigger"
+              type="button"
+              onClick={() => setHistoryModalOpen(true)}
+              disabled={previousSixMonthsSavings.length === 0}
+            >
+              View previous 6 months savings
+            </button>
           </div>
         </section>
       )}
@@ -492,7 +486,7 @@ export default function SavingsPage() {
           </p>
           <p className="micro-label">Best month in range</p>
           <DotScale
-            filled={bestMonth ? getDotCount(getSavingsRate(bestMonth)) : 1}
+            filled={bestMonth ? getDotCount(getSavingsRate(bestMonth), savingsRateSeries) : 1}
             tone={bestMonth ? getDotTone(bestMonth.savings) : "neutral"}
             ariaLabel="Best month strength"
           />
@@ -510,7 +504,7 @@ export default function SavingsPage() {
           </p>
           <p className="micro-label">Lowest month in range</p>
           <DotScale
-            filled={lowMonth ? getDotCount(getSavingsRate(lowMonth)) : 1}
+            filled={lowMonth ? getDotCount(getSavingsRate(lowMonth), savingsRateSeries) : 1}
             tone={lowMonth ? getDotTone(lowMonth.savings) : "neutral"}
             ariaLabel="Worst month strength"
           />
@@ -546,6 +540,36 @@ export default function SavingsPage() {
                 onClick={handleSaveGoal}
               >
                 Save goal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {historyModalOpen && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Previous 6 months savings">
+          <div className="modal-card">
+            <h3 className="modal-title">Previous 6 months savings</h3>
+            <p className="modal-sub">Month-wise net savings from your finance records.</p>
+
+            <div className="history-list">
+              {previousSixMonthsSavings.length === 0 ? (
+                <p className="subtext">Not enough history.</p>
+              ) : (
+                previousSixMonthsSavings.map((item) => (
+                  <div key={item.month} className="history-row">
+                    <span>{formatMonthLabel(item.month)}</span>
+                    <span className={item.savings >= 0 ? "positive-value" : "negative-value"}>
+                      {formatSavingsValue(item.savings)}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button className="ghost-link" type="button" onClick={() => setHistoryModalOpen(false)}>
+                Close
               </button>
             </div>
           </div>
