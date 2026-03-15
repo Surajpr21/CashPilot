@@ -80,11 +80,6 @@ export default function SavingsPage() {
       }
       const userId = userData.user.id;
 
-      const end = new Date();
-      const start = new Date(end.getFullYear(), end.getMonth() - 11, 1);
-      const startStr = start.toISOString().split("T")[0];
-      const endStr = new Date(end.getFullYear(), end.getMonth() + 1, 0).toISOString().split("T")[0];
-
       const [
         { data: monthlySavingsData, error: monthlySavingsError },
         { data: targetsData, error: targetsError },
