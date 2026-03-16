@@ -297,7 +297,6 @@ export default function SavingsPage() {
     return analyzedMonths.map((item) => {
       const income = Number(item.income) || 0;
       const expenses = Number(item.expenses) || 0;
-      const savings = Number(item.savings ?? income - expenses) || 0;
 
       let savingsRatePercent = 0;
       if (income > 0) {
