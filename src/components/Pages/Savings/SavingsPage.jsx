@@ -17,15 +17,18 @@ import {
   normalizeSavingsItems,
 } from "./selectors/savingsSelectors";
 
-const PERIOD_OPTIONS = [
-  { value: "this-month", label: "This month" },
-  { value: "previous", label: "Previous month" },
-];
-
 const currency = (val) => `₹${Math.round(val).toLocaleString("en-IN")}`;
 
 const getCurrentMonthKey = () => formatMonthKey(new Date());
 const TREND_MONTHS = 6;
+
+const shiftMonthKey = (monthKey, delta) => {
+  const date = getDateFromMonthKey(monthKey);
+  if (!date) return getCurrentMonthKey();
+
+  const shifted = new Date(date.getFullYear(), date.getMonth() + delta, 1);
+  return formatMonthKey(shifted);
+};
 
 const getDateFromMonthKey = (key) => {
   if (!key) return null;
@@ -74,7 +77,6 @@ function DotScale({ filled, total = 5, tone = "neutral", ariaLabel, pattern }) {
 }
 
 export default function SavingsPage() {
-  const [period, setPeriod] = useState("this-month");
   const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthKey());
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
@@ -175,18 +177,18 @@ export default function SavingsPage() {
 
       const targetMap = Array.isArray(targetsData)
         ? targetsData.reduce((acc, row) => {
-            acc[row.month] = row.target_amount;
-            return acc;
-          }, {})
+          acc[row.month] = row.target_amount;
+          return acc;
+        }, {})
         : {};
 
       const expenseTotalsByMonth = Array.isArray(expensesData)
         ? expensesData.reduce((acc, row) => {
-            const monthKey = toMonthKey(row.spent_at);
-            if (!monthKey) return acc;
-            acc[monthKey] = (acc[monthKey] || 0) + (Number(row.amount) || 0);
-            return acc;
-          }, {})
+          const monthKey = toMonthKey(row.spent_at);
+          if (!monthKey) return acc;
+          acc[monthKey] = (acc[monthKey] || 0) + (Number(row.amount) || 0);
+          return acc;
+        }, {})
         : {};
 
       const mergedMonthlyMap = {};
@@ -242,16 +244,6 @@ export default function SavingsPage() {
       active = false;
     };
   }, []);
-
-  useEffect(() => {
-    if (period === "this-month") {
-      setSelectedMonth(getCurrentMonthKey());
-    } else if (period === "previous") {
-      const prev = new Date();
-      prev.setMonth(prev.getMonth() - 1);
-      setSelectedMonth(formatMonthKey(prev));
-    }
-  }, [period]);
 
   const savingsState = useMemo(
     () => deriveSavingsState(monthlySavings, savingsTargets, selectedMonth),
@@ -331,6 +323,11 @@ export default function SavingsPage() {
 
   const { summary, targetAmount, incomeExpense, forecast, bestMonth, lowMonth, consistency, edgeStates } = savingsState;
 
+  const currentMonthKey = getCurrentMonthKey();
+  const minMonthKey = useMemo(() => shiftMonthKey(currentMonthKey, -11), [currentMonthKey]);
+  const canGoPreviousMonth = selectedMonth > minMonthKey;
+  const canGoNextMonth = selectedMonth < currentMonthKey;
+
   const formatMonthLabel = (key) => {
     if (!key) return "—";
     const date = getDateFromMonthKey(key);
@@ -344,6 +341,8 @@ export default function SavingsPage() {
     if (!date) return "—";
     return new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" }).format(date);
   };
+
+  const selectedMonthLabel = useMemo(() => formatMonthLabel(selectedMonth), [selectedMonth]);
 
   const formatHistorySavingsValue = (value) => {
     if (value === null || value === undefined) return "—";
@@ -420,18 +419,33 @@ export default function SavingsPage() {
 
       <div className="summary-top-row">
         <div className="savings-filter">
-          <select
-            id="period-select"
-            className="filter-select"
-            value={period}
-            onChange={(e) => setPeriod(e.target.value)}
+          <div
+            className="month-picker"
+            role="group"
+            aria-label="Select savings month"
           >
-            {PERIOD_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+            <button
+              type="button"
+              className="month-picker-nav"
+              onClick={() => setSelectedMonth((prev) => shiftMonthKey(prev, -1))}
+              disabled={!canGoPreviousMonth}
+              aria-label="Previous month"
+            >
+              <span aria-hidden="true">‹</span>
+            </button>
+            <div className="month-picker-label" aria-live="polite">
+              {selectedMonthLabel}
+            </div>
+            <button
+              type="button"
+              className="month-picker-nav"
+              onClick={() => setSelectedMonth((prev) => shiftMonthKey(prev, 1))}
+              disabled={!canGoNextMonth}
+              aria-label="Next month"
+            >
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
         </div>
 
         <div className="summary-actions">
@@ -535,7 +549,7 @@ export default function SavingsPage() {
                 ? `${currency(incomeExpense.income)} vs ${currency(incomeExpense.expenses)}`
                 : "—"}
             </p>
-            <div className="thin-divider" />
+            {/* <div className="thin-divider" /> */}
             <p className="subtext">
               {summary.hasData
                 ? summary.savings >= 0
@@ -574,7 +588,7 @@ export default function SavingsPage() {
         </section>
       )}
 
-      <p className="legend-text">Dots indicate savings strength for the selected period.</p>
+      <p className="legend-text">Dots indicate savings strength for the selected month.</p>
 
       <section className="plain-grid">
         <div className="plain-card plain-card-info">
@@ -708,11 +722,6 @@ export default function SavingsPage() {
           </div>
         </div>
       </section>
-
-      <div className="inline-actions">
-        <button className="link-quiet">View related expenses</button>
-        <button className="link-quiet">Go to dashboard</button>
-      </div>
 
       {goalModalOpen && (
         <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Set savings goal">
