@@ -53,13 +53,58 @@
   font-size: 13px;
 }
 
-.filter-select {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  color: #0f172a;
-  font-size: 14px;
+.month-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  /* min-height: 44px; */
+  padding: 7px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  background: linear-gradient(90deg, #efe3fb 0%, #f4f1f7 44%, #edf5ea 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 8px 20px rgba(148, 163, 184, 0.16);
+}
+
+.month-picker-nav {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.62);
+  color: #9aa8ba;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(148, 163, 184, 0.12);
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease, background-color 180ms ease;
+}
+
+.month-picker-nav span {
+  font-size: 18px;
+  line-height: 1;
+  margin-top: -1px;
+}
+
+.month-picker-nav:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 14px rgba(148, 163, 184, 0.18);
+}
+
+.month-picker-nav:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.month-picker-label {
+  min-width: 132px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: #8ea2b0;
+  letter-spacing: -0.015em;
 }
 
 .summary-actions {
@@ -145,7 +190,7 @@
 .card-head,
 .section-head {
   display: flex;
-  align-items: center;
+  align-items: end;
   gap: 10px;
 }
 
@@ -173,11 +218,12 @@
 .summary-label {
   margin: 0 0 8px;
   color: #6b7280;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .summary-value {
   margin: 0;
+  margin-top: 9px;
   font-weight: 700;
   font-size: 20px;
 }
@@ -211,7 +257,7 @@
 }
 
 .mini-progress-text {
-  font-size: 11px;
+  font-size: 12px;
   color: #475569;
   font-weight: 600;
 }
@@ -250,7 +296,7 @@
 .plain-card {
   --card-accent: #4f46e5;
   --card-accent-soft: rgba(79, 70, 229, 0.12);
-  background: #ffffff;
+  background: #f2f4f2;
   border-radius: 14px;
   padding: 16px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
@@ -284,8 +330,8 @@
 
 .plain-card h3 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .plain-lines {
@@ -298,7 +344,7 @@
   display: flex;
   justify-content: space-between;
   color: #0f172a;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .line.with-divider {
@@ -422,6 +468,7 @@
 
 .subtext {
   margin: 0;
+  margin-top: 7px;
   font-size: 13px;
   color: #475569;
 }
@@ -430,6 +477,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .ghost-link {
@@ -695,6 +744,16 @@
 @media (max-width: 720px) {
   .savings-head {
     flex-direction: column;
+  }
+
+  .month-picker {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .month-picker-label {
+    min-width: 0;
+    flex: 1;
   }
 
   .paired-cards {
