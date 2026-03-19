@@ -45,6 +45,13 @@ import ExpenseForm from "./ExpensesFilters/ExpenseForm/ExpenseForm";
 
 const PAGE_SIZE = 10;
 
+const toLocalDateString = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 // Helper to get date range presets
 function getDatePreset(preset) {
   const now = new Date();
@@ -52,14 +59,14 @@ function getDatePreset(preset) {
   const month = now.getMonth();
 
   if (preset === "thisMonth") {
-    const from = new Date(year, month, 1).toISOString().split("T")[0];
-    const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
+    const from = toLocalDateString(new Date(year, month, 1));
+    const to = toLocalDateString(new Date(year, month + 1, 0));
     return { from, to };
   }
 
   if (preset === "lastMonth") {
-    const from = new Date(year, month - 1, 1).toISOString().split("T")[0];
-    const to = new Date(year, month, 0).toISOString().split("T")[0];
+    const from = toLocalDateString(new Date(year, month - 1, 1));
+    const to = toLocalDateString(new Date(year, month, 0));
     return { from, to };
   }
 
@@ -229,22 +236,34 @@ export default function ExpensesPage() {
     [incomeTotalAmount]
   );
 
-  const incomePreset = useMemo(() => {
-    const thisMonth = getDatePreset("thisMonth");
-    const lastMonth = getDatePreset("lastMonth");
-    if (filters.fromDate === thisMonth.from && filters.toDate === thisMonth.to) return "thisMonth";
-    if (filters.fromDate === lastMonth.from && filters.toDate === lastMonth.to) return "lastMonth";
-    return "custom";
-  }, [filters.fromDate, filters.toDate]);
-
-  const handleIncomePresetChange = (preset) => {
-    if (preset === "thisMonth" || preset === "lastMonth") {
-      const { from, to } = getDatePreset(preset);
-      const next = { ...filters, fromDate: from, toDate: to };
-      setFilters(next);
-      setIncomePage(1);
-      setPage(1);
+  const getIncomeActiveMonthDate = () => {
+    if (filters.fromDate) {
+      const parsed = new Date(`${filters.fromDate}T00:00:00`);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed;
+      }
     }
+    return new Date();
+  };
+
+  const getIncomeMonthLabel = () => {
+    const activeMonth = getIncomeActiveMonthDate();
+    return activeMonth.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  const shiftIncomeMonth = (offset) => {
+    const current = getIncomeActiveMonthDate();
+    const nextMonthDate = new Date(current.getFullYear(), current.getMonth() + offset, 1);
+    const from = toLocalDateString(new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth(), 1));
+    const to = toLocalDateString(new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1, 0));
+    const next = { ...filters, fromDate: from, toDate: to };
+
+    setFilters(next);
+    setIncomePage(1);
+    setPage(1);
   };
 
   return (
@@ -369,15 +388,25 @@ export default function ExpensesPage() {
         {activeTab === "income" && (
           <div className="income-view">
             <div className="expenses-page-filters income-filters">
-              <select
-                className="expenses-page-filter"
-                value={incomePreset}
-                onChange={(e) => handleIncomePresetChange(e.target.value)}
-              >
-                <option value="thisMonth">This month</option>
-                <option value="lastMonth">Last month</option>
-                <option value="custom">Custom (from expenses filters)</option>
-              </select>
+              <div className="expenses-month-selector" aria-label="Income month selector">
+                <button
+                  type="button"
+                  className="expenses-month-arrow expenses-month-arrow-prev"
+                  onClick={() => shiftIncomeMonth(-1)}
+                  aria-label="Previous month"
+                >
+                  &lt;
+                </button>
+                <span className="expenses-month-label">{getIncomeMonthLabel()}</span>
+                <button
+                  type="button"
+                  className="expenses-month-arrow expenses-month-arrow-next"
+                  onClick={() => shiftIncomeMonth(1)}
+                  aria-label="Next month"
+                >
+                  &gt;
+                </button>
+              </div>
 
               <div className="income-summary-group">
                 <div className="expenses-page-summary-item">
