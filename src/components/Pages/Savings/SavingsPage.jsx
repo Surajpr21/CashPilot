@@ -604,7 +604,7 @@ export default function SavingsPage() {
             <div className="line highlight"><span className="savings-label"><span className="dot tiny-dot" />Savings</span><span>{summary.hasData ? formatSavingsValue(summary.savings) : "—"}</span></div>
           </div>
           <p className="micro-subtext">Savings rate this month: {Math.round(summary.savingsRate * 100)}% of income</p>
-          <p className="micro-subtext">Typical month: {forecast.hasData ? formatSavingsValue(forecast.average) : "Not enough data"}</p>
+          <p className="micro-subtext">Average monthly savings: {forecast.hasData ? formatSavingsValue(forecast.average) : "Not enough data"}</p>
         </div>
 
         <div className="plain-card plain-card-accent">
@@ -651,10 +651,11 @@ export default function SavingsPage() {
       <section className="paired-cards">
         <div className="plain-card plain-card-positive">
           <div className="section-head compact">
-            <p className="badge">High savings month</p>
-            <span className="card-icon" aria-hidden="true">
+             <span className="card-icon" aria-hidden="true">
               <HugeiconsIcon icon={MoneyBag02Icon} size={22} strokeWidth={1.9} color="currentColor" />
             </span>
+            <p className="badge">High savings month</p>
+           
           </div>
           <h4 className="month-title">{bestMonth ? formatMonthLabel(bestMonth.month) : "Not enough data"}</h4>
           <p className="month-amount positive">
@@ -687,10 +688,11 @@ export default function SavingsPage() {
         </div>
         <div className="plain-card plain-card-negative">
           <div className="section-head compact">
-            <p className="badge badge-negative">Low savings month</p>
-            <span className="card-icon" aria-hidden="true">
+             <span className="card-icon" aria-hidden="true">
               <HugeiconsIcon icon={RupeeShieldIcon} size={22} strokeWidth={1.9} color="currentColor" />
             </span>
+            <p className="badge badge-negative">Low savings month</p>
+           
           </div>
           <h4 className="month-title">{lowMonth ? formatMonthLabel(lowMonth.month) : "Not enough data"}</h4>
           <p className="month-amount negative">

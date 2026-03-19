@@ -196,11 +196,11 @@
 
 .section-head {
   margin-bottom: 12px;
+  align-items: center;
 }
 
 .section-head.compact {
-  justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
 }
 
 .card-icon {
@@ -381,8 +381,8 @@
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
-  background: #eef2ff;
-  color: #1d4ed8;
+     background: rgba(21, 128, 61, 0.12);
+    color: #15803d;
   font-weight: 600;
   font-size: 12px;
   margin: 0;

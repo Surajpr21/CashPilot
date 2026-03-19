@@ -58,8 +58,29 @@ export const getForecast3Months = (items, horizon = 3) => {
   if (!Array.isArray(items) || items.length === 0) {
     return { projected: 0, best: 0, likely: 0, average: 0, hasData: false, sampleSize: 0 };
   }
+
   const sorted = [...items].sort((a, b) => b.month.localeCompare(a.month));
-  const window = sorted.slice(0, horizon);
+  const currentMonthKey = formatMonthKey(new Date());
+
+  // Prefer complete historical months for forecasting and ignore likely incomplete rows.
+  const forecastWindow = sorted
+    .filter((item) => {
+      if (!item?.month || item.month === currentMonthKey) return false;
+      const income = Number(item.income) || 0;
+      const expenses = Number(item.expenses) || 0;
+      return income > 0 && expenses > 0;
+    })
+    .slice(0, 6);
+
+  const fallbackWindow = sorted
+    .filter((item) => {
+      const income = Number(item?.income) || 0;
+      const expenses = Number(item?.expenses) || 0;
+      return income !== 0 || expenses !== 0;
+    })
+    .slice(0, Math.max(horizon, 3));
+
+  const window = forecastWindow.length > 0 ? forecastWindow : fallbackWindow;
   const savingsValues = window.map((m) => m.savings ?? m.income - m.expenses);
   const average = savingsValues.reduce((acc, val) => acc + val, 0) / window.length;
   const projected = average * horizon;

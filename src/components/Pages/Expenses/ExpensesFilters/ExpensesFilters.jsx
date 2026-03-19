@@ -6,6 +6,13 @@ import { getExpenseStats } from "../../../../services/expenses.service";
 import { CATEGORIES } from "../../../../constants/categories";
 import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 
+const toLocalDateString = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdded }) {
   const [showForm, setShowForm] = useState(false);
   const [localFilters, setLocalFilters] = useState({
@@ -66,8 +73,8 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
-    const from = new Date(year, month, 1).toISOString().split("T")[0];
-    const to = new Date(year, month + 1, 0).toISOString().split("T")[0];
+    const from = toLocalDateString(new Date(year, month, 1));
+    const to = toLocalDateString(new Date(year, month + 1, 0));
 
     const resetFilters = {
       fromDate: from,
@@ -81,45 +88,35 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
     onFilterChange(resetFilters);
   };
 
-  const setDatePreset = (preset) => {
-    if (preset === "custom") {
-      const customFilters = { ...localFilters, fromDate: "", toDate: "" };
-      setLocalFilters(customFilters);
-      onFilterChange(customFilters);
-      return;
-    }
+  const applyMonth = (baseDate) => {
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth();
+    const from = toLocalDateString(new Date(year, month, 1));
+    const to = toLocalDateString(new Date(year, month + 1, 0));
 
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    
-    let from, to;
-    
-    if (preset === "thisMonth") {
-      from = new Date(year, month, 1).toISOString().split("T")[0];
-      to = new Date(year, month + 1, 0).toISOString().split("T")[0];
-    } else if (preset === "lastMonth") {
-      from = new Date(year, month - 1, 1).toISOString().split("T")[0];
-      to = new Date(year, month, 0).toISOString().split("T")[0];
-    } else if (preset === "lastYear") {
-      from = new Date(year - 1, 0, 1).toISOString().split("T")[0];
-      to = new Date(year - 1, 11, 31).toISOString().split("T")[0];
-    }
-    
     const newFilters = { ...localFilters, fromDate: from, toDate: to };
     setLocalFilters(newFilters);
     onFilterChange(newFilters);
   };
 
+  const getActiveMonthDate = () => {
+    if (localFilters.fromDate) {
+      const parsed = new Date(`${localFilters.fromDate}T00:00:00`);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed;
+      }
+    }
+    return new Date();
+  };
+
+  const shiftMonth = (offset) => {
+    const current = getActiveMonthDate();
+    const nextMonthDate = new Date(current.getFullYear(), current.getMonth() + offset, 1);
+    applyMonth(nextMonthDate);
+  };
+
   const formatNumber = (value) =>
     Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 });
-
-  const datePresetOptions = [
-    { value: "This month", label: "This month" },
-    { value: "Last month", label: "Last month" },
-    { value: "Last year", label: "Last year" },
-    { value: "Custom range", label: "Custom range" },
-  ];
 
   const categoryOptions = [
     { value: "", label: "All categories" },
@@ -141,66 +138,35 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
     { value: "other", label: "Other" },
   ];
 
-  // Get current date preset label
-  const getDatePresetLabel = () => {
-    const now = new Date();
-    const thisMonthFrom = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0];
-    const thisMonthTo = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
-    const lastMonthFrom = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().split("T")[0];
-    const lastMonthTo = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split("T")[0];
-    const lastYearFrom = new Date(now.getFullYear() - 1, 0, 1).toISOString().split("T")[0];
-    const lastYearTo = new Date(now.getFullYear() - 1, 11, 31).toISOString().split("T")[0];
-
-    if (localFilters.fromDate === thisMonthFrom && localFilters.toDate === thisMonthTo) {
-      return "This month";
-    } else if (localFilters.fromDate === lastMonthFrom && localFilters.toDate === lastMonthTo) {
-      return "Last month";
-    } else if (localFilters.fromDate === lastYearFrom && localFilters.toDate === lastYearTo) {
-      return "Last year";
-    }
-    return "Custom range";
+  const getActiveMonthLabel = () => {
+    const monthDate = getActiveMonthDate();
+    return monthDate.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
   };
 
   return (
     <div className="expenses-page-filters">
-      {/* 1∩╕ÅΓâú Date Filter (PRIMARY) - Dropdown with presets */}
-      <CustomDropdown
-        value={getDatePresetLabel()}
-        options={datePresetOptions}
-        onChange={(val) => {
-          if (val === "Custom range") {
-            const customFilters = { ...localFilters, fromDate: "", toDate: "" };
-            setLocalFilters(customFilters);
-            onFilterChange(customFilters);
-          } else if (val === "This month") {
-            setDatePreset("thisMonth");
-          } else if (val === "Last month") {
-            setDatePreset("lastMonth");
-          } else if (val === "Last year") {
-            setDatePreset("lastYear");
-          }
-        }}
-        placeholder="This month"
-        width="190px"
-      />
-
-      {/* Custom date range inputs (shown when needed) */}
-      {getDatePresetLabel() === "Custom range" && (
-        <>
-          <input
-            type="date"
-            className="expenses-page-filter expenses-date-input"
-            value={localFilters.fromDate}
-            onChange={(e) => handleLocalChange("fromDate", e.target.value)}
-          />
-          <input
-            type="date"
-            className="expenses-page-filter expenses-date-input"
-            value={localFilters.toDate}
-            onChange={(e) => handleLocalChange("toDate", e.target.value)}
-          />
-        </>
-      )}
+      <div className="expenses-month-selector" aria-label="Expense month selector">
+        <button
+          type="button"
+          className="expenses-month-arrow expenses-month-arrow-prev"
+          onClick={() => shiftMonth(-1)}
+          aria-label="Previous month"
+        >
+          &lt;
+        </button>
+        <span className="expenses-month-label">{getActiveMonthLabel()}</span>
+        <button
+          type="button"
+          className="expenses-month-arrow expenses-month-arrow-next"
+          onClick={() => shiftMonth(1)}
+          aria-label="Next month"
+        >
+          &gt;
+        </button>
+      </div>
 
       {/* 2∩╕ÅΓâú Category Filter */}
       <CustomDropdown

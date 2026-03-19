@@ -34,6 +34,54 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
+.expenses-month-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 6px 10px;
+    border-radius: 14px;
+    background: #e3e5e8;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.expenses-month-arrow {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    color: #7d8697;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.expenses-month-arrow-prev {
+    background: #d9d5e9;
+}
+
+.expenses-month-arrow-next {
+    background: #edf0f2;
+}
+
+.expenses-month-arrow:hover {
+    transform: translateY(-1px);
+}
+
+.expenses-month-label {
+    min-width: 110px;
+    text-align: center;
+    color: #7d8697;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+}
+
 /* Keep dropdown labels on one line */
 .expenses-page-filters .cp-dropdown-trigger span {
     display: block;
@@ -266,6 +314,10 @@
     .cp-dropdown-item {
         font-size: 13px;
     }
+
+    .expenses-month-label {
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 1350px) {
@@ -302,6 +354,15 @@
         padding: 8px 12px;
         border-radius: 10px;
     }
+
+    .expenses-month-selector {
+        gap: 10px;
+    }
+
+    .expenses-month-label {
+        min-width: 100px;
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 1300px) {
@@ -331,6 +392,21 @@
 
     .expenses-search-hint {
         max-width: 180px;
+    }
+
+    .expenses-month-selector {
+        min-height: 40px;
+        padding: 5px 8px;
+    }
+
+    .expenses-month-arrow {
+        width: 28px;
+        height: 28px;
+    }
+
+    .expenses-month-label {
+        min-width: 90px;
+        font-size: 14px;
     }
 }
 
