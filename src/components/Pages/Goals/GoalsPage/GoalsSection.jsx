@@ -5,7 +5,6 @@ import AddMoneyModal from "./AddMoneyModal";
 import EditGoalModal from "./EditGoalModal";
 import { deleteGoal } from "../../../../services/goals.service";
 import {
-  getDaysOverdue,
   getGoalStatus,
   getGoalTargetDate,
   getRemainingAmount,
@@ -114,74 +113,6 @@ export default function GoalsSection({ goals, loading, setGoals }) {
     return "goals-active";
   };
 
-  const getInsightTypeClass = (type) => {
-    if (type === "overdue") return "goals-insight-overdue";
-    if (type === "risk") return "goals-insight-risk";
-    return "goals-insight-normal";
-  };
-
-  const buildInsights = (goalsList) => {
-    return goalsList
-      .map((goal) => {
-        const status = getGoalStatus(goal);
-
-        if (status === "completed") {
-          return null;
-        }
-
-        if (status === "overdue") {
-          const daysLate = getDaysOverdue(goal);
-          return {
-            id: `${goal.id}-overdue`,
-            type: "overdue",
-            priority: 0,
-            message: `${goal.name} is overdue by ${daysLate} day${daysLate === 1 ? "" : "s"}`,
-          };
-        }
-
-        const monthlyRequired = getMonthlyRequired(goal);
-        if (!monthlyRequired) {
-          return {
-            id: `${goal.id}-normal`,
-            type: "normal",
-            priority: 2,
-            message: `${goal.name} is active. Add a target date to get a monthly plan.`,
-          };
-        }
-
-        const progress = getProgressPercent(goal);
-        const isAtRisk = progress < 35;
-
-        if (isAtRisk) {
-          return {
-            id: `${goal.id}-risk`,
-            type: "risk",
-            priority: 1,
-            message: `${goal.name} is at risk. Save ₹${monthlyRequired.toLocaleString()}/month to catch up.`,
-          };
-        }
-
-        return {
-          id: `${goal.id}-normal`,
-          type: "normal",
-          priority: 2,
-          message: `${goal.name} is active. Save ₹${monthlyRequired.toLocaleString()}/month to stay on track.`,
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.priority - b.priority);
-  };
-
-  const handleRecalculatePlan = (goal) => {
-    const monthlyRequired = getMonthlyRequired(goal);
-    if (!monthlyRequired) {
-      alert("Set a valid future target date to recalculate this plan.");
-      return;
-    }
-
-    alert(`To complete ${goal.name}, save ₹${monthlyRequired.toLocaleString()}/month from now onward.`);
-  };
-
   if (loading) {
     return (
       <div className="goals-page-section">
@@ -210,7 +141,6 @@ export default function GoalsSection({ goals, loading, setGoals }) {
     };
   });
 
-  const insights = buildInsights(goalsWithStatus);
   const goalsGridClass =
     goalsWithStatus.length === 1
       ? "goals-grid-1"
