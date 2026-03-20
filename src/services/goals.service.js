@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { withDerivedGoalStatus } from '../lib/goalStatus';
 
 /**
  * STEP 5️⃣ Fetch goals (READ)
@@ -24,7 +25,7 @@ export async function fetchGoals() {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data;
+  return (data || []).map(withDerivedGoalStatus);
 }
 
 /**
@@ -46,7 +47,7 @@ export async function createGoal({ name, targetAmount, targetDate }) {
     .single();
 
   if (error) throw error;
-  return data;
+  return withDerivedGoalStatus(data);
 }
 
 /**
