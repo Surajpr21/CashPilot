@@ -3,6 +3,8 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, PieChart, List, CreditCard, Wallet, BarChart2, LogOut, PiggyBank, Bell } from "lucide-react";
 import "./Sidebar.css";
 import { useAuth } from "../../../contexts/AuthContext";
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+
 
 const NAV_TABS = [
   { key: "dashboard", label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
@@ -47,14 +49,21 @@ const Sidebar = ({ onToggleNotifications }) => {
       <div className="controls">
         <nav className="nav">
           {NAV_TABS.map(tab => (
-            <NavLink
-              key={tab.key}
-              to={tab.path}
-              className={`nav-item ${activeKey === tab.key ? "active" : ""}`}
-            >
-              {/* {tab.icon}  — enable icons later if needed */}
-              <span>{tab.label}</span>
-            </NavLink>
+            <React.Fragment key={tab.key}>
+              <NavLink
+                to={tab.path}
+                className={`nav-item ${activeKey === tab.key ? "active" : ""}`}
+              >
+                {/* {tab.icon}  — enable icons later if needed */}
+                <span>{tab.label}</span>
+              </NavLink>
+
+              {tab.key === "goals" && (
+                <div className="theme-switch-slot" aria-label="Theme switch">
+                  <ThemeSwitch />
+                </div>
+              )}
+            </React.Fragment>
           ))}
         </nav>
 
