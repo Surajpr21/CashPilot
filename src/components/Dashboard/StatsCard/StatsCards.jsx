@@ -136,15 +136,34 @@ const StatsCards = () => {
     ];
   }, [monthlyStats.expense, monthlyStats.expenseCount, monthlyStats.income, monthlyStats.incomeCount, subscriptions]);
 
+  const getCardVariantClass = (title) => {
+    if (title === "Spent This Month") return "card-spent";
+    if (title === "Saved This Month") return "card-saved";
+    if (title === "Investments") return "card-invest";
+    return "";
+  };
+
   return (
     <div className="stats-section-container">
       <div className="stats-left">
-        {derivedCards.map((item, index) => (
+        {derivedCards.map((item, index) => {
+          const variantClass = getCardVariantClass(item.title);
+
+          return (
           <div
             key={index}
-            className="stats-card"
-            style={{ background: item.gradient, opacity: loading ? 0.7 : 1 }}
+            className={`stats-card ${variantClass}`.trim()}
+            style={{
+              background: item.gradient,
+              opacity: loading ? 0.7 : 1,
+            }}
           >
+            <div className="blob b1" aria-hidden />
+            <div className="blob b2" aria-hidden />
+            <div className="blob b3" aria-hidden />
+            <div className="blob b4" aria-hidden />
+            {!!variantClass && <div className="glow" aria-hidden />}
+            {!!variantClass && <div className="noise" aria-hidden />}
             {item.title === "Total Balance" && (
               <div className="stats-card-bg" aria-hidden>
                 <svg
@@ -253,8 +272,8 @@ const StatsCards = () => {
               </div>
             </div>
           </div>
-
-        ))}
+          );
+        })}
       </div>
 
       <div className="stats-right">

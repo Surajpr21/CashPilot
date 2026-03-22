@@ -238,6 +238,7 @@
 .stats-card {
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 /* Background Layer */
@@ -247,13 +248,386 @@
   pointer-events: none;
   mix-blend-mode: soft-light;
   opacity: .95;
+  z-index: 2;
 }
 
 /* Force SVG to behave like a COVER background */
 .stats-card-bg svg {
     position: absolute;
-    bottom: 0;
+    bottom: -25px;
     left: 0;
     width: 100%;
-    height: 70%;
+    height: 100%;
+    z-index: 3;
 }
+
+.stats-card-header,
+.stats-card-value,
+.stats-card-change-badge {
+  position: relative;
+  z-index: 4;
+}
+
+.stats-card .glow,
+.stats-card .noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stats-card .blob {
+  display: none;
+}
+
+.stats-card .glow {
+  z-index: 2;
+  opacity: 0;
+}
+
+.stats-card .noise {
+  z-index: 2;
+  opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-spent {
+  background:
+    radial-gradient(ellipse 160% 120% at 90% -20%, #2a6640 0%, transparent 45%),
+    radial-gradient(ellipse 120% 100% at 50% 50%, #1a4a28 0%, transparent 55%),
+    radial-gradient(ellipse 100% 80% at 0% 100%, #0f3018 0%, transparent 55%),
+    linear-gradient(150deg, #163320 0%, #0a1c0d 100%) !important;
+  border: 1px solid rgba(100, 230, 140, 0.15);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-spent .glow {
+  background:
+    radial-gradient(ellipse 120% 100% at 90% -5%, rgba(120, 255, 170, 0.65) 0%, transparent 45%),
+    radial-gradient(ellipse 100% 80% at 30% 60%, rgba(80, 220, 130, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 70% 100%, rgba(60, 200, 110, 0.2) 0%, transparent 50%);
+  mix-blend-mode: screen;
+  opacity: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-saved {
+  background:
+    radial-gradient(ellipse 120% 90% at 75% -5%, #1a2440 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 10% 85%, #101828 0%, transparent 55%),
+    linear-gradient(150deg, #111828 0%, #090e18 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-saved .glow {
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 5%, rgba(80, 120, 220, 0.28) 0%, transparent 55%);
+  mix-blend-mode: screen;
+  opacity: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-invest {
+  background:
+    radial-gradient(ellipse 120% 90% at 75% -5%, #14301e 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 10% 85%, #0c1f14 0%, transparent 55%),
+    linear-gradient(150deg, #0e1a10 0%, #080e09 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-invest .glow {
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 5%, rgba(50, 170, 90, 0.25) 0%, transparent 55%);
+  mix-blend-mode: screen;
+  opacity: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-spent .stats-card-title,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-saved .stats-card-title,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-invest .stats-card-title {
+  color: rgba(221, 238, 231, 0.9);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-spent .stats-card-value,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-saved .stats-card-value,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-invest .stats-card-value {
+  color: #f5fff9;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-spent .hero-icon path,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-saved .hero-icon path,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-invest .hero-icon path {
+  fill: rgba(216, 240, 229, 0.92);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-spent .noise,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-saved .noise,
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card.card-invest .noise {
+  opacity: 0.35;
+}
+
+/* Dark mode card theme (driven by existing toggle checked state) */
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card {
+  border: 1px solid rgba(178, 194, 245, 0.14);
+  box-shadow: 0 10px 26px rgba(3, 7, 22, 0.34);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card:nth-child(1) {
+  --dm-glow-a: rgba(60, 140, 180, 0.35);
+  --dm-glow-b: rgba(20, 80, 110, 0.2);
+  background:
+    radial-gradient(ellipse 130% 100% at 80% -10%, #2a4a5e 0%, transparent 55%),
+    radial-gradient(ellipse 80% 70% at 10% 80%, #1a3040 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 90% 100%, rgba(0, 0, 0, 0.55) 0%, transparent 70%),
+    linear-gradient(160deg, #1a2e3d 0%, #0d1a24 60%, #0a1520 100%) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card:nth-child(2) {
+  --dm-glow-a: rgba(116, 126, 226, 0.33);
+  --dm-glow-b: rgba(74, 84, 170, 0.2);
+  background:
+    radial-gradient(ellipse 130% 100% at 80% -10%, #3b437d 0%, transparent 55%),
+    radial-gradient(ellipse 80% 70% at 10% 80%, #2a315f 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 90% 100%, rgba(0, 0, 0, 0.55) 0%, transparent 70%),
+    linear-gradient(160deg, #232a57 0%, #171d3f 60%, #111733 100%) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card:nth-child(3) {
+  --dm-glow-a: rgba(86, 128, 212, 0.35);
+  --dm-glow-b: rgba(42, 84, 162, 0.2);
+  background:
+    radial-gradient(ellipse 130% 100% at 80% -10%, #2e4f83 0%, transparent 55%),
+    radial-gradient(ellipse 80% 70% at 10% 80%, #223d67 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 90% 100%, rgba(0, 0, 0, 0.55) 0%, transparent 70%),
+    linear-gradient(160deg, #20375d 0%, #172847 60%, #111d35 100%) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card:nth-child(4) {
+  --dm-glow-a: rgba(86, 168, 118, 0.34);
+  --dm-glow-b: rgba(38, 103, 66, 0.22);
+  background:
+    radial-gradient(ellipse 130% 100% at 80% -10%, #2f5c47 0%, transparent 55%),
+    radial-gradient(ellipse 80% 70% at 10% 80%, #214633 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 90% 100%, rgba(0, 0, 0, 0.55) 0%, transparent 70%),
+    linear-gradient(160deg, #1d3c2f 0%, #152d24 60%, #0f231c 100%) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.08) 0 0.8px, transparent 0.8px 2.5px),
+    radial-gradient(circle at 75% 65%, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 3px);
+  background-size: 120px 120px, 140px 140px;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 85% 10%, var(--dm-glow-a, rgba(60, 140, 180, 0.35)) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 90%, var(--dm-glow-b, rgba(20, 80, 110, 0.2)) 0%, transparent 55%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card > :not(.stats-card-bg) {
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .stats-card-bg {
+  mix-blend-mode: soft-light;
+  opacity: 0.95;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .stats-card-bg svg {
+  filter: none;
+  transform: translateZ(0);
+  opacity: 0.78;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card-title {
+  color: rgba(225, 236, 255, 0.86);
+  font-weight: 500;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card-value {
+  color: #f4f8ff;
+  font-weight: 700;
+  text-shadow: 0 1px 10px rgba(7, 14, 30, 0.3);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .hero-icon path {
+  fill: rgba(201, 225, 248, 0.92);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card-change-badge.positive {
+  background-color: rgba(219, 239, 232, 0.92);
+  color: #164e44;
+  box-shadow: inset 0 0 0 1px rgba(214, 242, 234, 0.55);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card-change-badge.negative {
+  background-color: rgba(248, 210, 217, 0.94);
+  color: #a61f38;
+  box-shadow: inset 0 0 0 1px rgba(254, 230, 236, 0.55);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card-change-badge .arrow-icon {
+  opacity: 0.92;
+}
+
+/* Blob card effect for dark mode stats cards. */
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: #0d0d18;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .blob {
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0.85;
+  z-index: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .b1 {
+  width: 170px;
+  height: 170px;
+  background: rgba(80, 50, 200, 0.5);
+  top: -50px;
+  left: -30px;
+  animation: drift2 9s ease-in-out infinite;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .b2 {
+  width: 140px;
+  height: 140px;
+  background: rgba(20, 130, 75, 0.4);
+  bottom: -40px;
+  right: -10px;
+  animation: drift1 11s ease-in-out infinite;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .b3 {
+  width: 90px;
+  height: 90px;
+  background: rgba(60, 80, 180, 0.35);
+  top: 30px;
+  right: 60px;
+  animation: drift4 7s ease-in-out infinite;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .b4 {
+  width: 80px;
+  height: 80px;
+  background: rgba(40, 170, 100, 0.25);
+  top: 10px;
+  left: 50%;
+  animation: drift3 13s ease-in-out infinite;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .stats-card .noise {
+  opacity: 0.45;
+  z-index: 3;
+}
+
+@keyframes drift1 {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(18px, -14px) scale(1.08);
+  }
+  66% {
+    transform: translate(-10px, 12px) scale(0.95);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes drift2 {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-16px, 10px) scale(1.05);
+  }
+  66% {
+    transform: translate(12px, -18px) scale(0.92);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes drift3 {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  25% {
+    transform: translate(14px, 16px) scale(1.1);
+  }
+  50% {
+    transform: translate(-8px, -10px) scale(0.9);
+  }
+  75% {
+    transform: translate(10px, -14px) scale(1.05);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes drift4 {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  40% {
+    transform: translate(-20px, -8px) scale(1.12);
+  }
+  70% {
+    transform: translate(8px, 16px) scale(0.88);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+/* Final dark-mode override for Spent card theme. */
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .card-spent {
+  background:
+    radial-gradient(ellipse 155% 120% at 22% -18%, #72e8a3 0%, transparent 45%),
+    radial-gradient(ellipse 130% 105% at 45% 48%, #2f9a5e 0%, transparent 58%),
+    radial-gradient(ellipse 120% 95% at 92% 72%, #0f3a24 0%, transparent 62%),
+    linear-gradient(150deg, #2a7f52 0%, #0d2618 100%) !important;
+  border: 1px solid rgba(136, 245, 179, 0.28);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-left .card-spent .glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 125% 100% at 20% -8%, rgba(178, 255, 212, 0.6) 0%, transparent 44%),
+    radial-gradient(ellipse 100% 80% at 34% 60%, rgba(110, 232, 158, 0.36) 0%, transparent 56%),
+    radial-gradient(ellipse 80% 62% at 72% 98%, rgba(70, 205, 128, 0.22) 0%, transparent 50%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+

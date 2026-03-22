@@ -24,7 +24,6 @@ body {
   margin-top: 8px;
 }
 
-
 .logo {
   font-weight: 600;
   font-size: 24px;
@@ -33,6 +32,10 @@ body {
   flex-shrink: 0;
   /* prevents logo from shrinking */
   color: #1C4047;
+}
+
+.topbar:has(.theme-switch__checkbox:checked) .logo {
+  color: #fff;
 }
 
 .controls {
@@ -101,6 +104,10 @@ body {
 
 .nav-item:hover {
   background: rgba(0, 0, 0, 0.05);
+}
+
+.nav:has(.theme-switch__checkbox:checked) .nav-item, .icon-btn  {
+  color: #fff;
 }
 
 .nav-item.active {

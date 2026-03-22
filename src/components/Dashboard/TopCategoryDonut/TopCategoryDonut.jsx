@@ -1,15 +1,23 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import "./TopCategoryDonut.css";
 import { useNavigate } from "react-router-dom";
 import { useDashboardData } from "../../../contexts/DashboardDataContext";
 
-const GRADIENTS = [
+const LIGHT_GRADIENTS = [
   { from: "#CDE7A2", to: "#90D087" },
   { from: "#FFE6A8", to: "#F4C86A" },
   { from: "#B7EFE5", to: "#6ECFBC" },
   { from: "#BEE6FF", to: "#7CB8E8" },
   { from: "#C9C8FF", to: "#8EA2F6" },
+];
+
+const DARK_GRADIENTS = [
+  { from: "#F5CB72", to: "#E9B65E" },
+  { from: "#CEE978", to: "#8EDB6A" },
+  { from: "#75DFAE", to: "#5CB4D3" },
+  { from: "#5D88F5", to: "#6E74F3" },
+  { from: "#A37EF2", to: "#E887C2" },
 ];
 
 const CATEGORY_GRADIENTS = {
@@ -43,8 +51,23 @@ const lighten = (hex, amount = 0.18) => {
 const TopCategoryDonut = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [range, setRange] = useState("6m");
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
   const { topCategoriesByRange, loading } = useDashboardData();
+
+  useEffect(() => {
+    const themeToggle = document.querySelector(".theme-switch__checkbox");
+    if (!themeToggle) {
+      setIsDarkMode(false);
+      return undefined;
+    }
+
+    const syncTheme = () => setIsDarkMode(Boolean(themeToggle.checked));
+    syncTheme();
+
+    themeToggle.addEventListener("change", syncTheme);
+    return () => themeToggle.removeEventListener("change", syncTheme);
+  }, []);
 
   const data = useMemo(() => (topCategoriesByRange[range] || []).slice(0, 8), [range, topCategoriesByRange]);
 
@@ -64,12 +87,13 @@ const TopCategoryDonut = () => {
   );
 
   const pieData = data.length ? data : [{ name: "No data", value: 0 }];
+  const donutGradients = isDarkMode ? DARK_GRADIENTS : LIGHT_GRADIENTS;
 
   const gradientIdFor = (name, index) => {
     const lower = (name || "").toLowerCase();
     if (lower.includes("util")) return "donut-grad-utilities";
     if (lower.includes("transport")) return "donut-grad-transport";
-    return `donut-grad-${index % GRADIENTS.length}`;
+    return `donut-grad-${index % donutGradients.length}`;
   };
 
   return (
@@ -95,14 +119,14 @@ const TopCategoryDonut = () => {
             {loading && <text x="50%" y="50%" textAnchor="middle">Loading…</text>}
 
             <defs>
-              {GRADIENTS.map((g, i) => (
+              {donutGradients.map((g, i) => (
                 <linearGradient key={i} id={`donut-grad-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor={g.from} />
                   <stop offset="100%" stopColor={g.to} />
                 </linearGradient>
               ))}
 
-              {GRADIENTS.map((g, i) => (
+              {donutGradients.map((g, i) => (
                 <linearGradient key={`active-${i}`} id={`donut-grad-active-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor={lighten(g.from)} />
                   <stop offset="100%" stopColor={lighten(g.to)} />
@@ -158,14 +182,14 @@ const TopCategoryDonut = () => {
             <Tooltip
               wrapperStyle={{ zIndex: 1000 }}
               contentStyle={{
-                background: "#ffffff",
+                background: isDarkMode ? "rgba(18, 25, 45, 0.92)" : "#ffffff",
                 border: "none",
                 borderRadius: "10px",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                boxShadow: isDarkMode ? "0 8px 24px rgba(0,0,0,0.45)" : "0 8px 24px rgba(0,0,0,0.12)",
                 padding: "8px 12px",
               }}
               labelStyle={{ display: "none" }}
-              itemStyle={{ fontSize: "0.85rem", color: "#374151" }}
+              itemStyle={{ fontSize: "0.85rem", color: isDarkMode ? "#d6e1ff" : "#374151" }}
               formatter={(value, _, props) => [currencyFmt.format(value), props.payload.name]}
             />
           </PieChart>
@@ -173,7 +197,7 @@ const TopCategoryDonut = () => {
 
         <div className="donut-center">
           <div className="donut-center-amount">
-            <UpArrowIcon className="donut-arrow-icon" />
+            {!isDarkMode && <UpArrowIcon className="donut-arrow-icon" />}
             <span className="donut-value">{currencyFmt.format(Number(topCategory.value || 0))}</span>
           </div>
 
