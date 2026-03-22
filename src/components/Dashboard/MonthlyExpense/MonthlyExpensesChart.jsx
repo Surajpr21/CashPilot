@@ -105,6 +105,7 @@ export default function MonthlyExpensesChart() {
   const [mode, setMode] = useState("expenses");
   const [range, setRange] = useState("6m");
   const [tooltip, setTooltip] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
   const { chartSeriesByRange, loading } = useDashboardData();
   const baseBuckets = useMemo(() => buildBaseBuckets(range), [range]);
@@ -131,6 +132,20 @@ export default function MonthlyExpensesChart() {
     }
   }, []);
 
+  useEffect(() => {
+    const themeToggle = document.querySelector(".theme-switch__checkbox");
+    if (!themeToggle) {
+      setIsDarkMode(false);
+      return undefined;
+    }
+
+    const syncTheme = () => setIsDarkMode(Boolean(themeToggle.checked));
+    syncTheme();
+
+    themeToggle.addEventListener("change", syncTheme);
+    return () => themeToggle.removeEventListener("change", syncTheme);
+  }, []);
+
   const seriesForRange = chartSeriesByRange[range] || emptySeries;
 
   const padding = { top: 18, right: 18, bottom: 46, left: 50 };
@@ -146,6 +161,34 @@ export default function MonthlyExpensesChart() {
   );
 
   const currentSeries = mergedSeries[mode];
+  const chartTheme = useMemo(
+    () => (isDarkMode
+      ? {
+        areaTop: "#84b5ff",
+        areaTopOpacity: 0.3,
+        areaBottom: "#7df0b4",
+        areaBottomOpacity: 0,
+        lineStart: "#7ea3ff",
+        lineMid: "#82cff6",
+        lineEnd: "#ccff88",
+        grid: "rgba(255, 255, 255, 0.1)",
+        pointFill: "#e9ffc0",
+        pointStroke: "#bff57c",
+      }
+      : {
+        areaTop: "#3CA8D6",
+        areaTopOpacity: 0.35,
+        areaBottom: "#244809",
+        areaBottomOpacity: 0,
+        lineStart: "#99C0F6",
+        lineMid: "#99C0F6",
+        lineEnd: "#D3F2BD",
+        grid: "#f3f4f6",
+        pointFill: "#ffffff",
+        pointStroke: "#4C6EF5",
+      }),
+    [isDarkMode]
+  );
   const seriesData = currentSeries.data || [];
   const values = seriesData.map((d) => d.value);
   const maxVal = Math.max(...values, 1);
@@ -245,8 +288,8 @@ export default function MonthlyExpensesChart() {
         <svg width={width} height={height} className="expenses-svg">
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3CA8D6" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#244809" stopOpacity="0" />
+              <stop offset="0%" stopColor={chartTheme.areaTop} stopOpacity={chartTheme.areaTopOpacity} />
+              <stop offset="100%" stopColor={chartTheme.areaBottom} stopOpacity={chartTheme.areaBottomOpacity} />
             </linearGradient>
 
             <linearGradient id="fadeGradient" x1="0" y1="0" x2="1" y2="0">
@@ -266,8 +309,9 @@ export default function MonthlyExpensesChart() {
               y2="0%"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="80%" stopColor="#99C0F6" />
-              <stop offset="90%" stopColor="#D3F2BD" />
+              <stop offset="0%" stopColor={chartTheme.lineStart} />
+              <stop offset="72%" stopColor={chartTheme.lineMid} />
+              <stop offset="100%" stopColor={chartTheme.lineEnd} />
             </linearGradient>
 
 
@@ -294,7 +338,7 @@ export default function MonthlyExpensesChart() {
                   x2={width - padding.right}
                   y1={y}
                   y2={y}
-                  stroke="#f3f4f6"
+                  stroke={chartTheme.grid}
                 />
                 <text
                   x={padding.left - 12}
@@ -330,8 +374,8 @@ export default function MonthlyExpensesChart() {
               cx={p.x}
               cy={p.y}
               r={4.5}
-              fill="#fff"
-              stroke="#4C6EF5"
+              fill={chartTheme.pointFill}
+              stroke={chartTheme.pointStroke}
               strokeWidth="1.75"
               mask="url(#horizontalFade)"
               className="line-point"

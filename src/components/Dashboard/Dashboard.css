@@ -26,6 +26,204 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   isolation: isolate;
 }
 
+.dashboard-container:has(.theme-switch__checkbox:checked) {
+  background:
+    radial-gradient(ellipse 62% 50% at 0% 0%, rgba(80, 50, 180, 0.35) 0%, transparent 45%),
+    radial-gradient(ellipse 80% 70% at 100% 100%, rgba(20, 120, 70, 0.25) 0%, transparent 55%),
+    linear-gradient(120deg, #130e24 0%, #0a1f16 45%, #1a3d0a 100%);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked)::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(27, 14, 79, 0.45) 0 10%, transparent 20%),
+    radial-gradient(circle at 90% 88%, rgba(20, 130, 75, 0.4) 0 12%, transparent 26%),
+    radial-gradient(circle at 72% 22%, rgba(24, 37, 105, 0.35) 0 8%, transparent 20%),
+    radial-gradient(circle at 48% 14%, rgba(40, 170, 100, 0.25) 0 7%, transparent 18%);
+  filter: blur(40px);
+  opacity: 0.85;
+  animation: dashboardBlobDrift 16s ease-in-out infinite;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.45;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-card,
+  .donut-card,
+  .bills-card,
+  .recent-trans-card,
+  .budget-card,
+  .goals-card,
+  .insights-card
+) {
+  position: relative;
+  overflow: hidden;
+  background: rgba(16, 22, 38, 0.38) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(6px);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-card,
+  .donut-card,
+  .bills-card,
+  .recent-trans-card,
+  .budget-card,
+  .goals-card,
+  .insights-card
+)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: 0.2;
+  z-index: 0;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-card,
+  .donut-card,
+  .bills-card,
+  .recent-trans-card,
+  .budget-card,
+  .goals-card,
+  .insights-card
+) > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-card,
+  .donut-card,
+  .bills-card,
+  .recent-trans-card,
+  .budget-card,
+  .goals-card,
+  .insights-card
+) :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  a,
+  button,
+  td,
+  th,
+  li,
+  .tt-label,
+  .tt-value,
+  .donut-title,
+  .donut-value,
+  .donut-center-label,
+  .goals-label,
+  .goals-title,
+  .goals-meta,
+  .budget-name,
+  .budget-value,
+  .insights-eyebrow,
+  .insights-title,
+  .insights-footer,
+  .bills-total-label,
+  .bills-total-amount,
+  .bills-name,
+  .bills-date,
+  .bills-amount
+) {
+  color: #eef3ff !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-card,
+  .donut-card,
+  .bills-card,
+  .recent-trans-card,
+  .budget-card,
+  .goals-card,
+  .insights-card
+) :is(.tick-label, .x-label, .x-label.small) {
+  fill: rgba(224, 234, 255, 0.85) !important;
+}
+
+/* Keep text dark where backgrounds remain light/white for contrast. */
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-dropdown,
+  .toggle-pill.active,
+  .chart-tooltip,
+  .chart-tooltip *,
+  .recent-trans-btn,
+  .recent-trans-select,
+  .bills-manage,
+  .goals-cta,
+  .budget-filter,
+  .budget-total-percent
+) {
+  color: #0f172a !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .bills-status.due,
+  .bills-status.paid,
+  .bills-status.overdue
+) {
+  color: inherit !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.due {
+  color: #8a6a24 !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.paid {
+  color: #1f6b5d !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.overdue {
+  color: #b43f46 !important;
+}
+
+@keyframes dashboardBlobDrift {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  25% {
+    transform: translate(20px, -14px) scale(1.05);
+  }
+  50% {
+    transform: translate(-14px, 12px) scale(0.97);
+  }
+  75% {
+    transform: translate(10px, 16px) scale(1.04);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
 /* Sidebar is controlled by Sidebar.jsx — no need to touch it here */
 
 /* Snowfall canvas fix */
