@@ -155,7 +155,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   .bills-date,
   .bills-amount
 ) {
-  color: #eef3ff !important;
+  color: #eef3ff;
 }
 
 .dashboard-container:has(.theme-switch__checkbox:checked) :is(
@@ -224,15 +224,15 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   background: rgba(255, 255, 255, 0.08) !important;
   color: #d9e2f5 !important;
 }
-
+/* 
 .dashboard-container:has(.theme-switch__checkbox:checked) :is(
   .bills-status.due,
   .bills-status.paid,
   .bills-status.overdue
 ) {
   color: inherit !important;
-}
-
+} */
+/* 
 .dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.due {
   color: #8a6a24 !important;
 }
@@ -243,7 +243,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.overdue {
   color: #b43f46 !important;
-}
+} */
 
 @keyframes dashboardBlobDrift {
   0% {

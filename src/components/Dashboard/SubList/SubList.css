@@ -283,6 +283,21 @@
     color: #B43F46;
 }
 
+.dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.due {
+    background: #3B2F1A;   /* deep warm amber surface */
+    color: #F2B84B;        /* rich amber text */
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.paid {
+    background: #1E3A34;   /* deep teal surface */
+    color: #34D399;        /* clean green */
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .bills-status.overdue {
+    background: #3A1F22;   /* deep red surface */
+    color: #F87171;        /* soft red (not harsh) */
+}
+
 /* FOOTER */
 .bills-footer {
     padding: 6px 0px;
