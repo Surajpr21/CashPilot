@@ -631,3 +631,6 @@
   opacity: 0.95;
 }
 
+.topbar:has(.theme-switch__checkbox:checked) .stats-right {
+  color: #fff;
+}

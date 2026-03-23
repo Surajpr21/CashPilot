@@ -172,18 +172,57 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
 
 /* Keep text dark where backgrounds remain light/white for contrast. */
 .dashboard-container:has(.theme-switch__checkbox:checked) :is(
-  .monthly-expenses-dropdown,
-  .toggle-pill.active,
   .chart-tooltip,
   .chart-tooltip *,
+  .budget-total-percent
+) {
+  color: #0f172a !important;
+}
+
+/* Dark mode control chips (buttons/selects). */
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-dropdown,
   .recent-trans-btn,
   .recent-trans-select,
   .bills-manage,
   .goals-cta,
-  .budget-filter,
-  .budget-total-percent
+  .budget-filter
 ) {
-  color: #0f172a !important;
+  background: #2f3545 !important;
+  color: #e8ecf8 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) :is(
+  .monthly-expenses-dropdown,
+  .recent-trans-btn,
+  .recent-trans-select,
+  .bills-manage,
+  .goals-cta,
+  .budget-filter
+):is(:hover, :focus-visible) {
+  background: #3a4256 !important;
+  color: #f2f5ff !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .toggle {
+  background: #2f3545 !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .toggle-pill {
+  color: rgba(232, 236, 248, 0.58) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .toggle-pill.active {
+  background: #f8fafc !important;
+  color: #1f2937 !important;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.24) !important;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .toggle-pill:not(.active):is(:hover, :focus-visible) {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #d9e2f5 !important;
 }
 
 .dashboard-container:has(.theme-switch__checkbox:checked) :is(

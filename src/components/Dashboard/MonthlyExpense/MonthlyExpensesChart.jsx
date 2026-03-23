@@ -164,16 +164,16 @@ export default function MonthlyExpensesChart() {
   const chartTheme = useMemo(
     () => (isDarkMode
       ? {
-        areaTop: "#84b5ff",
-        areaTopOpacity: 0.3,
-        areaBottom: "#7df0b4",
-        areaBottomOpacity: 0,
-        lineStart: "#7ea3ff",
-        lineMid: "#82cff6",
-        lineEnd: "#ccff88",
+        areaTop: "#8ba8ff",
+        areaTopOpacity: 0.15,
+        areaBottom: "#8fe7bc",
+        areaBottomOpacity: 0.04,
+        lineStart: "#89a0ff",
+        lineMid: "#72d4ef",
+        lineEnd: "#c8f98f",
         grid: "rgba(255, 255, 255, 0.1)",
-        pointFill: "#e9ffc0",
-        pointStroke: "#bff57c",
+        pointFill: "#ecffc7",
+        pointStroke: "#c6f584",
       }
       : {
         areaTop: "#3CA8D6",
@@ -314,6 +314,34 @@ export default function MonthlyExpensesChart() {
               <stop offset="100%" stopColor={chartTheme.lineEnd} />
             </linearGradient>
 
+            <linearGradient id="areaTintGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#8ea9ff" stopOpacity="0.22" />
+              <stop offset="52%" stopColor="#73d0ee" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#b9f58f" stopOpacity="0.24" />
+            </linearGradient>
+
+            <linearGradient id="areaBottomFadeGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="white" stopOpacity="1" />
+              <stop offset="72%" stopColor="white" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
+            </linearGradient>
+
+            <filter id="areaGrain" x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.012 0.02"
+                numOctaves="2"
+                seed="8"
+                stitchTiles="stitch"
+                result="noise"
+              />
+              <feColorMatrix in="noise" type="saturate" values="0" result="monoNoise" />
+              <feComponentTransfer in="monoNoise" result="grainAlpha">
+                <feFuncA type="table" tableValues="0 0.08" />
+              </feComponentTransfer>
+              <feGaussianBlur in="grainAlpha" stdDeviation="0.25" result="grainSoft" />
+            </filter>
+
 
 
             <mask id="horizontalFade">
@@ -323,6 +351,16 @@ export default function MonthlyExpensesChart() {
                 width="100%"
                 height="100%"
                 fill="url(#fadeGradient)"
+              />
+            </mask>
+
+            <mask id="areaBottomFade">
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                fill="url(#areaBottomFadeGradient)"
               />
             </mask>
 
@@ -353,7 +391,25 @@ export default function MonthlyExpensesChart() {
           })}
 
           {/* Area */}
-          <path d={areaPath} fill="url(#areaGradient)" mask="url(#horizontalFade)" />
+          <path d={areaPath} fill="url(#areaGradient)" mask="url(#areaBottomFade)" />
+          {isDarkMode && (
+            <>
+              <path
+                d={areaPath}
+                fill="url(#areaTintGradient)"
+                opacity="1"
+                mask="url(#areaBottomFade)"
+              />
+              <path
+                d={areaPath}
+                fill="#ffffff"
+                opacity="0.16"
+                filter="url(#areaGrain)"
+                mask="url(#areaBottomFade)"
+                style={{ mixBlendMode: "overlay" }}
+              />
+            </>
+          )}
 
           {/* Line */}
           <path

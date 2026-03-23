@@ -61,11 +61,20 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
+.dashboard-container:has(.theme-switch__checkbox:checked) .recent-trans-table thead th {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #A0B2AF;
+}
+
 .recent-trans-table tbody td {
     padding: 10px 8px;
     color: #0F2E2B;
     border-bottom: 1px solid #f0f0f0;
     font-weight: 400;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .recent-trans-table tbody td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .recent-trans-table tbody tr:last-child td {
