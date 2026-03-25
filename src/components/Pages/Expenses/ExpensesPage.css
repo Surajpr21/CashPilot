@@ -363,3 +363,65 @@
   background: #fef2f2;
   color: #b91c1c;
 }
+
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filters {
+  position: relative;
+  background: rgba(16, 22, 38, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 14px 28px rgba(2, 6, 23, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filters::before,
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: 0.2;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table-wrapper {
+  position: relative;
+  background: rgba(16, 22, 38, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    0 14px 32px rgba(2, 6, 23, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table {
+  background: transparent;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-thead {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-th {
+  color: rgba(226, 232, 240, 0.78);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-td {
+  color: #e2e8f0;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-tr:hover .expenses-page-td {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-amount {
+  color: #f8fafc;
+}
