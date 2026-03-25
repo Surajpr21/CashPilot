@@ -634,3 +634,8 @@
 .topbar:has(.theme-switch__checkbox:checked) .stats-right {
   color: #fff;
 }
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .stats-number-value, .stats-number-icon svg, .stats-number-label {
+color: #f4f8ff;
+  text-shadow: 0 1px 10px rgba(7, 14, 30, 0.3);
+}
