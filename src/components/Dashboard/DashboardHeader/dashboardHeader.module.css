@@ -26,6 +26,21 @@
   margin-bottom: 20px;
 }
 
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #0F2E2B;
+}
+
+:global(.dashboard-container:has(.theme-switch__checkbox:checked)) .title {
+  color: #f8fafc;
+}
+
+:global(.dashboard-container:has(.theme-switch__checkbox:checked)) .subtitle {
+  color: #cbd5e1;
+}
+
 .center {
   color: #4b5563;
   font-size: 0.9rem;

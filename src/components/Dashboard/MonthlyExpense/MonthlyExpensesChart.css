@@ -48,10 +48,10 @@
 
 .chip.growth {
   background: #ecfdf5;
-  color: #16a34a;
+  color: #34d399;
   font-weight: 600;
   font-size: 0.78rem;
-  padding: 0.25rem 0.6rem;
+  padding: 7px 9.6px;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
@@ -61,7 +61,7 @@
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .chip.growth {
   background: rgba(22, 163, 74, 0.723);
-  color: #16a34a;
+  color: #68e997;
 }
 
 .monthly-expenses-dropdown {
@@ -78,7 +78,7 @@
   gap: 6px;
   padding: 4px;
   border-radius: 12px;
-  background: #e6edf0;
+  /* background: #e6edf0; */
 }
 
 .toggle-pill {

@@ -22,12 +22,12 @@ const RecentTransactions = () => {
 
                 <div className="recent-trans-actions">
                     <button className="bills-manage" onClick={() => navigate("/expenses")}>Manage →</button>
-                    <button className="recent-trans-btn" onClick={refreshDashboardData} disabled={loading}>
+                    {/* <button className="recent-trans-btn" onClick={refreshDashboardData} disabled={loading}>
                         {loading ? "Refreshing..." : "Refresh"}
                     </button>
                     <select className="recent-trans-select" disabled>
                         <option>Recent</option>
-                    </select>
+                    </select> */}
                 </div>
             </div>
 

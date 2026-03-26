@@ -2,7 +2,7 @@
     background: #F2F4F2;
     border-radius: 28px;
     padding: 16px;
-        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
 }
 
 /* HEADER */
@@ -68,19 +68,34 @@
     color: #0F2E2B;
 }
 
+.budget-card:has(.budget-total-percent) .budget-total-percent {
+    background: #B43F46;
+    color: #FFFFFF;
+}
+
+/* .budget-card:has(.budget-header-actions) .budget-header-actions {
+    background: #B43F46;
+} */
+
+.budget-header-actions{
+    display: flex;
+    gap: 12px;
+}
+
 /* LIST */
 .budget-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
-.budget-empty {
-    padding: 12px;
-    background: #f5f7f8;
-    border: 1px dashed #d0d7de;
-    border-radius: 8px;
-    color: #5b6b73;
-    font-size: 14px;
-}
+
+    .budget-empty {
+        padding: 12px;
+        background: #f5f7f8;
+        border: 1px dashed #d0d7de;
+        border-radius: 8px;
+        color: #5b6b73;
+        font-size: 14px;
+    }
 }
 
 /* ROW */
@@ -138,35 +153,36 @@
 }
 
 .budget-total-budget {
-  background: #E3EFEA;
-  height: 10px;
-  border-radius: 12px;
-  overflow: hidden;
+    background: #E3EFEA;
+    height: 10px;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .budget-total-actual {
-  height: 100%;
-  border-radius: 12px;
-  transition: width 0.35s ease, background-color 0.25s ease;
+    height: 100%;
+    border-radius: 12px;
+    transition: width 0.35s ease, background-color 0.25s ease;
 }
 
 .budget-total-percent {
-  padding: 0 12px;
-  border-radius: 999px;
-  font-weight: 600;
-  line-height: 1.4;
-  display: inline-block;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    line-height: 1.4;
+    display: inline-block;
 }
 
 .budget-bar-budget {
-  background: #E3EFEA;      /* track */
-  height: 8px;
-  border-radius: 10px;
-  overflow: hidden;
+    background: #E3EFEA;
+    /* track */
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .budget-bar-actual {
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.35s ease, background-color 0.25s ease;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.35s ease, background-color 0.25s ease;
 }
