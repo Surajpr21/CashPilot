@@ -265,7 +265,7 @@
 /* Table styling */
 .expenses-page-table-wrapper {
   margin-top: 20px;
-  background: linear-gradient(135deg, #f7fafc 0%, #eef3ff 100%);
+  /* background: linear-gradient(135deg, #f7fafc 0%, #eef3ff 100%); */
   border-radius: 18px;
   overflow: hidden;
   box-shadow:
@@ -367,7 +367,7 @@
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filters {
   position: relative;
-  background: rgba(16, 22, 38, 0.38);
+  /* background: rgba(16, 22, 38, 0.38); */
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -391,7 +391,7 @@
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table-wrapper {
   position: relative;
-  background: rgba(16, 22, 38, 0.38);
+  /* background: rgba(16, 22, 38, 0.38); */
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
