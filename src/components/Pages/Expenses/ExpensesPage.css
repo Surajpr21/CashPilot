@@ -265,7 +265,7 @@
 /* Table styling */
 .expenses-page-table-wrapper {
   margin-top: 20px;
-  background: linear-gradient(135deg, #f7fafc 0%, #eef3ff 100%);
+  /* background: linear-gradient(135deg, #f7fafc 0%, #eef3ff 100%); */
   border-radius: 18px;
   overflow: hidden;
   box-shadow:
