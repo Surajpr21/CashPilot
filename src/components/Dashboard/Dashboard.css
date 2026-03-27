@@ -174,7 +174,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
 .dashboard-container:has(.theme-switch__checkbox:checked) :is(
   .chart-tooltip,
   .chart-tooltip *,
-  .budget-total-percent
+
 ) {
   color: #0f172a !important;
 }
@@ -205,10 +205,10 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
   color: #f2f5ff !important;
 }
 
-.dashboard-container:has(.theme-switch__checkbox:checked) .toggle {
+/* .dashboard-container:has(.theme-switch__checkbox:checked) .toggle {
   background: #2f3545 !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-}
+} */
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .toggle-pill {
   color: rgba(232, 236, 248, 0.58) !important;
@@ -398,4 +398,8 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAD0FF", en
     #ffffff 55%,
     transparent 100%
   );
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .subtitle {
+  color: #cbd5e1;
 }

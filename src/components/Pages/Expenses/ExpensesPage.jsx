@@ -243,7 +243,7 @@ export default function TransactionsPage() {
   };
 
   const handleFilterChange = (newFilters) => {
-    // Guardrail: block asset-like categories from expenses. Expenses should not log gold/RD/FD/SIP/investments.
+  
     const disallowed = ["Gold", "Investment", "Investments", "RD", "FD", "SIP", "Mutual Fund", "Stocks", "Equity"];
     const nextCategory = disallowed.includes(newFilters.category) ? "" : newFilters.category;
 

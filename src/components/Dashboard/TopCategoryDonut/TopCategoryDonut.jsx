@@ -100,6 +100,7 @@ const TopCategoryDonut = () => {
     <div className="donut-card">
       <div className="donut-header">
         <h3 className="donut-title">Top category</h3>
+        <div className="donut-control">
         <button className="bills-manage" onClick={() => navigate("/expenses")}>Manage →</button>
         <select
           className="donut-dropdown"
@@ -111,6 +112,7 @@ const TopCategoryDonut = () => {
           <option value="6m">Last 6 months</option>
           <option value="1y">Last year</option>
         </select>
+        </div>
       </div>
 
       <div className="donut-wrapper">
