@@ -11,7 +11,7 @@ const currencyFmt = new Intl.NumberFormat("en-IN", {
 
 const RecentTransactions = () => {
     const navigate = useNavigate();
-    const { recentExpenses, refreshDashboardData, loading } = useDashboardData();
+    const { recentExpenses, loading } = useDashboardData();
 
     const rows = useMemo(() => recentExpenses ?? [], [recentExpenses]);
 
