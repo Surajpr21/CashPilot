@@ -367,7 +367,7 @@
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filters {
   position: relative;
-  /* background: rgba(16, 22, 38, 0.38); */
+  background: rgba(16, 22, 38, 0.38);
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -391,7 +391,7 @@
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table-wrapper {
   position: relative;
-  /* background: rgba(16, 22, 38, 0.38); */
+  background: rgba(16, 22, 38, 0.38);
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);

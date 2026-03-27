@@ -11,6 +11,11 @@
 .expenses-page-title {
     font-size: 28px;
     font-weight: 700;
+    color: #0f172a;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-title {
+    color: #ffffff;
 }
 
 .expenses-page-subtitle {
