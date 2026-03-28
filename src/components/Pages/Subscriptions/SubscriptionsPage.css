@@ -81,6 +81,18 @@
   box-sizing: border-box;
 }
 
+/* DARK MODE for search input */
+.dashboard-container:has(.theme-switch__checkbox:checked) .subscriptions-page-search input {
+  background: linear-gradient(120deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
+  color: #e2e8f0;
+  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .subscriptions-page-search input::placeholder {
+  color: rgba(226, 232, 240, 0.45);
+}
+
 /* .subscriptions-page-filter:hover,
 .subscriptions-page-search input:hover {
   background: #f3f4f6;

@@ -31,6 +31,27 @@
   box-shadow: 0 8px 18px rgba(17, 24, 39, 0.18);
 }
 
+.dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle {
+  background: rgba(148, 163, 184, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 6px 16px rgba(2, 6, 23, 0.28);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle button {
+  color: rgba(226, 232, 240, 0.86);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle button.active {
+  background: rgba(36, 69, 74, 0.92);
+  color: #f8fafc;
+  box-shadow: 0 10px 20px rgba(2, 6, 23, 0.4);
+}
+
 /* SVG Background */
 .expenses-page-svg-background {
   position: absolute;

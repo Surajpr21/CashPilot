@@ -519,6 +519,35 @@
   box-shadow: 0 5px 12px rgba(15, 23, 42, 0.14);
 }
 
+.dashboard-container:has(.theme-switch__checkbox:checked)
+  .assets-page-form-investment
+  .expense-date-picker {
+  background: rgba(15, 23, 42, 0.94);
+  border-color: rgba(148, 163, 184, 0.22);
+  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.5);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked)
+  .assets-page-form-investment
+  .date-picker-header {
+  color: #e2e8f0;
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked)
+  .assets-page-form-investment
+  .date-nav-btn {
+  color: #e2e8f0;
+  background: rgba(148, 163, 184, 0.14);
+  border-color: rgba(148, 163, 184, 0.28);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.45);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked)
+  .assets-page-form-investment
+  .date-nav-btn:hover {
+  background: rgba(148, 163, 184, 0.24);
+}
+
 .assets-page-form-investment .date-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -629,6 +658,13 @@
     0 0 0 3px rgba(31, 182, 170, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-container:has(.theme-switch__checkbox:checked) .assets-page-form-investment .assets-page-form-row input {
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.22);
 }
 
 .assets-page-form-investment .assets-page-modal-kicker {
