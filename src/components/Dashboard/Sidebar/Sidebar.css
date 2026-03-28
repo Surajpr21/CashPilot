@@ -102,18 +102,32 @@ body {
   text-decoration: none;
 }
 
-.nav-item:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
+
 
 .nav:has(.theme-switch__checkbox:checked) .nav-item, .icon-btn  {
   color: #fff;
 }
 
+.nav-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+
 .nav-item.active {
   background: #24454A;
   color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.nav:has(.theme-switch__checkbox:checked) .nav-item:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+
+.nav:has(.theme-switch__checkbox:checked) .nav-item.active {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32);
 }
 
 .theme-switch-slot {
