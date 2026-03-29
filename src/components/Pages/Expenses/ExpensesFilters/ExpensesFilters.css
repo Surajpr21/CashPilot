@@ -286,6 +286,17 @@
     min-width: 220px;
     border-radius: 10px;
     overflow: hidden;
+    height: 45.99px !important;
+    min-height: 45.99px !important;
+    max-height: 45.99px !important;
+}
+/* Force search input inside wrapper to 45.99px height */
+.expenses-search-wrapper input[type="text"],
+.expenses-search-wrapper input[type="search"] {
+    height: 45.99px !important;
+    min-height: 45.99px !important;
+    max-height: 45.99px !important;
+    box-sizing: border-box;
 }
 
 .expenses-search-wrapper::before {
@@ -358,11 +369,14 @@
 @media (max-width: 1400px) {
 
     .expenses-page-filter,
-    .expenses-page-clear-filters,
-    .expenses-page-add-expense,
-    .cp-dropdown-trigger,
-    .cp-dropdown-item {
-        font-size: 13px;
+    .expenses-page-clear-filters {
+        position: relative;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        overflow: hidden;
+        height: 45.99px;
+        min-height: 45.99px;
+        max-height: 45.99px;
     }
 
     .expenses-month-label {

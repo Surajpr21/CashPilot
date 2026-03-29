@@ -258,6 +258,7 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense",
     const isDatePlaceholder = !formState.spent_at;
 
     return (
+
       <label className="expense-form-field">
         <span>Date</span>
         <div className="expense-date-wrapper" ref={datePickerRef}>

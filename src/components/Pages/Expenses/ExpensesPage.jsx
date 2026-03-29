@@ -1,39 +1,3 @@
-// import React from "react";
-// import ExpensesFilters from "./ExpensesFilters/ExpensesFilters";
-// import ExpensesSummary from "./ExpensesFilters/ExpensesSummary";
-// import ExpensesTable from "./ExpensesFilters/ExpensesTable";
-// import ExpensesPagination from "./ExpensesFilters/ExpensesPagination";
-// import "./ExpensesPage.css";
-
-// export default function ExpensesPage() {
-//   const expenses = [
-//     { date: "31 May 2025", title: "Amazon", category: "Shopping", sub: "Amazon", amount: "₹318", mode: "UPI" },
-//     { date: "30 May 2025", title: "PVR", category: "Movie", sub: "PVR", amount: "₹4,200", mode: "Card" },
-//     { date: "30 May 2025", title: "Medplus", category: "Health", sub: "Medplus", amount: "₹540", mode: "Bank" },
-//     { date: "26 May 2025", title: "Swiggy", category: "Food", sub: "Swiggy", amount: "₹160", mode: "UPI" },
-//     { date: "24 May 2025", title: "Flipkart", category: "Shopping", sub: "Flipkart", amount: "₹1,600", mode: "Bank" },
-//     { date: "20 May 2025", title: "Uber", category: "Travel", sub: "Uber", amount: "₹2,000", mode: "UPI" },
-//     { date: "19 May 2025", title: "Petrol", category: "Auto", sub: "Petrol", amount: "₹1,400", mode: "Bank" },
-//     { date: "18 May 2025", title: "Dropbox", category: "Software", sub: "Dropbox", amount: "₹450", mode: "UPI" },
-//     { date: "16 May 2025", title: "Myntra", category: "Shopping", sub: "Myntra", amount: "₹1,200", mode: "Card" },
-//     { date: "14 May 2025", title: "Concert tickets", category: "Entertainment", sub: "Concert tickets", amount: "₹2,700", mode: "UPI" }
-//   ];
-
-//   return (
-//     <div className="expenses-page-container">
-
-//       <div className="expenses-page-header">
-//         <h1 className="expenses-page-title">Expenses</h1>
-//         <p className="expenses-page-subtitle">Track and manage all your spending.</p>
-//       </div>
-
-//       <ExpensesFilters />
-//       {/* <ExpensesSummary /> */}
-//       <ExpensesTable expenses={expenses} />
-//       <ExpensesPagination />
-//     </div>
-//   );
-// }
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -44,6 +8,7 @@ import { getExpensesPaginated, deleteExpense } from "../../../services/expenses.
 import { getIncomePaginated, deleteIncomeTransaction } from "../../../services/transactions.service";
 import { useAuth } from "../../../contexts/AuthContext";
 import ExpenseForm from "./ExpensesFilters/ExpenseForm/ExpenseForm";
+
 
 const PAGE_SIZE = 10;
 
@@ -370,7 +335,7 @@ export default function TransactionsPage() {
           <h1 className="expenses-page-title">Transactions</h1>
           <p className="expenses-page-subtitle">Track expenses and income in one view. Expenses stay the default.</p>
           <div className="expenses-page-guardrail">
-        
+
           </div>
         </div>
 
