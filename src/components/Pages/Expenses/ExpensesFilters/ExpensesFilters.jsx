@@ -5,7 +5,7 @@ import ExpenseForm from "./ExpenseForm/ExpenseForm";
 import { getExpenseStats } from "../../../../services/expenses.service";
 import { CATEGORIES } from "../../../../constants/categories";
 import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
-
+// import ExpenseFormDemo from "./ExpensesFilters/ExpenseForm/ExpenseFormDemo";
 const toLocalDateString = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -168,7 +168,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         </button>
       </div>
 
-      {/* 2∩╕ÅΓâú Category Filter */}
+      {/*  Category Filter */}
       <CustomDropdown
         value={localFilters.category}
         options={categoryOptions}
@@ -178,7 +178,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         menuMaxHeight="260px"
       />
 
-      {/* 3∩╕ÅΓâú Any amount (sort) */}
+
       <CustomDropdown
         value={localFilters.amountSort}
         options={amountSortOptions}
@@ -187,7 +187,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         width="180px"
       />
 
-      {/* 4∩╕ÅΓâú Payment Mode Filter */}
+
       <CustomDropdown
         value={localFilters.paymentMode}
         options={paymentOptions}
@@ -196,7 +196,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
         width="200px"
       />
 
-      {/* 5∩╕ÅΓâú Search across date/title/category/amount/payment */}
+
       <div className="expenses-search-wrapper">
         <input
           type="text"

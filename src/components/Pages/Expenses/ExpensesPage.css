@@ -1,3 +1,9 @@
+/*
+  Dark mode hybrid system:
+  - body.dark is the primary selector for dark mode.
+  - :has(.theme-switch__checkbox:checked) is a temporary fallback for legacy code.
+  - New code should use only body.dark. Legacy :has() will be removed gradually.
+*/
 .expenses-page-container {
   font-family: Inter, sans-serif;
   position: relative;
@@ -11,7 +17,7 @@
   background: #f3f4f6;
   border-radius: 50px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  margin-bottom: 18px;
+  /* margin-bottom: 18px; */
 }
 
 .transactions-toggle button {
@@ -31,6 +37,7 @@
   box-shadow: 0 8px 18px rgba(17, 24, 39, 0.18);
 }
 
+body.dark .transactions-toggle,
 .dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle {
   background: rgba(148, 163, 184, 0.16);
   box-shadow:
@@ -38,14 +45,17 @@
     0 6px 16px rgba(2, 6, 23, 0.28);
 }
 
+body.dark .transactions-toggle button,
 .dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle button {
   color: rgba(226, 232, 240, 0.86);
 }
 
+body.dark .transactions-toggle button:hover,
 .dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle button:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
+body.dark .transactions-toggle button.active,
 .dashboard-container:has(.theme-switch__checkbox:checked) .transactions-toggle button.active {
   background: rgba(36, 69, 74, 0.92);
   color: #f8fafc;
@@ -386,6 +396,7 @@
 }
 
 
+body.dark .expenses-page-filters,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filters {
   position: relative;
   background: rgba(16, 22, 38, 0.38);
@@ -397,6 +408,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+body.dark .expenses-page-filters::before,
+body.dark .expenses-page-table-wrapper::before,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filters::before,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table-wrapper::before {
   content: "";
@@ -410,6 +423,7 @@
   opacity: 0.2;
 }
 
+body.dark .expenses-page-table-wrapper,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table-wrapper {
   position: relative;
   background: rgba(16, 22, 38, 0.38);
@@ -421,28 +435,34 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+body.dark .expenses-page-table,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-table {
   background: transparent;
 }
 
+body.dark .expenses-page-thead,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-thead {
   background: rgba(255, 255, 255, 0.06);
 }
 
+body.dark .expenses-page-th,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-th {
   color: rgba(226, 232, 240, 0.78);
   border-bottom: 1px solid rgba(148, 163, 184, 0.22);
 }
 
+body.dark .expenses-page-td,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-td {
   color: #e2e8f0;
   border-top: 1px solid rgba(148, 163, 184, 0.2);
 }
 
+body.dark .expenses-page-tr:hover .expenses-page-td,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-tr:hover .expenses-page-td {
   background: rgba(148, 163, 184, 0.1);
 }
 
+body.dark .expenses-page-amount,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-amount {
   color: #f8fafc;
 }
