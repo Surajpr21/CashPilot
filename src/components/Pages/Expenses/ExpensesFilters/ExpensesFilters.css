@@ -1,3 +1,9 @@
+/*
+    Dark mode hybrid system:
+    - body.dark is the primary selector for dark mode.
+    - :has(.theme-switch__checkbox:checked) is a temporary fallback for legacy code.
+    - New code should use only body.dark. Legacy :has() will be removed gradually.
+*/
 /* Content wrapper */
 .expenses-page-content {
     position: relative;
@@ -14,6 +20,7 @@
     color: #0f172a;
 }
 
+body.dark .expenses-page-title,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-title {
     color: #ffffff;
 }
@@ -88,6 +95,7 @@
     line-height: 1;
 }
 
+body.dark .expenses-month-selector,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-month-selector {
     background: linear-gradient(120deg,
             rgba(30, 41, 59, 0.88) 0%,
@@ -97,16 +105,19 @@
         0 8px 20px rgba(2, 6, 23, 0.35);
 }
 
+body.dark .expenses-month-arrow,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-month-arrow {
     color: #cbd5e1;
     background: rgba(148, 163, 184, 0.14);
     box-shadow: 0 2px 8px rgba(2, 6, 23, 0.45);
 }
 
+body.dark .expenses-month-arrow:hover,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-month-arrow:hover {
     background: rgba(148, 163, 184, 0.24);
 }
 
+body.dark .expenses-month-label,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-month-label {
     color: #e2e8f0;
 }
@@ -141,6 +152,8 @@
 }
 
 /* DARK MODE for filter and clear buttons */
+body.dark .expenses-page-filter,
+body.dark .expenses-page-clear-filters,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filter,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-clear-filters {
     background: linear-gradient(120deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
@@ -149,6 +162,8 @@
     /* border: 1px solid rgba(148, 163, 184, 0.18); */
 }
 
+body.dark .expenses-page-filter::placeholder,
+body.dark .expenses-page-clear-filters::placeholder,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-filter::placeholder,
 .dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-clear-filters::placeholder {
     color: rgba(226, 232, 240, 0.45);

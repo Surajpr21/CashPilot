@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useTheme } from "../../../context/ThemeContext";
 import "./ThemeSwitch.css";
 
 export default function ThemeSwitch() {
-  const [isDark, setIsDark] = useState(false);
-
+  const { isDark, setIsDark } = useTheme();
   return (
     <div className="theme-switch-wrapper">
       <label className="theme-switch">
@@ -11,7 +10,7 @@ export default function ThemeSwitch() {
           type="checkbox"
           className="theme-switch__checkbox"
           checked={isDark}
-          onChange={() => setIsDark(!isDark)}
+          onChange={e => setIsDark(e.target.checked)}
         />
         <div className="theme-switch__container">
           <div className="theme-switch__clouds" />
