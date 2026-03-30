@@ -105,6 +105,34 @@ body.dark .transactions-toggle button.active,
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); */
 }
 
+/* body.dark .pagination,
+.dashboard-container:has(.theme-switch__checkbox:checked) .pagination {
+  Optional: add a subtle background or border if needed
+} */
+
+body.dark .pagination button,
+.dashboard-container:has(.theme-switch__checkbox:checked) .pagination button {
+  background: #24454a;
+  color: #f8fafc;
+  box-shadow: 0 4px 16px rgba(2, 6, 23, 0.28);
+}
+
+body.dark .pagination button:hover:not(:disabled),
+.dashboard-container:has(.theme-switch__checkbox:checked) .pagination button:hover:not(:disabled) {
+  background: #1a2e32;
+}
+
+body.dark .pagination button:disabled,
+.dashboard-container:has(.theme-switch__checkbox:checked) .pagination button:disabled {
+  background: #334155;
+  color: #64748b;
+}
+
+body.dark .pagination span,
+.dashboard-container:has(.theme-switch__checkbox:checked) .pagination span {
+  color: #e2e8f0;
+}
+
 .pagination button {
   width: 42px;
   height: 42px;
@@ -235,6 +263,11 @@ body.dark .transactions-toggle button.active,
   color: #0f172a;
 }
 
+body.dark .income-summary-item,
+.dashboard-container:has(.theme-switch__checkbox:checked) .income-summary-item {
+  color: #e2e8f0;
+}
+
 .income-summary-divider {
   width: 1px;
   height: 20px;
@@ -250,6 +283,11 @@ body.dark .transactions-toggle button.active,
 .income-amount {
   color: #047857;
   font-weight: 700;
+}
+
+body.dark .income-amount,
+.dashboard-container:has(.theme-switch__checkbox:checked) .income-amount {
+  color: #34d399;
 }
 
 @media (max-width: 1400px) {

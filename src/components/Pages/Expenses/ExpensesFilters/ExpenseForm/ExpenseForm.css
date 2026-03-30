@@ -131,6 +131,16 @@ body.dark .expense-modal::before,
   color: #0f172a;
 }
 
+body.dark .expense-form-header h3 {
+  color: rgba(248, 250, 252, 0.92);
+}
+
+body.dark .expense-form-helper{
+  background-color: #3d1e05;
+  color: #fff7ed;
+  border: none;
+}
+
 .expense-form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -216,7 +226,7 @@ body.dark .expense-form-field {
 }
 
 .expense-form-helper {
-  font-size: 12px;
+  font-size: 11px;
   color: #b45309;
   margin: 6px 0 0;
   background: #fff7ed;
@@ -247,6 +257,13 @@ body.dark .expense-form-field {
     0 12px 22px rgba(23, 120, 110, 0.26),
     0 2px 4px rgba(0, 0, 0, 0.06);
   transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+body.dark .expense-form-actions button,
+.dashboard-container:has(.theme-switch__checkbox:checked) .expense-form-actions button {
+  background: linear-gradient(180deg, #334155 0%, #0f172a 100%);
+  color: #e2e8f0;
+  box-shadow: 0 12px 22px rgba(2, 6, 23, 0.28), 0 2px 4px rgba(0,0,0,0.12);
 }
 
 .expense-form-actions button:hover:not(:disabled) {
@@ -377,6 +394,16 @@ body.dark .expense-form-field input[type="date"] {
   -webkit-backdrop-filter: blur(12px) saturate(110%);
 }
 
+body.dark .expense-date-picker,
+.dashboard-container:has(.theme-switch__checkbox:checked) .expense-date-picker {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.98));
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.25);
+  color: rgba(226, 232, 240, 0.92);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+}
+
 .date-picker-header {
   display: flex;
   align-items: center;
@@ -404,6 +431,14 @@ body.dark .expense-form-field input[type="date"] {
   place-items: center;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
   transition: transform 0.12s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.dark .date-nav-btn,
+.dashboard-container:has(.theme-switch__checkbox:checked) .date-nav-btn {
+  background: linear-gradient(120deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
+  color: rgba(226, 232, 240, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.22);
 }
 
 .date-nav-btn:hover {
@@ -449,6 +484,14 @@ body.dark .expense-form-field input[type="date"] {
   place-items: center;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.16s ease;
+}
+
+body.dark .date-cell,
+.dashboard-container:has(.theme-switch__checkbox:checked) .date-cell {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.98));
+  color: rgba(226, 232, 240, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 10px 20px rgba(2, 6, 23, 0.18);
 }
 
 .date-cell.future {

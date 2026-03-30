@@ -243,6 +243,12 @@ body.dark .expenses-page-clear-filters::placeholder,
         -6px -6px 12px #ffffff; */
 }
 
+body.dark .expenses-page-add-expense,
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-add-expense {
+    background: linear-gradient(120deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
+    color: #e2e8f0;
+}
+
 .expenses-page-add-expense::before {
     content: "";
     width: 0;
@@ -263,6 +269,11 @@ body.dark .expenses-page-clear-filters::placeholder,
     transition: 0.5s ease;
     display: block;
     z-index: -1;
+}
+
+body.dark .expenses-page-add-expense::before,
+.dashboard-container:has(.theme-switch__checkbox:checked) .expenses-page-add-expense::before {
+    background: linear-gradient(135deg, rgba(51,65,85,0.95) 0%, rgba(15,23,42,0.98) 100%);
 }
 
 .expenses-page-add-expense:hover::before {

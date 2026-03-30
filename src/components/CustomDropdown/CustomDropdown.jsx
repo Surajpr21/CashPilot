@@ -10,7 +10,9 @@ export default function CustomDropdown({
   placeholder = "Select",
   width = "180px",
   menuMaxHeight,
-  disabled = false
+  disabled = false,
+  disableShine = false,
+  disableBounce = false
 }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -47,7 +49,7 @@ export default function CustomDropdown({
     >
       <div
         id={id}
-        className={`cp-dropdown-trigger ${open ? "open" : ""} ${disabled ? "disabled" : ""} ${isPlaceholder ? "is-placeholder" : ""}`}
+        className={`cp-dropdown-trigger ${open ? "open" : ""} ${disabled ? "disabled" : ""} ${isPlaceholder ? "is-placeholder" : ""} ${disableShine ? "no-shine" : ""} ${disableBounce ? "no-bounce" : ""}`}
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-haspopup="listbox"
