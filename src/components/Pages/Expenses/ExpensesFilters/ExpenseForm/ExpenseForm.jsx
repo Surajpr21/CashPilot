@@ -580,6 +580,8 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense",
               placeholder="Select category"
               width="100%"
               menuMaxHeight="260px"
+              disableShine={true}
+              disableBounce={true}
             />
             <p className="expense-form-helper">Buying gold, RD/FD/SIP, or investing? Add it from Assets, not here.</p>
           </label>
@@ -620,6 +622,8 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense",
               placeholder="Select mode"
               width="100%"
               menuMaxHeight="100px"
+              disableShine={true}
+              disableBounce={true}
             />
           </label>
         </div>
@@ -638,6 +642,8 @@ export default function ExpenseForm({ onClose, onExpenseAdded, mode = "expense",
               placeholder="Select category"
               width="100%"
               menuMaxHeight="240px"
+              disableShine={true}
+              disableBounce={true}
             />
           </label>
 

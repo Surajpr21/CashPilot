@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "./ExpensesFilters.css";
 import ExpenseForm from "./ExpenseForm/ExpenseForm";
+import HugeiconsClose from "./HugeiconsClose";
 import { getExpenseStats } from "../../../../services/expenses.service";
 import { CATEGORIES } from "../../../../constants/categories";
 import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
@@ -240,9 +241,6 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
             </span>
           </div>
         </div>
-        <div className="expense-page-right">
-          <button className="expenses-page-export">Export CSV</button>
-        </div>
       </div>
 
       {statsError && (
@@ -263,7 +261,7 @@ export default function ExpensesFilters({ filters, onFilterChange, onExpenseAdde
               aria-label="Close"
               onClick={() => setShowForm(false)}
             >
-              ×
+              <HugeiconsClose size={24} color="currentColor" />
             </button>
             <ExpenseForm 
               onClose={() => setShowForm(false)} 

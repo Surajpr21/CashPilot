@@ -451,9 +451,9 @@ export default function TransactionsPage() {
                   <span className="expenses-page-summary-label">Entries:</span>
                   <span className="expenses-page-summary-value">{incomeRows.length}</span>
                 </div>
-                <button className="expenses-page-export income-summary-action" type="button">
+                {/* <button className="expenses-page-export income-summary-action" type="button">
                   View income summary
-                </button>
+                </button> */}
               </div>
             </div>
 
