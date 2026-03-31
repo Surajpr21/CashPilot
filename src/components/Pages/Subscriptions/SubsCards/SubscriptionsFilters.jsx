@@ -45,6 +45,7 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
   };
 
   return (
+
     <div className="subscriptions-page-filters-wrapper">
       <div className="subscriptions-page-filters-row">
         <CustomDropdown
@@ -60,7 +61,6 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
           width="170px"
           menuMaxHeight="200px"
         />
-
         <CustomDropdown
           value={localFilters.billing_cycle}
           options={[
@@ -74,7 +74,6 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
           width="170px"
           menuMaxHeight="200px"
         />
-
         <CustomDropdown
           value={localFilters.category}
           options={CATEGORIES.map((cat) => ({ value: cat, label: cat }))}
@@ -83,27 +82,26 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
           width="190px"
           menuMaxHeight="240px"
         />
-
-  
-
-        <div className="subscriptions-page-search">
-          <input 
-            placeholder="Search" 
+        <div className="subs-search-wrapper">
+          <input
+            type="text"
+            className="subs-page-filter"
             value={localFilters.search}
             onChange={(e) => handleLocalChange("search", e.target.value)}
+            placeholder="Search date, title, category, amount, payment"
           />
+          <div className="subs-search-hint">Type dates as yyyy-mm-dd</div>
         </div>
-              <button 
+        <button
           className="subscriptions-page-clear-btn"
           onClick={clearFilters}
         >
           Clear filters
         </button>
-
-          <button
-            className="subscriptions-page-add-btn"
-            onClick={() => setShowForm(true)}
-          >
+        <button
+          className="subscriptions-page-add-btn"
+          onClick={() => setShowForm(true)}
+        >
           + Add Subscription
         </button>
       </div>
