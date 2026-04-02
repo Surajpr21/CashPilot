@@ -184,7 +184,11 @@ body.dark .subs-form-field select{
 }
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .subs-form-field input::placeholder {
-  color: rgba(226, 232, 240, 0.45);
+  color: rgba(226, 232, 240, 0.6);
+}
+
+body.dark .subs-form-field input::placeholder {
+  color: rgba(226, 232, 240, 0.6);
 }
 
 .subs-form-field select {
@@ -213,6 +217,16 @@ body.dark .subs-form-field select{
 .subs-form .cp-dropdown-placeholder,
 .subs-form .cp-dropdown-trigger.is-placeholder .cp-dropdown-icon {
   color: rgba(15, 23, 42, 0.45);
+}
+
+/* Disable bounce + shine only for the 3 form dropdowns (billing/category/payment) */
+.subs-form-grid .cp-dropdown-trigger:hover {
+  transform: none !important;
+}
+
+.subs-form-grid .cp-dropdown-trigger::before {
+  opacity: 0 !important;
+  animation: none !important;
 }
 
 .subs-form-field input:focus,
@@ -254,7 +268,7 @@ body.dark .subs-form-field select{
 }
 
 .subs-amount-input input {
-  padding-left: 28px;
+  /* padding-left: 28px; */
   width: 100%;
 }
 
@@ -295,6 +309,7 @@ body.dark .subs-form-field select{
 .subs-date-wrapper {
   position: relative;
   width: 100%;
+  /* background-color: blue; */
 }
 
 .subs-date-trigger {
@@ -317,6 +332,13 @@ body.dark .subs-form-field select{
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
+body.dark .subs-date-trigger {
+  background: linear-gradient(120deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
+  color: rgba(226, 232, 240, 0.6);
+  /* border: 1px solid rgba(148, 163, 184, 0.18); */
+  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.45);
+}
+
 .subs-date-trigger.placeholder,
 .subs-date-trigger .placeholder {
   color: rgba(15, 23, 42, 0.45);
@@ -325,7 +347,7 @@ body.dark .subs-form-field select{
 .subs-date-trigger.open,
 .subs-date-trigger:focus-visible {
   outline: none;
-  border-color: rgba(31, 182, 170, 0.6);
+  /* border-color: rgba(31, 182, 170, 0.6); */
   box-shadow:
     0 0 0 3px rgba(31, 182, 170, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
@@ -451,6 +473,85 @@ body.dark .subs-form-field select{
 
 .subs-date-cell.today {
   border-color: rgba(12, 32, 64, 0.16);
+}
+
+body.dark .subs-date-picker,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-picker {
+  background: linear-gradient(145deg, rgba(17, 25, 40, 0.98), rgba(15, 23, 42, 0.96));
+  border: 1px solid rgba(71, 85, 105, 0.42);
+  box-shadow:
+    0 24px 45px rgba(2, 6, 23, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px) saturate(105%);
+  -webkit-backdrop-filter: blur(14px) saturate(105%);
+}
+
+body.dark .subs-date-controls .cp-dropdown-trigger,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-controls .cp-dropdown-trigger {
+  height: 42px;
+  border: 1px solid rgba(51, 65, 85, 0.85);
+  background: linear-gradient(140deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.92));
+  color: rgba(226, 232, 240, 0.94);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 18px rgba(2, 6, 23, 0.42);
+}
+
+body.dark .subs-date-controls .cp-dropdown-icon,
+body.dark .subs-date-controls .cp-dropdown-placeholder,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-controls .cp-dropdown-icon,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-controls .cp-dropdown-placeholder {
+  color: rgba(203, 213, 225, 0.92);
+}
+
+body.dark .subs-date-nav,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-nav {
+  border: 1px solid rgba(71, 85, 105, 0.55);
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.94));
+  color: rgba(226, 232, 240, 0.94);
+  box-shadow: 0 10px 20px rgba(2, 6, 23, 0.46);
+}
+
+body.dark .subs-date-nav:hover,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-nav:hover {
+  background: linear-gradient(145deg, rgba(51, 65, 85, 0.95), rgba(30, 41, 59, 0.94));
+}
+
+body.dark .subs-date-weekdays,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-weekdays {
+  color: rgba(148, 163, 184, 0.9);
+}
+
+body.dark .subs-date-cell,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-cell {
+  border: 1px solid rgba(51, 65, 85, 0.72);
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.94), rgba(17, 24, 39, 0.92));
+  color: rgba(226, 232, 240, 0.9);
+  box-shadow: 0 6px 14px rgba(2, 6, 23, 0.35);
+}
+
+body.dark .subs-date-cell:hover,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-cell:hover {
+  border-color: rgba(100, 116, 139, 0.88);
+  background: linear-gradient(145deg, rgba(51, 65, 85, 0.95), rgba(30, 41, 59, 0.95));
+}
+
+body.dark .subs-date-cell.outside,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-cell.outside {
+  color: rgba(148, 163, 184, 0.56);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.78));
+  box-shadow: none;
+}
+
+body.dark .subs-date-cell.selected,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-cell.selected {
+  border-color: rgba(96, 165, 250, 0.96);
+  color: #f8fafc;
+  background: linear-gradient(145deg, rgba(37, 99, 235, 0.38), rgba(30, 64, 175, 0.32));
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.26);
+}
+
+body.dark .subs-date-cell.today,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-date-cell.today {
+  border-color: rgba(148, 163, 184, 0.9);
 }
 
 .subs-form-error,
