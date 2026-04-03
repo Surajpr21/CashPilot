@@ -72,29 +72,50 @@ body.dark .subs-modal::before,
 }
 
 
-.subs-modal-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  border: none;
-  background: #eef2f7;
-  width: 34px;
-  height: 34px;
+.subs-form-close {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: #dfe6ee;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  font-size: 18px;
-  font-weight: 700;
   cursor: pointer;
-  color: #4b5563;
+  color: #5f6b78;
   display: grid;
   place-items: center;
-  transition: background 0.2s ease, transform 0.1s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  transition: background 0.15s ease, transform 0.1s ease, color 0.15s ease;
 }
 
 /* Let clicks on the icon hit the button */
-.subs-modal-close svg { pointer-events: none; }
+.subs-form-close svg { pointer-events: none; }
 
-.subs-modal-close:hover { background: #e0e7ef; }
-.subs-modal-close:active { transform: scale(0.96); }
+.subs-form-close:hover {
+  background: #d2dbe6;
+  color: #4e5b68;
+}
+
+.subs-form-close:active {
+  transform: scale(0.97);
+}
+
+.subs-form-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.3);
+}
+
+body.dark .subs-form-close,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-form-close {
+  border-color: rgba(148, 163, 184, 0.32);
+  background: rgba(203, 213, 225, 0.88);
+  color: #334155;
+  box-shadow: none;
+}
+
+body.dark .subs-form-close:hover,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-form-close:hover {
+  background: rgba(185, 208, 233, 0.92);
+}
 
 .subs-form {
   display: flex;
@@ -149,6 +170,8 @@ body.dark .subs-form-header h3 {
 body.dark .subs-form-field span {
   color: rgba(226, 232, 240, 0.6);
 }
+
+
 
 .subs-form-field input,
 .subs-form-field select {

@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import CustomDropdown from "../../../../CustomDropdown/CustomDropdown";
 import { addSubscription, updateSubscription } from "../../../../../services/subscriptions";
 import "./SubscriptionForm.css";
@@ -226,6 +228,11 @@ export default function SubscriptionForm({ onClose, onSubscriptionAdded, editMod
     <form className="subs-form" onSubmit={handleSubmit}>
       <div className="subs-form-header">
         <h3>{editMode ? "Edit Subscription" : "Add Subscription"}</h3>
+        {onClose && (
+          <button type="button" className="subs-form-close" aria-label="Close form" onClick={onClose}>
+            <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={2} />
+          </button>
+        )}
       </div>
 
       <div className="subs-form-grid">

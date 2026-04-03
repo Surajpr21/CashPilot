@@ -75,7 +75,25 @@
     0 8px 20px rgba(2, 6, 23, 0.35);
 }
 
+body.dark .bVa-page-month-selector {
+  background: linear-gradient(
+    120deg,
+    rgba(30, 41, 59, 0.88) 0%,
+    rgba(15, 23, 42, 0.94) 100%
+  );
+  border-color: rgba(148, 163, 184, 0.26);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 20px rgba(2, 6, 23, 0.35);
+}
+
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-month-btn {
+  color: #cbd5e1;
+  background: rgba(148, 163, 184, 0.14);
+  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.45);
+}
+
+body.dark .bVa-page-month-btn {
   color: #cbd5e1;
   background: rgba(148, 163, 184, 0.14);
   box-shadow: 0 2px 8px rgba(2, 6, 23, 0.45);
@@ -85,7 +103,15 @@
   background: rgba(148, 163, 184, 0.24);
 }
 
+body.dark .bVa-page-month-btn:hover {
+  background: rgba(148, 163, 184, 0.24);
+}
+
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-month-selector span {
+  color: #e2e8f0;
+}
+
+body.dark .bVa-page-month-selector span {
   color: #e2e8f0;
 }
 
@@ -220,9 +246,100 @@
   box-shadow: 0 8px 18px rgba(2, 6, 23, 0.22);
 }
 
+body.dark .bVa-page-search-input {
+  background: rgba(15, 23, 42, 0.92);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.22);
+}
+
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-filter--search {
   background: rgba(15, 23, 42, 0.92);
   border-radius: 14px;
+}
+
+body.dark .bVa-page-filter--search {
+  background: rgba(15, 23, 42, 0.92);
+  border-radius: 14px;
+}
+
+body.dark .bVa-page-top-container,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.8));
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.45);
+}
+
+body.dark .bVa-page-filters .cp-dropdown-icon,
+body.dark .bVa-page-filters .cp-dropdown-trigger span,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-filters .cp-dropdown-icon,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-filters .cp-dropdown-trigger span {
+  color: #cbd5e1;
+}
+
+body.dark .bVa-page-clear-btn,
+body.dark .bVa-page-add-btn,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-add-btn {
+  background: rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
+}
+
+body.dark .bVa-page-clear-btn:hover,
+body.dark .bVa-page-add-btn:hover,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn:hover,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-add-btn:hover {
+  background: rgba(148, 163, 184, 0.28);
+}
+
+body.dark .bVa-page-summary-strip,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-summary-strip {
+  border-top-color: rgba(148, 163, 184, 0.24);
+  color: #94a3b8;
+}
+
+body.dark .bVa-page-summary-strip strong,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-summary-strip strong {
+  color: #f8fafc;
+}
+
+body.dark .bVa-page-import-btn,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-import-btn {
+  color: #cbd5e1;
+}
+
+body.dark .bVa-page-top-container,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container {
+  background: rgba(16, 22, 38, 0.38) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 14px 28px rgba(2, 6, 23, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px) saturate(110%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(110%) !important;
+  position: relative;
+  z-index: 5;
+  overflow: hidden;
+}
+
+body.dark .bVa-page-top-container::before,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: 0.2;
+  z-index: 1;
+}
+
+body.dark .bVa-page-top-container > *,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container > * {
+  position: relative;
+  z-index: 2;
 }
 
 .bVa-page-clear-btn {

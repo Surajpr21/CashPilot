@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
 import { getMonthlyTotal } from "../utils/subscriptions.utils";
 import { CATEGORIES } from "../../../../constants/categories";
@@ -122,13 +121,6 @@ export default function SubscriptionsFilters({ onSubscriptionAdded, subs = [], f
               className="subs-modal"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="subs-modal-close"
-                aria-label="Close"
-                onClick={() => setShowForm(false)}
-              >
-                <XMarkIcon width={18} height={18} aria-hidden="true" />
-              </button>
               <SubscriptionForm
                 onClose={() => setShowForm(false)}
                 onSubscriptionAdded={onSubscriptionAdded}
