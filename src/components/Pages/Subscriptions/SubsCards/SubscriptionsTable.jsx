@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { formatAmount, daysLeft, getStatus, cycleLabel, dateLabel } from "../utils/subscriptions.utils";
 import SubscriptionForm from "./SubscriptionForm/SubscriptionForm";
 import SmartAvatar from "./SubscriptionForm/SmartAvatar";
@@ -145,13 +144,6 @@ export default function SubscriptionsTable({ subs = [], onPause, onResume, onCan
               className="subs-modal"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="subs-modal-close"
-                aria-label="Close"
-                onClick={handleCloseEdit}
-              >
-                <XMarkIcon width={18} height={18} aria-hidden="true" />
-              </button>
               <SubscriptionForm
                 editMode={true}
                 subscription={editingSub}
