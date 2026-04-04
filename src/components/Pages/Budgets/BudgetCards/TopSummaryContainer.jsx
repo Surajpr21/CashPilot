@@ -116,11 +116,11 @@ export default function TopSummaryContainer({
           />
         </div>
 
-        <div className="bVa-page-filter bVa-page-filter--search">
+        <div className="bVa-page-search-wrap">
           <input
             type="text"
             placeholder="Search date, title, category..."
-            className="bVa-page-search-input"
+            className="bVa-page-filter bVa-page-search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -161,7 +161,7 @@ export default function TopSummaryContainer({
           </strong>
         </span>
 
-        <button className="bVa-page-import-btn">Import CSV</button>
+        {/* <button className="bVa-page-import-btn">Import CSV</button> */}
       </div>
     </div>
   );
