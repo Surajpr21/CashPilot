@@ -161,7 +161,7 @@ export default function TopSummaryContainer({
           </strong>
         </span>
 
-        <button className="bVa-page-import-btn">Import CSV</button>
+        {/* <button className="bVa-page-import-btn">Import CSV</button> */}
       </div>
     </div>
   );

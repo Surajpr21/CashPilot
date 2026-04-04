@@ -111,14 +111,14 @@ body.dark .subs-search-wrapper input[type="text"],
 body.dark .subs-search-wrapper input[type="search"],
 .body.dark .subs-search-wrapper input[type="search"] {
   background: linear-gradient(120deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
-  color: #e2e8f0 !important;
+  /* color: #e2e8f0 !important; */
   /* border: 1px solid rgba(148, 163, 184, 0.12); */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 10px 22px rgba(2, 6, 23, 0.35);
 }
 
 body.dark .subs-search-wrapper input[type="text"]::placeholder,
 .body.dark .subs-search-wrapper input[type="search"]::placeholder {
-  color: rgba(226, 232, 240, 0.45) !important;
+ color: rgba(226, 232, 240, 0.6) !important;
 }
 
 .body.dark .subscriptions-page-filters-wrapper,

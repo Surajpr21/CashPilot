@@ -19,7 +19,7 @@
 
 .bVa-page-month-selector {
   display: flex;
-  height: 42px;
+  height: 46px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -29,7 +29,7 @@
       #e8e0ff 0%,
       #dff7ec 45%,
       #e6e5e5 100%);
-  border: 1px solid #e5e7eb;
+  /* border: 1px solid #e5e7eb; */
   font-weight: 600;
   font-size: 14px;
   color: #1f2937;
@@ -108,11 +108,11 @@ body.dark .bVa-page-month-btn:hover {
 }
 
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-month-selector span {
-  color: #e2e8f0;
+  color: rgba(226, 232, 240, 0.6);
 }
 
 body.dark .bVa-page-month-selector span {
-  color: #e2e8f0;
+  color: rgba(226, 232, 240, 0.6);
 }
 
 .bVa-page-filter,
@@ -193,10 +193,13 @@ body.dark .bVa-page-month-selector span {
   flex: 2 1 180px;
   min-width: 120px;
   max-width: 200px;
-  height: 44px;
+  height: 46px;
   border-radius: 14px;
   overflow: hidden;
   transition: transform 0.2s ease;
+    box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 22px rgba(2, 6, 23, 0.35);
 }
 
 .bVa-page-search-wrap::before {
@@ -226,7 +229,7 @@ body.dark .bVa-page-month-selector span {
 .bVa-page-search-input {
   box-sizing: border-box;
   width: 100%;
-  height: 44px;
+  height: 46px;
   padding: 0 16px;
   border-radius: 14px;
   background: linear-gradient(90deg,
@@ -239,8 +242,13 @@ body.dark .bVa-page-month-selector span {
 }
 
 body.dark .bVa-page-search-input {
-  background: rgba(15, 23, 42, 0.92);
-  color: #e2e8f0;
+  background: linear-gradient(
+    120deg,
+    rgba(30, 41, 59, 0.88) 0%,
+    rgba(15, 23, 42, 0.92) 100%
+  );
+  color: rgba(226, 232, 240, 0.6) !important;
+  text-overflow: ellipsis;
   /* border: 1px solid rgba(148, 163, 184, 0.18); */
   /* box-shadow: 0 8px 18px rgba(2, 6, 23, 0.22); */
 }
@@ -256,21 +264,31 @@ body.dark .bVa-page-filters .cp-dropdown-icon,
 body.dark .bVa-page-filters .cp-dropdown-trigger span,
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-filters .cp-dropdown-icon,
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-filters .cp-dropdown-trigger span {
-  color: #cbd5e1;
+  color: rgba(226, 232, 240, 0.6);
+}
+
+body.dark .bVa-page-add-btn,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-add-btn {
+  background: linear-gradient(
+    120deg,
+    rgba(30, 41, 59, 0.92) 0%,
+    rgba(15, 23, 42, 0.98) 100%
+  ) !important;
+  color: #e2e8f0 !important;
 }
 
 body.dark .bVa-page-clear-btn,
-body.dark .bVa-page-add-btn,
-.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn,
-.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-add-btn {
-  background: rgba(148, 163, 184, 0.2);
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn {
+  background: linear-gradient(
+    120deg,
+    rgba(30, 41, 59, 0.88) 0%,
+    rgba(15, 23, 42, 0.92) 100%
+  );
   color: #e2e8f0;
 }
 
 body.dark .bVa-page-clear-btn:hover,
-body.dark .bVa-page-add-btn:hover,
-.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn:hover,
-.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-add-btn:hover {
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn:hover {
   background: rgba(148, 163, 184, 0.28);
 }
 
@@ -328,7 +346,7 @@ body.dark .bVa-page-top-container > *,
   position: relative;
   flex: 0 0 auto;
   min-width: 110px;
-  height: 44px;
+  height: 46px;
   padding: 0 16px;
   border-radius: 14px;
   border: none;
@@ -342,6 +360,16 @@ body.dark .bVa-page-top-container > *,
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
+}
+
+body.dark .bVa-page-clear-btn,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-clear-btn {
+  background: linear-gradient(
+    120deg,
+    rgba(30, 41, 59, 0.88) 0%,
+    rgba(15, 23, 42, 0.92) 100%
+  );
+  color: #e2e8f0;
 }
 
 .bVa-page-clear-btn::before {
@@ -419,6 +447,11 @@ body.dark .bVa-page-top-container > *,
   transition: 0.5s ease;
   display: block;
   z-index: -1;
+}
+
+body.dark .bVa-page-add-btn::before,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-add-btn::before {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
 }
 
 .bVa-page-add-btn:hover::before {
