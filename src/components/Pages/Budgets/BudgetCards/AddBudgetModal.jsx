@@ -101,6 +101,8 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
                 width="100%"
                 menuMaxHeight="260px"
                 disabled={loading}
+                disableShine
+                disableBounce
               />
             </div>
 
