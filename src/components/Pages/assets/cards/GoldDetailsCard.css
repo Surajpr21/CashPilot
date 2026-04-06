@@ -28,3 +28,11 @@
   color: #2563eb;
   cursor: pointer;
 }
+
+body.dark .assets-page-row span {
+  color: #e2e8f0;
+}
+
+body.dark .assets-page-list .assets-page-row {
+  border-bottom-color: rgba(71, 85, 105, 0.45);
+}

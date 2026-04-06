@@ -97,3 +97,36 @@
   color: #6b7280;
   font-size: 12px;
 }
+
+body.dark .assets-page-title {
+  color: #e2e8f0;
+}
+
+body.dark .assets-page-subtitle {
+  color: #94a3b8;
+}
+
+body.dark .assets-page-updated,
+body.dark .assets-page-muted {
+  color: #9aa9bd;
+}
+
+body.dark .assets-page-card-icon-assets {
+  background: rgba(59, 130, 246, 0.22);
+}
+
+body.dark .assets-page-card-icon-investments {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+body.dark .assets-page-card-icon-metals {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+body.dark .assets-page-card-icon-insurance {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+body.dark .assets-page-card-icon-insurance svg path:not(:first-of-type) {
+  stroke: #fda4af;
+}
