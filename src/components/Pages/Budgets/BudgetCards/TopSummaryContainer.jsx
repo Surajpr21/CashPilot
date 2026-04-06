@@ -10,6 +10,7 @@ export default function TopSummaryContainer({
   monthDisplay,
   onPrevMonth,
   onNextMonth,
+  disableNextMonth = false,
 }) {
   const CATEGORY_ALL = "all-categories";
   const AMOUNT_ALL = "all-amount";
@@ -80,6 +81,7 @@ export default function TopSummaryContainer({
             className="bVa-page-month-btn"
             onClick={onNextMonth}
             aria-label="Next month"
+            disabled={disableNextMonth}
           >
             <ChevronRightIcon className="bVa-page-month-icon" aria-hidden="true" />
           </button>

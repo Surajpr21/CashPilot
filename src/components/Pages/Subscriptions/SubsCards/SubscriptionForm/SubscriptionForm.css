@@ -342,7 +342,20 @@ body.dark .subs-form-field input::placeholder {
 }
 
 .subs-form-actions button:hover:not(:disabled) {
-  filter: brightness(1.03);
+  filter: none;
+  background: linear-gradient(180deg, #49ddd4 0%, #2ac4b9 100%);
+}
+
+body.dark .subs-form-actions button,
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-form-actions button {
+  background: linear-gradient(180deg, #334155 0%, #0f172a 100%);
+  color: #e2e8f0;
+  box-shadow: 0 12px 22px rgba(2, 6, 23, 0.28), 0 2px 4px rgba(0,0,0,0.12);
+}
+
+body.dark .subs-form-actions button:hover:not(:disabled),
+.dashboard-container:has(.theme-switch__checkbox:checked) .subs-form-actions button:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3f4f62 0%, #162235 100%);
 }
 
 .subs-form-actions button:active {

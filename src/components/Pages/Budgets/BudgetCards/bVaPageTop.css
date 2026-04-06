@@ -3,6 +3,9 @@
   background: #f2f4f2;
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+  position: relative;
+  z-index: 12;
+  overflow: visible;
 }
 
 .bVa-page-filters {
@@ -11,6 +14,8 @@
   gap: 12px;
   flex-wrap: nowrap;
   min-width: 0;
+  position: relative;
+  z-index: 6;
 }
 
 .bVa-page-filters>* {
@@ -48,6 +53,12 @@
   justify-content: center;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(16, 24, 40, 0.08);
+}
+
+.bVa-page-month-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: none;
 }
 
 .bVa-page-month-icon {
@@ -181,11 +192,16 @@ body.dark .bVa-page-month-selector span {
 
 .bVa-page-filters .cp-dropdown {
   width: 100% !important;
+  z-index: 20;
 }
 
 .bVa-page-filters .cp-dropdown-trigger {
   width: 100%;
   min-width: 0;
+}
+
+.bVa-page-filters .cp-dropdown-menu {
+  z-index: 70;
 }
 
 .bVa-page-search-wrap {
@@ -330,8 +346,8 @@ body.dark .bVa-page-top-container,
   backdrop-filter: blur(10px) saturate(110%) !important;
   -webkit-backdrop-filter: blur(10px) saturate(110%) !important;
   position: relative;
-  z-index: 5;
-  overflow: hidden;
+  z-index: 12;
+  overflow: visible;
 }
 
 body.dark .bVa-page-top-container::before,
@@ -351,6 +367,17 @@ body.dark .bVa-page-top-container::before,
 body.dark .bVa-page-top-container > *,
 .dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container > * {
   position: relative;
+  z-index: 2;
+}
+
+/* Keep filter dropdown layer above summary text within this card */
+body.dark .bVa-page-top-container > .bVa-page-filters,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container > .bVa-page-filters {
+  z-index: 9;
+}
+
+body.dark .bVa-page-top-container > .bVa-page-summary-strip,
+.dashboard-container:has(.theme-switch__checkbox:checked) .bVa-page-top-container > .bVa-page-summary-strip {
   z-index: 2;
 }
 
@@ -479,6 +506,8 @@ body.dark .bVa-page-add-btn::before,
   border-top: 1px solid #e5e7eb;
   font-size: 14px;
   color: #4b5563;
+  position: relative;
+  z-index: 1;
 }
 
 .bVa-page-summary-strip strong {
