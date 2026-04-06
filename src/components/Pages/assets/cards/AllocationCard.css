@@ -108,3 +108,28 @@
   color: #6b7280;
   margin-top: 8px;
 }
+
+body.dark .assets-page-card {
+  background: rgba(16, 22, 38, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 14px 28px rgba(2, 6, 23, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+}
+
+body.dark .assets-page-title,
+body.dark .assets-page-center-value {
+  color: #f1f5f9;
+}
+
+body.dark .assets-page-center-label,
+body.dark .assets-page-footnote {
+  color: #94a3b8;
+}
+
+body.dark .assets-page-donut-center {
+  background: rgba(15, 23, 42, 0.92);
+  box-shadow: 0 0 18px rgba(2, 6, 23, 0.5);
+}

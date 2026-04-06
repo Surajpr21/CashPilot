@@ -100,3 +100,19 @@ button.insurance-learn-more:hover .circle .icon.arrow {
 button.insurance-learn-more:hover .button-text {
   color: #fff;
 }
+
+body.dark .assets-page-row span {
+  color: #e2e8f0;
+}
+
+body.dark .assets-page-card p {
+  color: #cbd5e1;
+}
+
+body.dark button.insurance-learn-more .circle {
+  background: rgba(51, 65, 85, 0.95);
+}
+
+body.dark button.insurance-learn-more .button-text {
+  color: #cbd5e1;
+}

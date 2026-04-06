@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import "./AddBudgetModal.css";
 import CustomDropdown from "../../../CustomDropdown/CustomDropdown";
 import { addBudget, addBudgetRPC } from "../../../../services/budgets.service";
@@ -82,8 +84,8 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
       <div className="budget-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="budget-modal-header">
           <h2>Add Budget</h2>
-          <button className="budget-modal-close" onClick={handleCancel} aria-label="Close">
-            ×
+          <button type="button" className="budget-modal-close" onClick={handleCancel} aria-label="Close">
+            <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={2} />
           </button>
         </div>
 
@@ -133,14 +135,14 @@ export default function AddBudgetModal({ isOpen, onClose, currentMonth, budgets,
           </div>
 
           <div className="budget-modal-actions">
-            <button
+            {/* <button
               type="button"
               className="budget-modal-btn-cancel"
               onClick={handleCancel}
               disabled={loading}
             >
               Cancel
-            </button>
+            </button> */}
             <button
               type="submit"
               className="budget-modal-btn-submit"

@@ -48,6 +48,8 @@ export default function BudgetVsActualPage() {
   const [currentMonth, setCurrentMonth] = useState(startOfThisMonth);  // STEP 1: Always YYYY-MM-01
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const isCurrentMonthSelected = currentMonth === startOfThisMonth;
+
   // Format month to display (e.g., "January 2026")
   const getMonthDisplay = () => {
     const { year, monthIndex } = parseMonthKey(currentMonth);
@@ -86,10 +88,17 @@ export default function BudgetVsActualPage() {
   };
 
   const handleNextMonth = () => {
+    if (isCurrentMonthSelected) return;
+
     const { year, monthIndex } = parseMonthKey(currentMonth);
     const date = new Date(year, monthIndex, 1);
     date.setMonth(date.getMonth() + 1);
-    setCurrentMonth(formatMonthKey(date.getFullYear(), date.getMonth()));
+
+    const nextMonthKey = formatMonthKey(date.getFullYear(), date.getMonth());
+    // Extra guard: never allow moving beyond the current month.
+    if (nextMonthKey > startOfThisMonth) return;
+
+    setCurrentMonth(nextMonthKey);
   };
 
   // Handle successful budget addition
@@ -120,6 +129,7 @@ export default function BudgetVsActualPage() {
         monthDisplay={getMonthDisplay()}
         onPrevMonth={handlePrevMonth}
         onNextMonth={handleNextMonth}
+        disableNextMonth={isCurrentMonthSelected}
       />
 
       {/* Container 2: Category breakdown with merged data */}
