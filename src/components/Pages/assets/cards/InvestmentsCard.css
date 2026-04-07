@@ -383,6 +383,39 @@
   color: #4b5563;
 }
 
+.assets-page-form-investment {
+  --assets-form-active-bg: linear-gradient(90deg, #ddd0ff 0%, #ccefdc 45%, #d7ebe7 100%);
+  --assets-form-active-border: rgba(148, 163, 184, 0.55);
+  --assets-form-active-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 12px 26px rgba(79, 70, 229, 0.14);
+}
+
+body.dark .assets-page-form-investment {
+  --assets-form-active-bg: linear-gradient(120deg, rgba(51, 65, 85, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
+  --assets-form-active-border: rgba(100, 116, 139, 0.34);
+  --assets-form-active-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 24px rgba(2, 6, 23, 0.45);
+}
+
+.assets-page-form-investment .assets-page-form-row input:-webkit-autofill,
+.assets-page-form-investment .assets-page-form-row input:-webkit-autofill:hover,
+.assets-page-form-investment .assets-page-form-row input:-webkit-autofill:focus,
+.assets-page-form-investment .assets-page-form-row input:-webkit-autofill:active {
+  -webkit-text-fill-color: #0f172a;
+  caret-color: #0f172a;
+  background: var(--assets-form-active-bg) !important;
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
+  -webkit-box-shadow: var(--assets-form-active-shadow);
+  transition: background-color 9999s ease-out 0s;
+}
+
+body.dark .assets-page-form-investment .assets-page-form-row input:-webkit-autofill,
+body.dark .assets-page-form-investment .assets-page-form-row input:-webkit-autofill:hover,
+body.dark .assets-page-form-investment .assets-page-form-row input:-webkit-autofill:focus,
+body.dark .assets-page-form-investment .assets-page-form-row input:-webkit-autofill:active {
+  -webkit-text-fill-color: #e2e8f0;
+  caret-color: #e2e8f0;
+}
+
 .assets-page-form-investment .assets-page-form-row input,
 .assets-page-form-investment .assets-page-form-row select {
   height: 46px;
@@ -397,6 +430,30 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 10px 22px rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(6px) saturate(110%);
   -webkit-backdrop-filter: blur(6px) saturate(110%);
+  transition: background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, color 0.28s ease;
+}
+
+body:not(.dark) .assets-page-form-investment .assets-page-form-row input:not([type="date"]):not(:disabled):hover,
+body:not(.dark) .assets-page-form-investment .assets-page-form-row select:not(:disabled):hover,
+body:not(.dark) .assets-page-form-investment .cp-dropdown-trigger:hover,
+body:not(.dark) .assets-page-form-investment .date-picker-trigger:hover {
+  background: var(--assets-form-active-bg);
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
+}
+
+body:not(.dark) .assets-page-form-investment .assets-page-form-row input[placeholder]:not(:placeholder-shown):not(:disabled),
+body:not(.dark) .assets-page-form-investment .cp-dropdown-trigger:not(.is-placeholder),
+body:not(.dark) .assets-page-form-investment .date-picker-trigger:not(.placeholder) {
+  background: var(--assets-form-active-bg);
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
+}
+
+body:not(.dark) .assets-page-form-investment .assets-page-readonly-input:hover {
+  background: var(--assets-form-active-bg);
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
 }
 
 .assets-page-form-investment .assets-page-form-row input[type="date"] {
@@ -699,9 +756,9 @@ body.dark .assets-page-add-btn::before {
 }
 
 body.dark .assets-page-modal-backdrop {
-  background: rgba(2, 6, 23, 0.65);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: radial-gradient(circle at 20% 20%, rgba(148, 163, 184, 0.08), rgba(2, 6, 23, 0.72));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 body.dark .assets-page-modal,
@@ -713,6 +770,10 @@ body.dark .assets-page-modal.assets-page-modal-investment {
     0 14px 30px rgba(2, 6, 23, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   color: #e2e8f0;
+}
+
+body.dark .assets-page-modal.assets-page-modal-investment::before {
+  background: none;
 }
 
 body.dark .assets-page-modal h4 {
@@ -739,6 +800,29 @@ body.dark .assets-page-form-investment .date-picker-trigger {
   border-color: rgba(148, 163, 184, 0.2);
   color: #e2e8f0;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 20px rgba(2, 6, 23, 0.42);
+}
+
+body.dark .assets-page-form-investment .assets-page-form-row input:hover:not(:disabled),
+body.dark .assets-page-form-investment .assets-page-form-row select:hover:not(:disabled),
+body.dark .assets-page-form-investment .cp-dropdown-trigger:hover,
+body.dark .assets-page-form-investment .date-picker-trigger:hover {
+  background: var(--assets-form-active-bg);
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
+}
+
+body.dark .assets-page-form-investment .assets-page-form-row input[placeholder]:not(:placeholder-shown):not(:disabled),
+body.dark .assets-page-form-investment .cp-dropdown-trigger:not(.is-placeholder),
+body.dark .assets-page-form-investment .date-picker-trigger:not(.placeholder) {
+  background: var(--assets-form-active-bg);
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
+}
+
+body.dark .assets-page-form-investment .assets-page-readonly-input:hover {
+  background: var(--assets-form-active-bg);
+  border-color: var(--assets-form-active-border);
+  box-shadow: var(--assets-form-active-shadow);
 }
 
 body.dark .assets-page-form-investment .assets-page-form-row input::placeholder,

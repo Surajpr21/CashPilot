@@ -416,6 +416,7 @@ export default function AddInvestmentModal({
               <label htmlFor="investment-currency">Currency</label>
               <input
                 id="investment-currency"
+                className="assets-page-readonly-input"
                 name="investment-currency"
                 type="text"
                 value="INR"
