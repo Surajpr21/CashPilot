@@ -5,7 +5,7 @@
   margin-bottom: 24px;
 }
 
-.assets-page-title {
+.assets-page-header .assets-page-title {
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -40,8 +40,7 @@
 }
 
 .assets-page-card-heading h3,
-.assets-page-card-heading .assets-page-title,
-.assets-page-title {
+.assets-page-card-heading .assets-page-title {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
@@ -98,7 +97,12 @@
   font-size: 12px;
 }
 
-body.dark .assets-page-title {
+body.dark .assets-page-header .assets-page-title {
+  color: #e2e8f0;
+}
+
+body.dark .assets-page-card-heading h3,
+body.dark .assets-page-card-heading .assets-page-title {
   color: #e2e8f0;
 }
 

@@ -115,6 +115,16 @@ body.dark .expense-modal::before,
   display: flex;
   flex-direction: column;
   gap: 18px;
+  --expense-form-active-bg: linear-gradient(90deg, #ddd0ff 0%, #ccefdc 45%, #d7ebe7 100%);
+  --expense-form-active-border: rgba(148, 163, 184, 0.55);
+  --expense-form-active-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 12px 26px rgba(79, 70, 229, 0.14);
+}
+
+body.dark .expense-form,
+.dashboard-container:has(.theme-switch__checkbox:checked) .expense-form {
+  --expense-form-active-bg: linear-gradient(120deg, rgba(51, 65, 85, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
+  --expense-form-active-border: rgba(100, 116, 139, 0.34);
+  --expense-form-active-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 24px rgba(2, 6, 23, 0.45);
 }
 
 .expense-form-header {
@@ -188,14 +198,23 @@ body.dark .expense-form-helper{
 }
 
 body:not(.dark) .expense-form-field input:not([type="date"]):not(:disabled):hover {
-  background: linear-gradient(90deg, #ddd0ff 0%, #ccefdc 45%, #d7ebe7 100%);
-  border-color: rgba(148, 163, 184, 0.55);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 12px 26px rgba(79, 70, 229, 0.14);
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
 }
 
 body:not(.dark) .expense-form .cp-dropdown-trigger:hover {
-  background: linear-gradient(90deg, #ddd0ff 0%, #ccefdc 45%, #d7ebe7 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 12px 26px rgba(79, 70, 229, 0.14);
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
+}
+
+body:not(.dark) .expense-form-field input[placeholder]:not(:placeholder-shown):not(:disabled),
+body:not(.dark) .expense-form .cp-dropdown-trigger:not(.is-placeholder),
+body:not(.dark) .date-picker-trigger:not(.placeholder) {
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
 }
 
 .expense-form .cp-dropdown-trigger {
@@ -213,9 +232,20 @@ body.dark .expense-form-field select {
 body.dark .expense-form-field input:hover:not(:disabled),
 body.dark .expense-form-field select:hover:not(:disabled),
 body.dark .expense-form .cp-dropdown-trigger:hover {
-  background: linear-gradient(120deg, rgba(51, 65, 85, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
-  border-color: rgba(100, 116, 139, 0.34);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 24px rgba(2, 6, 23, 0.45);
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
+}
+
+body.dark .expense-form-field input[placeholder]:not(:placeholder-shown):not(:disabled),
+body.dark .expense-form .cp-dropdown-trigger:not(.is-placeholder),
+body.dark .date-picker-trigger:not(.placeholder),
+.dashboard-container:has(.theme-switch__checkbox:checked) .expense-form-field input[placeholder]:not(:placeholder-shown):not(:disabled),
+.dashboard-container:has(.theme-switch__checkbox:checked) .expense-form .cp-dropdown-trigger:not(.is-placeholder),
+.dashboard-container:has(.theme-switch__checkbox:checked) .date-picker-trigger:not(.placeholder) {
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
 }
 
 
@@ -384,15 +414,15 @@ body.dark .expense-form-field input[type="date"]:hover:not(:disabled) {
 }
 
 body:not(.dark) .date-picker-trigger:hover {
-  background: linear-gradient(90deg, #ddd0ff 0%, #ccefdc 45%, #d7ebe7 100%);
-  border-color: rgba(148, 163, 184, 0.55);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 12px 26px rgba(79, 70, 229, 0.14);
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
 }
 
 body.dark .date-picker-trigger:hover {
-  background: linear-gradient(120deg, rgba(51, 65, 85, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
-  border-color: rgba(100, 116, 139, 0.34);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 24px rgba(2, 6, 23, 0.45);
+  background: var(--expense-form-active-bg);
+  border-color: var(--expense-form-active-border);
+  box-shadow: var(--expense-form-active-shadow);
 }
 
 .date-picker-trigger.open,
