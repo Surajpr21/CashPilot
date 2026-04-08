@@ -168,6 +168,7 @@ export default function InsurancePoliciesModal({ isOpen, onClose, currency }) {
                   placeholder="Select type"
                   width="100%"
                   menuMaxHeight="220px"
+                  disableBounce
                   disabled={isSaving}
                 />
               </div>

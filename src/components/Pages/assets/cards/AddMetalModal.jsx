@@ -127,9 +127,8 @@ export default function AddMetalModal({
       setDateOpen(false);
     } else {
       setFormError("");
-      setPurchasedAt((prev) => prev || formatDate(now.getFullYear(), now.getMonth(), now.getDate()));
     }
-  }, [isOpen, formatDate, now]);
+  }, [isOpen]);
 
   useEffect(() => {
     const parsed = parseDate(purchasedAt);
@@ -382,6 +381,7 @@ export default function AddMetalModal({
                 placeholder="Select metal"
                 width="100%"
                 menuMaxHeight="220px"
+                disableBounce
                 disabled={isSubmitting}
               />
             </div>

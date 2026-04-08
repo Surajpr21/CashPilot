@@ -389,6 +389,7 @@ export default function AddInvestmentModal({
                 placeholder="Select type"
                 width="100%"
                 menuMaxHeight="220px"
+                disableBounce
                 disabled={isSubmitting}
               />
               <span className="assets-page-hint">Values map directly to the enum in Supabase.</span>
